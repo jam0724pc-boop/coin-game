@@ -40,8 +40,8 @@ body{
   position:absolute; inset:0; z-index:0;
   background:
     linear-gradient(180deg,
-      #4fb8ff 0%, #79d3ff 30%, #b9efff 48%,
-      #cdeb6e 52%, #8fd83a 60%, #6abf26 100%);
+      #2fc7ff 0%, #6dd6ff 25%, #b0eaff 45%,
+      #d4f56f 52%, #95e636 60%, #60b71a 100%);
 }
 .sun{
   position:absolute; top:5%; right:8%; width:14vh; height:14vh; border-radius:50%;
@@ -81,12 +81,16 @@ body{
 /* ===== タイトル文字 ===== */
 .title-wrap{ position:relative; z-index:5; text-align:center; }
 .game-title{
-  font-size:9vh; line-height:1; font-weight:800; letter-spacing:.02em;
-  color:#ffe35a;
-  -webkit-text-stroke:0.7vh #7a4a00;
-  text-shadow:0 0.8vh 0 #7a4a00, 0 1.4vh 1.6vh rgba(0,0,0,.35);
+  font-size:9.4vh; line-height:1; font-weight:900; letter-spacing:.04em;
+  color:#ffff77;
+  -webkit-text-stroke:0.8vh #8b5a00;
+  text-shadow:
+    0 0.8vh 0 #8b5a00,
+    0 1.8vh 2vh rgba(0,0,0,.4),
+    0 0 2.2vh rgba(255,255,100,.6),
+    -0.3vh 0.3vh 0 rgba(0,0,0,.2);
   transform:rotate(-2deg);
-  animation:titlePop .6s cubic-bezier(.2,1.6,.4,1) both;
+  animation:titlePop .6s cubic-bezier(.2,1.8,.4,1) both;
 }
 .game-sub{
   display:inline-block; margin-top:2vh; font-size:3.4vh; font-weight:800;
@@ -119,21 +123,28 @@ body{
 .levels{ position:relative; z-index:5; margin-top:1.4vh; display:flex; gap:2.2vh; flex-wrap:wrap; justify-content:center; }
 .lv-btn{
   font-family:var(--font); cursor:pointer;
-  width:18vh; padding:1.8vh .6vh; border-radius:2.6vh; border:.6vh solid #fff;
-  color:#fff; font-weight:800; text-align:center;
-  box-shadow:0 1vh 0 var(--sh,#888), 0 1.6vh 1.8vh rgba(0,0,0,.28), inset 0 .5vh .6vh rgba(255,255,255,.55);
-  transition:transform .08s ease, box-shadow .08s ease;
-  text-shadow:0 .3vh .4vh rgba(0,0,0,.25);
+  width:18vh; padding:2vh .6vh; border-radius:3vh; border:.8vh solid #fff;
+  color:#fff; font-weight:900; text-align:center;
+  background-clip:padding-box;
+  box-shadow:
+    0 1.4vh 0 var(--sh,#888),
+    0 2.2vh 2.6vh rgba(0,0,0,.35),
+    inset 0 .8vh .8vh rgba(255,255,255,.65),
+    inset 0 -.4vh .4vh rgba(0,0,0,.15);
+  transition:transform .08s ease, box-shadow .08s ease, filter .1s ease;
+  text-shadow:0 .4vh .6vh rgba(0,0,0,.3);
+  filter:brightness(1) saturate(1.15);
 }
-.lv-btn .num{ font-size:4.6vh; line-height:1; display:block; }
-.lv-btn .nm{ font-size:2.3vh; display:block; margin-top:.4vh; }
-.lv-btn .st{ font-size:2.4vh; letter-spacing:-.2vh; display:block; margin-top:.4vh; }
-.lv-btn:active{ transform:translateY(1vh); box-shadow:0 .2vh 0 var(--sh,#888), 0 .6vh .8vh rgba(0,0,0,.28), inset 0 .5vh .6vh rgba(255,255,255,.5); }
-.lv1{ background:linear-gradient(180deg,#a6ee6a,#5fc22e); --sh:#3a7d18; }
-.lv2{ background:linear-gradient(180deg,#8fe0ff,#36a8e6); --sh:#1d6fa0; }
-.lv3{ background:linear-gradient(180deg,#ffe46a,#ffb01f); --sh:#c77400; }
-.lv4{ background:linear-gradient(180deg,#ffb06a,#ff7a1f); --sh:#c25000; }
-.lv5{ background:linear-gradient(180deg,#ff8a8a,#e63333); --sh:#9c1c1c; }
+.lv-btn:hover{ filter:brightness(1.1) saturate(1.2) drop-shadow(0 0 .8vh rgba(255,255,255,.4)); }
+.lv-btn:active{ 
+  transform:translateY(1.2vh); 
+  box-shadow:0 .3vh 0 var(--sh,#888), 0 .8vh 1.2vh rgba(0,0,0,.28), inset 0 .8vh .8vh rgba(255,255,255,.6);
+}
+.lv1{ background:linear-gradient(180deg,#b8ff6e,#5fc22e); --sh:#2a6a14; }
+.lv2{ background:linear-gradient(180deg,#a8f0ff,#2a9ae6); --sh:#0f5fa8; }
+.lv3{ background:linear-gradient(180deg,#fff06e,#ffb01f); --sh:#b86a00; }
+.lv4{ background:linear-gradient(180deg,#ffc06e,#ff6a1f); --sh:#b84000; }
+.lv5{ background:linear-gradient(180deg,#ff9a9a,#e61a1a); --sh:#8a0a0a; }
 
 .sound-note{ position:relative; z-index:5; margin-top:2vh; font-size:1.9vh; color:#2a5a10; font-weight:800; background:rgba(255,255,255,.7); padding:.6vh 1.6vh; border-radius:999px; }
 
@@ -168,10 +179,14 @@ body{
   position:relative;
   width:54vh; height:54vh; border-radius:9vh;
   background:
-    radial-gradient(circle at 50% 38%, rgba(255,255,255,.5), rgba(255,255,255,0) 60%),
-    linear-gradient(160deg,#fff2c2,#ffd982 45%,#e7a52e 100%);
-  border:1.2vh solid #fff;
-  box-shadow:0 2vh 3vh rgba(0,0,0,.3), inset 0 -2vh 3vh rgba(170,110,0,.35), inset 0 1.4vh 1.8vh rgba(255,255,255,.7);
+    radial-gradient(circle at 48% 35%, rgba(255,255,255,.72), rgba(255,255,255,0) 52%),
+    radial-gradient(ellipse at 50% 50%, #fff8d0, #ffe8a0 35%, #e8b640 65%, #d4941a 100%);
+  border:1.4vh solid #fff;
+  box-shadow:
+    0 2.4vh 3.6vh rgba(0,0,0,.38),
+    inset 0 -2.4vh 3.6vh rgba(130,70,0,.42),
+    inset 0 1.8vh 2.4vh rgba(255,255,255,.85),
+    inset 0 0 2.2vh rgba(255,255,255,.45);
 }
 /* あぶないゾーン（ふち）の光 */
 .danger-ring{
@@ -189,23 +204,34 @@ body{
   position:absolute; left:50%; top:50%;
   width:14vh; height:14vh; border-radius:50%;
   margin-left:-7vh; margin-top:-7vh;
-  background:radial-gradient(circle at 36% 30%, var(--gold-1), var(--gold-2) 42%, var(--gold-3) 72%, var(--gold-4) 100%);
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.95), transparent 35%),
+    radial-gradient(circle at 36% 30%, var(--gold-1), var(--gold-2) 42%, var(--gold-3) 72%, var(--gold-4) 100%);
   border:0.9vh solid #e8a200;
   box-shadow:
-    inset -1vh -1vh 0 rgba(150,90,0,.35),
-    inset 1vh 1vh 1.6vh rgba(255,255,255,.85),
-    0 1.4vh 1.8vh rgba(0,0,0,.4);
+    inset -1.2vh -1.2vh 0.6vh rgba(150,90,0,.5),
+    inset 1.2vh 1.2vh 2vh rgba(255,255,255,.95),
+    0 1.6vh 2.2vh rgba(0,0,0,.45),
+    0 0 2vh rgba(255,215,0,.6);
   display:flex; align-items:center; justify-content:center;
   will-change:transform;
   z-index:11;
+  filter:drop-shadow(0 0 1.4vh rgba(255,200,0,.5));
 }
+.coin::after{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  background:radial-gradient(circle at 28% 25%, rgba(255,255,255,.6), transparent 40%);
+  pointer-events:none; animation:shine 3s ease-in-out infinite;
+}
+@keyframes shine{ 0%,100%{opacity:.5;} 50%{opacity:1;} }
 .coin .face{
-  font-size:7vh; font-weight:900; color:#f6b500;
-  text-shadow:0 .3vh 0 #fff, 0 -.3vh 0 #c77400;
+  font-size:7vh; font-weight:900; color:#f6b500; position:relative; z-index:1;
+  text-shadow:0 .4vh 0 #fff, 0 -.4vh 0 #c77400, 0 0 .8vh rgba(255,215,0,.8);
 }
 .coin .shine{
-  position:absolute; top:14%; left:20%; width:30%; height:22%; border-radius:50%;
-  background:rgba(255,255,255,.85); filter:blur(2px); transform:rotate(-25deg);
+  position:absolute; top:12%; left:18%; width:32%; height:25%; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.95), transparent 70%); 
+  filter:blur(1.4px); transform:rotate(-25deg); opacity:.8; z-index:1;
 }
 .coin.win{ animation:coinWin .6s ease-in-out 3; }
 @keyframes coinWin{ 0%,100%{ filter:brightness(1);} 50%{ filter:brightness(1.9) drop-shadow(0 0 3vh #ffe35a);} }
@@ -216,15 +242,25 @@ body{
 .goal-btn{
   position:absolute; right:3vh; bottom:3vh; z-index:25;
   font-family:var(--font); cursor:pointer;
-  font-size:4.4vh; font-weight:800; color:#fff;
-  padding:2.4vh 5vh; border-radius:999px; border:.7vh solid #fff;
-  background:linear-gradient(180deg,#a6ee6a,#3fb320);
-  box-shadow:0 1.4vh 0 #2a7d14, 0 2vh 2.4vh rgba(0,0,0,.32), inset 0 .6vh .8vh rgba(255,255,255,.6);
-  text-shadow:0 .4vh .5vh rgba(0,0,0,.25);
-  transition:transform .08s ease, box-shadow .08s ease;
+  font-size:4.8vh; font-weight:900; color:#fff;
+  padding:2.6vh 5.6vh; border-radius:999px; border:.8vh solid #fff;
+  background:linear-gradient(180deg,#b8ff6e,#3fb320);
+  box-shadow:
+    0 1.8vh 0 #1a6a0a,
+    0 2.6vh 3.2vh rgba(0,0,0,.38),
+    inset 0 .8vh .8vh rgba(255,255,255,.7),
+    inset 0 -.4vh .4vh rgba(0,0,0,.15),
+    0 0 2.6vh rgba(100,200,50,.6);
+  text-shadow:0 .5vh .8vh rgba(0,0,0,.3);
+  transition:transform .08s ease, box-shadow .08s ease, filter .1s ease;
+  filter:saturate(1.2);
 }
-.goal-btn:active{ transform:translateY(1.4vh); box-shadow:0 .2vh 0 #2a7d14, 0 .8vh 1vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6); }
-.goal-btn:disabled{ filter:grayscale(.6) brightness(.9); opacity:.7; }
+.goal-btn:hover{ filter:saturate(1.3) brightness(1.1) drop-shadow(0 0 1.2vh rgba(150,255,100,.7)); }
+.goal-btn:active{ 
+  transform:translateY(1.6vh); 
+  box-shadow:0 .2vh 0 #1a6a0a, 0 .8vh 1.4vh rgba(0,0,0,.35), inset 0 .8vh .8vh rgba(255,255,255,.7);
+}
+.goal-btn:disabled{ filter:grayscale(.7) brightness(.85); opacity:.65; cursor:not-allowed; }
 
 /* しっぱい あかフラッシュ */
 .fail-flash{
@@ -267,14 +303,21 @@ body{
 .rr-sub{ font-size:2.8vh; font-weight:800; color:#777; margin-top:1vh; }
 .next-btn{
   font-family:var(--font); cursor:pointer;
-  font-size:4vh; font-weight:800; color:#fff;
-  padding:2vh 5vh; border-radius:999px; border:.7vh solid #fff;
-  background:linear-gradient(180deg,#ffe46a,#ffb01f);
-  box-shadow:0 1.4vh 0 #c77400, 0 2vh 2.4vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6);
-  text-shadow:0 .4vh .5vh rgba(0,0,0,.2);
-  transition:transform .08s ease, box-shadow .08s ease;
+  font-size:4.2vh; font-weight:900; color:#fff;
+  padding:2.2vh 5.2vh; border-radius:999px; border:.8vh solid #fff;
+  background:linear-gradient(180deg,#fff06e,#ffb01f);
+  box-shadow:
+    0 1.6vh 0 #c77400,
+    0 2.2vh 2.6vh rgba(0,0,0,.32),
+    inset 0 .7vh .8vh rgba(255,255,255,.7),
+    inset 0 -.3vh .3vh rgba(0,0,0,.12),
+    0 0 2vh rgba(255,180,0,.5);
+  text-shadow:0 .4vh .6vh rgba(0,0,0,.28);
+  transition:transform .08s ease, box-shadow .08s ease, filter .1s ease;
+  filter:saturate(1.15);
 }
-.next-btn:active{ transform:translateY(1.4vh); box-shadow:0 .2vh 0 #c77400, 0 .8vh 1vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6); }
+.next-btn:hover{ filter:saturate(1.25) brightness(1.08) drop-shadow(0 0 1vh rgba(255,200,0,.6)); }
+.next-btn:active{ transform:translateY(1.4vh); box-shadow:0 .2vh 0 #c77400, 0 .8vh 1.2vh rgba(0,0,0,.3), inset 0 .7vh .8vh rgba(255,255,255,.7); }
 
 /* =========================================================
    さいごのリザルト
@@ -306,14 +349,24 @@ body{
 .final-nudge{ margin-top:1vh; font-size:3vh; font-weight:800; color:#fff; text-shadow:0 .4vh 0 #2a7a2a; }
 .restart-btn{
   margin-top:3vh; font-family:var(--font); cursor:pointer;
-  font-size:4vh; font-weight:800; color:#fff;
-  padding:2.2vh 5.4vh; border-radius:999px; border:.7vh solid #fff;
-  background:linear-gradient(180deg,#8fe0ff,#36a8e6);
-  box-shadow:0 1.4vh 0 #1d6fa0, 0 2vh 2.4vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6);
-  text-shadow:0 .4vh .5vh rgba(0,0,0,.2);
-  transition:transform .08s ease, box-shadow .08s ease;
+  font-size:4.2vh; font-weight:900; color:#fff;
+  padding:2.4vh 5.6vh; border-radius:999px; border:.8vh solid #fff;
+  background:linear-gradient(180deg,#a8f0ff,#2a9ae6);
+  box-shadow:
+    0 1.8vh 0 #0f5fa8,
+    0 2.4vh 3vh rgba(0,0,0,.35),
+    inset 0 .8vh .8vh rgba(255,255,255,.75),
+    inset 0 -.4vh .4vh rgba(0,0,0,.12),
+    0 0 2.4vh rgba(100,200,255,.5);
+  text-shadow:0 .5vh .7vh rgba(0,0,0,.3);
+  transition:transform .08s ease, box-shadow .08s ease, filter .1s ease;
+  filter:saturate(1.15);
 }
-.restart-btn:active{ transform:translateY(1.4vh); box-shadow:0 .2vh 0 #1d6fa0, 0 .8vh 1vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6); }
+.restart-btn:hover{ filter:saturate(1.25) brightness(1.1) drop-shadow(0 0 1.2vh rgba(150,220,255,.6)); }
+.restart-btn:active{ 
+  transform:translateY(1.6vh); 
+  box-shadow:0 .2vh 0 #0f5fa8, 0 .8vh 1.4vh rgba(0,0,0,.32), inset 0 .8vh .8vh rgba(255,255,255,.75);
+}
 
 /* かみふぶき */
 .confetti{ position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
@@ -746,18 +799,15 @@ function loop(now){
   if(dt>0.05) dt=0.05;
 
   if(State.active){
-    // 傾きを 画面の向きに合わせて回転
-    const ang=((screen.orientation&&screen.orientation.angle)||window.orientation||0)*Math.PI/180;
-    let tx=clamp(State.curGamma-State.baseGamma,-45,45);
-    let ty=clamp(State.curBeta -State.baseBeta ,-45,45);
-    const sx= tx*Math.cos(ang)+ty*Math.sin(ang);
-    const sy=-tx*Math.sin(ang)+ty*Math.cos(ang);
+    // 傾きから 加速度を計算（左右 = gamma、前後 = beta）
+    const tiltX=clamp(State.curGamma-State.baseGamma,-45,45);
+    const tiltY=clamp(State.curBeta -State.baseBeta ,-45,45);
 
     const k=CONFIG[State.level];
     const G=k.sens;
     // 加速度（坂の傾き ∝ sin）
-    State.vx += Math.sin(sx*Math.PI/180)*G*dt;
-    State.vy += Math.sin(sy*Math.PI/180)*G*dt;
+    State.vx += Math.sin(tiltX*Math.PI/180)*G*dt;
+    State.vy += Math.sin(tiltY*Math.PI/180)*G*dt;
     State.vx *= k.damp; State.vy *= k.damp;
     State.x += State.vx*dt; State.y += State.vy*dt;
 
@@ -845,7 +895,7 @@ function showFinal(){
 }
 
 /* かみふぶき */
-const COLORS=['#ff4d77','#ffd83a','#4cd14c','#36a8e6','#ff8a1f','#b06aff','#fff'];
+const COLORS=['#ff3d7a','#ffeb3b','#4edd4d','#2bccff','#ff9e1f','#d954ff','#fff','#ffaa00','#00ff99'];
 function makeConfetti(){
   const box=byId('confetti');
   for(let i=0;i<90;i++){
