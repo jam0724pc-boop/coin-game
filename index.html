@@ -81,12 +81,12 @@ body{
 /* ===== タイトル文字 ===== */
 .title-wrap{ position:relative; z-index:5; text-align:center; }
 .game-title{
-  font-size:9.4vh; line-height:1; font-weight:900; letter-spacing:.04em;
-  color:#ffe800;
+  font-size:8.8vh; line-height:1; font-weight:900; letter-spacing:.01em;
+  color:#ffd21a;
   text-shadow:
-    0.5vh 0 0 #6b3f00, -0.5vh 0 0 #6b3f00, 0 0.5vh 0 #6b3f00, 0 -0.5vh 0 #6b3f00,
-    0.5vh 0.5vh 0 #6b3f00, -0.5vh -0.5vh 0 #6b3f00, 0.5vh -0.5vh 0 #6b3f00, -0.5vh 0.5vh 0 #6b3f00,
-    0 1.6vh 1.8vh rgba(0,0,0,.4);
+    0.3vh 0 0 #5a3500, -0.3vh 0 0 #5a3500, 0 0.3vh 0 #5a3500, 0 -0.3vh 0 #5a3500,
+    0.3vh 0.3vh 0 #5a3500, -0.3vh -0.3vh 0 #5a3500, 0.3vh -0.3vh 0 #5a3500, -0.3vh 0.3vh 0 #5a3500,
+    0 0.7vh 0 #5a3500, 0 0.9vh 0 #5a3500;
   transform:rotate(-2deg);
   animation:titlePop .6s cubic-bezier(.2,1.8,.4,1) both;
 }
@@ -124,8 +124,9 @@ body{
 .levels{ position:relative; z-index:5; margin-top:1.4vh; display:flex; gap:2.2vh; flex-wrap:wrap; justify-content:center; }
 .lv-btn{
   font-family:var(--font); cursor:pointer;
-  width:18vh; padding:2vh .6vh; border-radius:3vh; border:.8vh solid #fff;
+  width:18vh; min-height:15vh; padding:2vh .6vh; border-radius:3vh; border:.8vh solid #fff;
   color:#fff; font-weight:900; text-align:center;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
   background-clip:padding-box;
   box-shadow:
     0 1.4vh 0 var(--sh,#888),
@@ -133,9 +134,12 @@ body{
     inset 0 .8vh .8vh rgba(255,255,255,.65),
     inset 0 -.4vh .4vh rgba(0,0,0,.15);
   transition:transform .08s ease, box-shadow .08s ease, filter .1s ease;
-  text-shadow:0 .4vh .6vh rgba(0,0,0,.3);
+  text-shadow:0 .4vh .6vh rgba(0,0,0,.35);
   filter:brightness(1) saturate(1.15);
 }
+.lv-btn .num{ font-size:5.4vh; line-height:1; display:block; font-weight:900; }
+.lv-btn .nm{ font-size:2.7vh; line-height:1.15; display:block; margin-top:.6vh; }
+.lv-btn .st{ font-size:3vh; line-height:1.1; display:block; margin-top:.6vh; }
 .lv-btn:hover{ filter:brightness(1.1) saturate(1.2) drop-shadow(0 0 .8vh rgba(255,255,255,.4)); }
 .lv-btn:active{ 
   transform:translateY(1.2vh); 
@@ -148,6 +152,16 @@ body{
 .lv5{ background:linear-gradient(180deg,#ff9a9a,#e61a1a); --sh:#8a0a0a; }
 
 .sound-note{ position:relative; z-index:5; margin-top:2vh; font-size:1.9vh; color:#2a5a10; font-weight:800; background:rgba(255,255,255,.7); padding:.6vh 1.6vh; border-radius:999px; }
+
+.tilt-fix{ position:relative; z-index:5; margin-top:1.2vh; display:flex; align-items:center; gap:1vh; }
+.tilt-fix-lbl{ font-size:1.7vh; font-weight:800; color:#2a5a10; background:rgba(255,255,255,.6); padding:.4vh 1vh; border-radius:999px; }
+.tfix-btn{
+  font-family:var(--font); cursor:pointer; font-size:1.8vh; font-weight:800; color:#777;
+  background:rgba(255,255,255,.85); border:.3vh solid #fff; border-radius:999px; padding:.6vh 1.6vh;
+  box-shadow:0 .5vh .8vh rgba(0,0,0,.18); transition:all .1s ease;
+}
+.tfix-btn.on{ background:linear-gradient(180deg,#ffe46a,#ffb01f); color:#fff; box-shadow:0 .5vh .8vh rgba(0,0,0,.25), inset 0 .3vh .3vh rgba(255,255,255,.6); }
+.tfix-btn:active{ transform:translateY(.3vh); }
 
 /* =========================================================
    ゲーム画面
@@ -451,6 +465,12 @@ body{
   </div>
 
   <div class="sound-note">🎵 おとが でるよ。おとを オンにしてね</div>
+
+  <div class="tilt-fix">
+    <span class="tilt-fix-lbl">むきが ぎゃくのとき →</span>
+    <button class="tfix-btn" id="tfixX">↔ ひだりみぎ</button>
+    <button class="tfix-btn" id="tfixY">↕ まえうしろ</button>
+  </div>
 </section>
 
 <!-- ============ ゲーム ============ -->
@@ -833,21 +853,25 @@ function loop(now){
 
   if(State.active){
     // 傾きから 加速度を計算
-    // ★横向き(ランドスケープ)では、画面の左右 = 端末のbeta、画面の前後 = 端末のgamma になる
     let dBeta  = State.curBeta  - State.baseBeta;   // 端末の前後の傾き
     let dGamma = State.curGamma - State.baseGamma;  // 端末の左右の傾き
 
-    // 画面の向きに合わせて、左右と前後の軸・符号を決める
-    const angle = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+    // 画面が横向きか縦向きかを確実に判定（iPad Safariでは角度が取れないことがあるため）
+    const landscape = (window.matchMedia && window.matchMedia('(orientation: landscape)').matches)
+                      || (window.innerWidth >= window.innerHeight);
+    // 横向きの「どちら向き」かを取得（取れなければ既定値）
+    let o = (typeof window.orientation === 'number') ? window.orientation
+            : (screen.orientation && typeof screen.orientation.angle==='number' ? screen.orientation.angle : 90);
+
     let tiltX, tiltY;
-    if(angle === 90){            // ランドスケープ（その1）
-      tiltX =  dBeta;  tiltY = -dGamma;
-    } else if(angle === -90 || angle === 270){  // ランドスケープ（その2）
-      tiltX = -dBeta;  tiltY =  dGamma;
-    } else if(angle === 180){    // たて（逆さ）
-      tiltX = -dGamma; tiltY = -dBeta;
-    } else {                     // たて（通常）
-      tiltX =  dGamma; tiltY =  dBeta;
+    if(landscape){
+      // ★横向き：画面の左右 = 端末のbeta、画面の前後 = 端末のgamma
+      if(o === -90 || o === 270){ tiltX = -dBeta;  tiltY =  dGamma; }
+      else                      { tiltX =  dBeta;  tiltY = -dGamma; }
+    } else {
+      // 縦向き（保険）
+      if(o === 180){ tiltX = -dGamma; tiltY = -dBeta; }
+      else         { tiltX =  dGamma; tiltY =  dBeta; }
     }
     if(TILT.invertX) tiltX = -tiltX;
     if(TILT.invertY) tiltY = -tiltY;
@@ -988,6 +1012,26 @@ document.querySelectorAll('.lv-btn').forEach(btn=>{
 });
 
 setupPointerFallback();
+
+/* ===== 向き調整ボタン（押すと左右/前後の向きを反転、設定は記憶） ===== */
+try{
+  if(localStorage.getItem('tiltInvertX')==='1') TILT.invertX=true;
+  if(localStorage.getItem('tiltInvertY')==='1') TILT.invertY=true;
+}catch(e){}
+const tfixX=byId('tfixX'), tfixY=byId('tfixY');
+function refreshTfix(){
+  tfixX.classList.toggle('on', TILT.invertX);
+  tfixY.classList.toggle('on', TILT.invertY);
+}
+refreshTfix();
+tfixX.addEventListener('click', ()=>{
+  TILT.invertX=!TILT.invertX; refreshTfix();
+  try{ localStorage.setItem('tiltInvertX', TILT.invertX?'1':'0'); }catch(e){}
+});
+tfixY.addEventListener('click', ()=>{
+  TILT.invertY=!TILT.invertY; refreshTfix();
+  try{ localStorage.setItem('tiltInvertY', TILT.invertY?'1':'0'); }catch(e){}
+});
 </script>
 </body>
 </html>
