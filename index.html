@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>コインはこびゲーム</title>
+<style>
+/* =========================================================
+   コインはこびゲーム  〜たいらにあるこう！〜
+   11インチ iPad ランドスケープ用  /  外部画像なし・1ファイル完結
+    ※ 先生が調整しやすいよう、主なパラメータは <script> 冒頭の CONFIG にまとめています
+   ========================================================= */
+
+:root{
+  --gold-1:#fff7c0; --gold-2:#ffd83a; --gold-3:#f5a800; --gold-4:#b66f00;
+  --green-1:#9bffa0; --green-2:#4cd14c; --green-3:#157a15;
+  --font: "Hiragino Maru Gothic ProN","ヒラギノ丸ゴ ProN W4","M PLUS Rounded 1c","Rounded Mplus 1c","Yu Gothic","YuGothic",sans-serif;
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0; }
+html,body{ height:100%; overflow:hidden; }
+body{
+  font-family:var(--font);
+  -webkit-user-select:none; user-select:none;
+  touch-action:manipulation;
+  background:#5ec8ff;
+  color:#3a2a00;
+}
+
+/* ===== 画面共通 ===== */
+.screen{
+  position:fixed; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.hidden{ display:none !important; }
+
+/* ===== そら〜くさ の背景 ===== */
+.sky-bg{
+  position:absolute; inset:0; z-index:0;
+  background:
+    linear-gradient(180deg,
+      #4fb8ff 0%, #79d3ff 30%, #b9efff 48%,
+      #cdeb6e 52%, #8fd83a 60%, #6abf26 100%);
+}
+.sun{
+  position:absolute; top:5%; right:8%; width:14vh; height:14vh; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%, #fff7c7, #ffe65a 55%, #ffcf2e 100%);
+  box-shadow:0 0 40px 14px rgba(255,225,90,.7);
+  z-index:1;
+}
+.cloud{
+  position:absolute; background:#fff; border-radius:50%;
+  box-shadow:0 8px 18px rgba(0,0,0,.08);
+  opacity:.95; z-index:1;
+}
+.cloud::before,.cloud::after{ content:""; position:absolute; background:#fff; border-radius:50%; }
+.c1{ width:16vh; height:7vh; top:12%; left:10%; animation:drift 26s linear infinite; }
+.c1::before{ width:9vh; height:9vh; top:-3.5vh; left:2.5vh; }
+.c1::after{ width:7vh; height:7vh; top:-2.5vh; left:8vh; }
+.c2{ width:12vh; height:5.5vh; top:24%; left:60%; animation:drift 34s linear infinite; }
+.c2::before{ width:7vh; height:7vh; top:-3vh; left:2vh; }
+.c2::after{ width:5.5vh; height:5.5vh; top:-2vh; left:6vh; }
+@keyframes drift{ from{ transform:translateX(-10vw);} to{ transform:translateX(120vw);} }
+
+/* 左右の土管（どかん） */
+.pipe{
+  position:absolute; bottom:0; width:13vh; height:30vh; z-index:1;
+  background:linear-gradient(90deg,#0e5e0e 0%, #2f9e2f 22%, #b6ffba 46%, #3aa83a 64%, #0c4f0c 100%);
+  border-radius:6px 6px 0 0;
+}
+.pipe::before{ /* 土管のフチ */
+  content:""; position:absolute; top:-3.6vh; left:-1.4vh; width:calc(100% + 2.8vh); height:5.4vh;
+  background:linear-gradient(90deg,#0e5e0e 0%, #2f9e2f 22%, #b6ffba 46%, #3aa83a 64%, #0c4f0c 100%);
+  border-radius:10px;
+  box-shadow:0 6px 12px rgba(0,0,0,.25), inset 0 -4px 6px rgba(0,0,0,.25), inset 0 4px 4px rgba(255,255,255,.4);
+}
+.pipe.left{ left:3vh; }
+.pipe.right{ right:3vh; }
+
+/* ===== タイトル文字 ===== */
+.title-wrap{ position:relative; z-index:5; text-align:center; }
+.game-title{
+  font-size:9vh; line-height:1; font-weight:800; letter-spacing:.02em;
+  color:#ffe35a;
+  -webkit-text-stroke:0.7vh #7a4a00;
+  text-shadow:0 0.8vh 0 #7a4a00, 0 1.4vh 1.6vh rgba(0,0,0,.35);
+  transform:rotate(-2deg);
+  animation:titlePop .6s cubic-bezier(.2,1.6,.4,1) both;
+}
+.game-sub{
+  display:inline-block; margin-top:2vh; font-size:3.4vh; font-weight:800;
+  color:#fff; background:linear-gradient(180deg,#ff8aa0,#ff4d77);
+  padding:1vh 3vh; border-radius:999px;
+  -webkit-text-stroke:0; box-shadow:0 .8vh 0 #b62b50, 0 1.4vh 1.4vh rgba(0,0,0,.25);
+  border:.5vh solid #fff;
+}
+@keyframes titlePop{ from{ transform:rotate(-2deg) scale(.4); opacity:0;} to{ transform:rotate(-2deg) scale(1); opacity:1;} }
+
+/* あそびかたカード */
+.howto{
+  position:relative; z-index:5; margin-top:2.4vh;
+  background:rgba(255,255,255,.92);
+  border:.5vh solid #fff;
+  border-radius:3vh; padding:1.6vh 3vh;
+  box-shadow:0 1vh 2.4vh rgba(0,0,0,.2);
+  display:flex; gap:3vh; align-items:center;
+}
+.howto .step{ text-align:center; max-width:20vh; }
+.howto .emo{ font-size:5vh; line-height:1; }
+.howto .lbl{ font-size:2.1vh; font-weight:800; color:#3a6a1a; margin-top:.6vh; }
+.howto .arrow{ font-size:4vh; color:#ffb01f; font-weight:900; }
+
+/* むずかしさボタン */
+.levels-title{
+  position:relative; z-index:5; margin-top:2.8vh; font-size:3vh; font-weight:800; color:#fff;
+  text-shadow:0 .4vh 0 #2a7a2a, 0 .8vh .8vh rgba(0,0,0,.2);
+}
+.levels{ position:relative; z-index:5; margin-top:1.4vh; display:flex; gap:2.2vh; flex-wrap:wrap; justify-content:center; }
+.lv-btn{
+  font-family:var(--font); cursor:pointer;
+  width:18vh; padding:1.8vh .6vh; border-radius:2.6vh; border:.6vh solid #fff;
+  color:#fff; font-weight:800; text-align:center;
+  box-shadow:0 1vh 0 var(--sh,#888), 0 1.6vh 1.8vh rgba(0,0,0,.28), inset 0 .5vh .6vh rgba(255,255,255,.55);
+  transition:transform .08s ease, box-shadow .08s ease;
+  text-shadow:0 .3vh .4vh rgba(0,0,0,.25);
+}
+.lv-btn .num{ font-size:4.6vh; line-height:1; display:block; }
+.lv-btn .nm{ font-size:2.3vh; display:block; margin-top:.4vh; }
+.lv-btn .st{ font-size:2.4vh; letter-spacing:-.2vh; display:block; margin-top:.4vh; }
+.lv-btn:active{ transform:translateY(1vh); box-shadow:0 .2vh 0 var(--sh,#888), 0 .6vh .8vh rgba(0,0,0,.28), inset 0 .5vh .6vh rgba(255,255,255,.5); }
+.lv1{ background:linear-gradient(180deg,#a6ee6a,#5fc22e); --sh:#3a7d18; }
+.lv2{ background:linear-gradient(180deg,#8fe0ff,#36a8e6); --sh:#1d6fa0; }
+.lv3{ background:linear-gradient(180deg,#ffe46a,#ffb01f); --sh:#c77400; }
+.lv4{ background:linear-gradient(180deg,#ffb06a,#ff7a1f); --sh:#c25000; }
+.lv5{ background:linear-gradient(180deg,#ff8a8a,#e63333); --sh:#9c1c1c; }
+
+.sound-note{ position:relative; z-index:5; margin-top:2vh; font-size:1.9vh; color:#2a5a10; font-weight:800; background:rgba(255,255,255,.7); padding:.6vh 1.6vh; border-radius:999px; }
+
+/* =========================================================
+   ゲーム画面
+   ========================================================= */
+#game{ justify-content:center; }
+.counter{
+  position:absolute; top:2.4vh; left:2.4vh; z-index:20;
+  background:rgba(255,255,255,.92); border:.5vh solid #fff; border-radius:2vh;
+  padding:1vh 2.2vh; font-size:3vh; font-weight:800; color:#c77400;
+  box-shadow:0 .8vh 1.4vh rgba(0,0,0,.22);
+}
+.counter b{ color:#e63333; font-size:3.6vh; }
+.quit{
+  position:absolute; top:2.4vh; right:2.4vh; z-index:20;
+  background:rgba(255,255,255,.85); border:.5vh solid #fff; border-radius:2vh;
+  padding:.9vh 1.8vh; font-size:2.2vh; font-weight:800; color:#777; cursor:pointer;
+  box-shadow:0 .6vh 1vh rgba(0,0,0,.2);
+}
+.quit:active{ transform:translateY(.4vh); }
+
+.hint{
+  position:absolute; top:2.4vh; left:50%; transform:translateX(-50%); z-index:15;
+  font-size:3.2vh; font-weight:800; color:#fff;
+  text-shadow:0 .5vh 0 #2a7a2a, 0 .9vh .9vh rgba(0,0,0,.25);
+}
+
+/* おぼん（トレイ） */
+.tray-area{ position:relative; z-index:10; display:flex; align-items:center; justify-content:center; }
+.tray{
+  position:relative;
+  width:54vh; height:54vh; border-radius:9vh;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255,255,255,.5), rgba(255,255,255,0) 60%),
+    linear-gradient(160deg,#fff2c2,#ffd982 45%,#e7a52e 100%);
+  border:1.2vh solid #fff;
+  box-shadow:0 2vh 3vh rgba(0,0,0,.3), inset 0 -2vh 3vh rgba(170,110,0,.35), inset 0 1.4vh 1.8vh rgba(255,255,255,.7);
+}
+/* あぶないゾーン（ふち）の光 */
+.danger-ring{
+  position:absolute; inset:0; border-radius:9vh; pointer-events:none;
+  box-shadow:inset 0 0 0 1.2vh rgba(255,40,40,0);
+  transition:box-shadow .05s linear;
+}
+.tray-center-mark{
+  position:absolute; left:50%; top:50%; width:18vh; height:18vh; transform:translate(-50%,-50%);
+  border:0.6vh dashed rgba(180,110,0,.45); border-radius:50%; pointer-events:none;
+}
+
+/* コイン */
+.coin{
+  position:absolute; left:50%; top:50%;
+  width:14vh; height:14vh; border-radius:50%;
+  margin-left:-7vh; margin-top:-7vh;
+  background:radial-gradient(circle at 36% 30%, var(--gold-1), var(--gold-2) 42%, var(--gold-3) 72%, var(--gold-4) 100%);
+  border:0.9vh solid #e8a200;
+  box-shadow:
+    inset -1vh -1vh 0 rgba(150,90,0,.35),
+    inset 1vh 1vh 1.6vh rgba(255,255,255,.85),
+    0 1.4vh 1.8vh rgba(0,0,0,.4);
+  display:flex; align-items:center; justify-content:center;
+  will-change:transform;
+  z-index:11;
+}
+.coin .face{
+  font-size:7vh; font-weight:900; color:#f6b500;
+  text-shadow:0 .3vh 0 #fff, 0 -.3vh 0 #c77400;
+}
+.coin .shine{
+  position:absolute; top:14%; left:20%; width:30%; height:22%; border-radius:50%;
+  background:rgba(255,255,255,.85); filter:blur(2px); transform:rotate(-25deg);
+}
+.coin.win{ animation:coinWin .6s ease-in-out 3; }
+@keyframes coinWin{ 0%,100%{ filter:brightness(1);} 50%{ filter:brightness(1.9) drop-shadow(0 0 3vh #ffe35a);} }
+.coin.fall{ animation:coinFall .6s ease-in forwards; }
+@keyframes coinFall{ to{ transform:translateY(60vh) rotate(540deg) scale(.5); opacity:0;} }
+
+/* ゴールボタン（右下・先生用） */
+.goal-btn{
+  position:absolute; right:3vh; bottom:3vh; z-index:25;
+  font-family:var(--font); cursor:pointer;
+  font-size:4.4vh; font-weight:800; color:#fff;
+  padding:2.4vh 5vh; border-radius:999px; border:.7vh solid #fff;
+  background:linear-gradient(180deg,#a6ee6a,#3fb320);
+  box-shadow:0 1.4vh 0 #2a7d14, 0 2vh 2.4vh rgba(0,0,0,.32), inset 0 .6vh .8vh rgba(255,255,255,.6);
+  text-shadow:0 .4vh .5vh rgba(0,0,0,.25);
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.goal-btn:active{ transform:translateY(1.4vh); box-shadow:0 .2vh 0 #2a7d14, 0 .8vh 1vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6); }
+.goal-btn:disabled{ filter:grayscale(.6) brightness(.9); opacity:.7; }
+
+/* しっぱい あかフラッシュ */
+.fail-flash{
+  position:absolute; inset:0; z-index:30; pointer-events:none;
+  background:radial-gradient(circle at 50% 50%, rgba(255,60,60,.25), rgba(220,0,0,.65));
+  opacity:0;
+}
+.fail-flash.on{ animation:flashRed .5s ease-out; }
+@keyframes flashRed{ 0%{ opacity:0;} 20%{ opacity:1;} 100%{ opacity:0;} }
+
+/* カウントダウン */
+.countdown{
+  position:absolute; inset:0; z-index:40; display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.18);
+}
+.countdown .cd-num{
+  font-size:24vh; font-weight:900; color:#fff;
+  -webkit-text-stroke:1vh #ff8a1f;
+  text-shadow:0 1.4vh 0 #c25000, 0 2vh 2vh rgba(0,0,0,.3);
+  animation:cdPop .6s ease-out;
+}
+@keyframes cdPop{ from{ transform:scale(2.4); opacity:0;} 60%{ opacity:1;} to{ transform:scale(1); opacity:1;} }
+
+/* ラウンドけっか オーバーレイ */
+.round-result{
+  position:absolute; inset:0; z-index:45; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:3vh;
+  background:rgba(0,0,0,.35);
+}
+.rr-card{
+  background:#fff; border:1vh solid #ffd982; border-radius:5vh;
+  padding:4vh 6vh; text-align:center;
+  box-shadow:0 2vh 4vh rgba(0,0,0,.35);
+  animation:cdPop .45s ease-out;
+}
+.rr-emo{ font-size:14vh; line-height:1; }
+.rr-msg{ font-size:5vh; font-weight:800; margin-top:1vh; }
+.rr-msg.ok{ color:#3fb320; }
+.rr-msg.ng{ color:#ff8a1f; }
+.rr-sub{ font-size:2.8vh; font-weight:800; color:#777; margin-top:1vh; }
+.next-btn{
+  font-family:var(--font); cursor:pointer;
+  font-size:4vh; font-weight:800; color:#fff;
+  padding:2vh 5vh; border-radius:999px; border:.7vh solid #fff;
+  background:linear-gradient(180deg,#ffe46a,#ffb01f);
+  box-shadow:0 1.4vh 0 #c77400, 0 2vh 2.4vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6);
+  text-shadow:0 .4vh .5vh rgba(0,0,0,.2);
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.next-btn:active{ transform:translateY(1.4vh); box-shadow:0 .2vh 0 #c77400, 0 .8vh 1vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6); }
+
+/* =========================================================
+   さいごのリザルト
+   ========================================================= */
+#final{ justify-content:center; }
+.final-card{
+  position:relative; z-index:5; text-align:center;
+  animation:cdPop .6s cubic-bezier(.2,1.6,.4,1) both;
+}
+.final-star{
+  font-size:30vh; line-height:1; filter:drop-shadow(0 0 5vh #ffe35a);
+  animation:starSpin 2.4s ease-in-out infinite;
+}
+@keyframes starSpin{ 0%,100%{ transform:scale(1) rotate(-6deg);} 50%{ transform:scale(1.12) rotate(6deg);} }
+.final-headline{
+  font-size:6.4vh; font-weight:800; color:#fff;
+  -webkit-text-stroke:.6vh #7a4a00;
+  text-shadow:0 .8vh 0 #7a4a00, 0 1.4vh 1.4vh rgba(0,0,0,.3);
+}
+.final-rate{
+  margin-top:1.4vh; font-size:11vh; font-weight:900; line-height:1;
+  color:#ffe35a; -webkit-text-stroke:.9vh #c25000;
+  text-shadow:0 1vh 0 #c25000, 0 1.8vh 1.8vh rgba(0,0,0,.3);
+}
+.final-rate .pct{ font-size:7vh; }
+.final-praise{ margin-top:1.6vh; font-size:4.4vh; font-weight:800; }
+.final-praise.big{ color:#ff4d77; }
+.final-praise.warm{ color:#fff; text-shadow:0 .5vh 0 #2a7a2a; }
+.final-nudge{ margin-top:1vh; font-size:3vh; font-weight:800; color:#fff; text-shadow:0 .4vh 0 #2a7a2a; }
+.restart-btn{
+  margin-top:3vh; font-family:var(--font); cursor:pointer;
+  font-size:4vh; font-weight:800; color:#fff;
+  padding:2.2vh 5.4vh; border-radius:999px; border:.7vh solid #fff;
+  background:linear-gradient(180deg,#8fe0ff,#36a8e6);
+  box-shadow:0 1.4vh 0 #1d6fa0, 0 2vh 2.4vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6);
+  text-shadow:0 .4vh .5vh rgba(0,0,0,.2);
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.restart-btn:active{ transform:translateY(1.4vh); box-shadow:0 .2vh 0 #1d6fa0, 0 .8vh 1vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.6); }
+
+/* かみふぶき */
+.confetti{ position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
+.confetti i{
+  position:absolute; top:-6vh; width:1.6vh; height:2.4vh; border-radius:.3vh;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  0%{ transform:translateY(-10vh) rotate(0deg); opacity:1; }
+  100%{ transform:translateY(115vh) rotate(720deg); opacity:1; }
+}
+
+/* たてむき注意 */
+.rotate-hint{
+  position:fixed; inset:0; z-index:999; display:none;
+  flex-direction:column; align-items:center; justify-content:center; gap:3vh;
+  background:linear-gradient(180deg,#36a8e6,#6abf26); color:#fff; text-align:center;
+}
+.rotate-hint .ico{ font-size:18vw; animation:rot 2s ease-in-out infinite; }
+@keyframes rot{ 0%,100%{ transform:rotate(0);} 50%{ transform:rotate(90deg);} }
+.rotate-hint .txt{ font-size:6vw; font-weight:800; text-shadow:0 .6vh 0 #2a7a2a; }
+@media (orientation:portrait){ .rotate-hint{ display:flex; } }
+</style>
+</head>
+<body>
+
+<!-- ============ タイトル ============ -->
+<section id="title" class="screen">
+  <div class="sky-bg"></div>
+  <div class="sun"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="pipe left"></div>
+  <div class="pipe right"></div>
+
+  <div class="title-wrap">
+    <div class="game-title">コインはこびゲーム</div>
+    <div class="game-sub">⭐ たいらに あるこう！ ⭐</div>
+  </div>
+
+  <div class="howto">
+    <div class="step"><div class="emo">🙌</div><div class="lbl">iPadを<br>りょうてで<br>もつよ</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="emo">🪙</div><div class="lbl">たいらに<br>キープして<br>あるこう</div></div>
+    <div class="arrow">▶</div>
+    <div class="step"><div class="emo">🏁</div><div class="lbl">５メートル<br>すすんだら<br>ゴール！</div></div>
+  </div>
+
+  <div class="levels-title">むずかしさを えらんでね</div>
+  <div class="levels">
+    <button class="lv-btn lv1" data-level="1"><span class="num">1</span><span class="nm">とっても<br>かんたん</span></button>
+    <button class="lv-btn lv2" data-level="2"><span class="num">2</span><span class="nm">かんたん</span></button>
+    <button class="lv-btn lv3" data-level="3"><span class="num">3</span><span class="nm">ふつう</span></button>
+    <button class="lv-btn lv4" data-level="4"><span class="num">4</span><span class="nm">むずかしい</span></button>
+    <button class="lv-btn lv5" data-level="5"><span class="num">5</span><span class="st">ゲキムズ</span></button>
+  </div>
+
+  <div class="sound-note">🎵 おとが でるよ。おとを オンにしてね</div>
+</section>
+
+<!-- ============ ゲーム ============ -->
+<section id="game" class="screen hidden">
+  <div class="sky-bg"></div>
+  <div class="sun"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="pipe left"></div>
+  <div class="pipe right"></div>
+
+  <div class="counter">いま <b id="cur">1</b> かいめ / 5かい</div>
+  <button class="quit" id="quitBtn">やめる</button>
+  <div class="hint">🪙 たいらに キープ！</div>
+
+  <div class="tray-area">
+    <div class="tray">
+      <div class="tray-center-mark"></div>
+      <div class="coin" id="coin">
+        <div class="shine"></div>
+        <div class="face">$</div>
+      </div>
+      <div class="danger-ring" id="dangerRing"></div>
+    </div>
+  </div>
+
+  <button class="goal-btn" id="goalBtn">ゴール！🏁</button>
+
+  <div class="fail-flash" id="failFlash"></div>
+
+  <!-- カウントダウン -->
+  <div class="countdown hidden" id="countdown"><div class="cd-num" id="cdNum">3</div></div>
+
+  <!-- ラウンドけっか -->
+  <div class="round-result hidden" id="roundResult">
+    <div class="rr-card">
+      <div class="rr-emo" id="rrEmo">🎉</div>
+      <div class="rr-msg" id="rrMsg">せいこう！</div>
+      <div class="rr-sub" id="rrSub"></div>
+    </div>
+    <button class="next-btn" id="nextBtn">つぎへ</button>
+  </div>
+</section>
+
+<!-- ============ さいごのリザルト ============ -->
+<section id="final" class="screen hidden">
+  <div class="sky-bg"></div>
+  <div class="confetti" id="confetti"></div>
+  <div class="final-card">
+    <div class="final-star hidden" id="finalStar">⭐</div>
+    <div class="final-headline" id="finalHeadline">5かいちゅう 0かい くりあ！</div>
+    <div class="final-rate" id="finalRate">0<span class="pct">％</span></div>
+    <div class="final-praise" id="finalPraise"></div>
+    <div class="final-nudge" id="finalNudge"></div>
+    <button class="restart-btn" id="restartBtn">🔁 さいしょから あそぶ</button>
+  </div>
+</section>
+
+<!-- たてむき注意 -->
+<div class="rotate-hint">
+  <div class="ico">📱</div>
+  <div class="txt">よこむきに してね</div>
+</div>
+
+<script>
+/* =========================================================================
+   ★ 先生むけ調整パラメータ ★
+   むずかしさを変えたいときは、ここの数字をいじってください。
+   - sens   : コインの すべりやすさ（大きいほど よく動く＝むずかしい）
+   - damp   : ブレーキの強さ（1に近いほど止まりにくい＝慣性が大きい）
+   - radius : おぼんのセーフ範囲のわりあい（小さいほど落ちやすい）
+   ========================================================================= */
+const CONFIG = {
+  1:{ sens:1200, damp:0.945, radius:0.90 },  // とってもかんたん
+  2:{ sens:1900, damp:0.948, radius:0.84 },  // かんたん
+  3:{ sens:2700, damp:0.951, radius:0.77 },  // ふつう
+  4:{ sens:3700, damp:0.953, radius:0.69 },  // むずかしい
+  5:{ sens:5200, damp:0.956, radius:0.61 }   // ゲキムズ
+};
+const TOTAL_PLAYS = 5;
+
+/* ===================== ゲーム状態 ===================== */
+const State = {
+  level:1, play:1, clears:0,
+  active:false, ended:false, calibrating:false,
+  x:0, y:0, vx:0, vy:0,
+  baseBeta:0, baseGamma:0,
+  curBeta:0, curGamma:0,
+  sensorSeen:false, pointerCtrl:false,
+  raf:null, last:0, maxR:0
+};
+
+/* ===================== 画面のきりかえ ===================== */
+const screens = { title:byId('title'), game:byId('game'), final:byId('final') };
+function show(name){
+  for(const k in screens) screens[k].classList.add('hidden');
+  screens[name].classList.remove('hidden');
+}
+function byId(id){ return document.getElementById(id); }
+
+/* =========================================================================
+   Web Audio API  〜 すべての音をプログラムで生成 〜
+   ========================================================================= */
+let audioCtx=null, masterGain=null;
+const NOTES = (function(){
+  const m={}, names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  for(let oct=1; oct<=6; oct++){
+    for(let i=0;i<12;i++){
+      const midi=(oct+1)*12+i;            // C4 -> 60
+      m[names[i]+oct]=440*Math.pow(2,(midi-69)/12);
+    }
+  }
+  m['r']=0; return m;
+})();
+
+function initAudio(){
+  if(audioCtx) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  audioCtx = new AC();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.42;
+  masterGain.connect(audioCtx.destination);
+}
+function resumeAudio(){ if(audioCtx && audioCtx.state==='suspended') audioCtx.resume(); }
+
+/* 1音を鳴らす（square=メロディ / triangle=ベース） */
+function playNote(type, freq, t, dur, gain){
+  if(!freq) return;
+  const osc=audioCtx.createOscillator(), g=audioCtx.createGain();
+  osc.type = (type==='bass') ? 'triangle' : 'square';
+  osc.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.linearRampToValueAtTime(gain, t+0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  osc.connect(g); g.connect(masterGain);
+  osc.start(t); osc.stop(t+dur+0.03);
+}
+/* ノイズの ドラム（8bitっぽい打楽器） */
+function playDrum(t){
+  const len=Math.floor(audioCtx.sampleRate*0.05);
+  const buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);
+  const src=audioCtx.createBufferSource(); src.buffer=buf;
+  const f=audioCtx.createBiquadFilter(); f.type='highpass'; f.frequency.value=2600;
+  const g=audioCtx.createGain(); g.gain.value=0.18;
+  src.connect(f); f.connect(g); g.connect(masterGain); src.start(t);
+}
+
+/* ===================== 5曲のBGM（短いループ） ===================== */
+/* note は ['音名', 拍数]。type:'drum' のトラックは ['x',拍] で打つ */
+const BGMS = {
+  1:{ tempo:104, tracks:[
+    { type:'mel', gain:0.30, seq:[
+      ['C5',1],['E5',1],['G5',1],['E5',1], ['F5',1],['E5',1],['D5',1],['r',1],
+      ['D5',1],['F5',1],['A5',1],['F5',1], ['E5',1],['D5',1],['C5',2] ] },
+    { type:'bass', gain:0.34, seq:[
+      ['C3',2],['G3',2],['F3',2],['G3',2], ['F3',2],['C3',2],['G3',2],['C3',2] ] }
+  ]},
+  2:{ tempo:126, tracks:[
+    { type:'mel', gain:0.30, seq:[
+      ['G4',.5],['B4',.5],['D5',1],['G5',1],['D5',1],
+      ['E5',.5],['D5',.5],['C5',1],['B4',1],['G4',1],
+      ['A4',.5],['B4',.5],['C5',1],['A4',1],['D5',1],
+      ['G5',1],['D5',1],['B4',1],['G4',1] ] },
+    { type:'bass', gain:0.32, seq:[
+      ['G2',1],['G2',1],['D3',1],['D3',1],['C3',1],['C3',1],['D3',1],['D3',1],
+      ['G2',1],['G2',1],['C3',1],['C3',1],['G2',1],['D3',1],['G2',1],['G2',1] ] }
+  ]},
+  3:{ tempo:146, tracks:[
+    { type:'mel', gain:0.30, seq:[
+      ['E5',.5],['E5',.5],['G5',.5],['E5',.5],['C5',.5],['E5',.5],['G5',1],
+      ['F5',.5],['E5',.5],['D5',.5],['E5',.5],['C5',1],['r',.5],['G4',.5],
+      ['A4',.5],['C5',.5],['E5',.5],['G5',.5],['A5',.5],['G5',.5],['E5',.5],['C5',.5],
+      ['D5',.5],['E5',.5],['F5',.5],['D5',.5],['C5',2] ] },
+    { type:'bass', gain:0.32, seq:[
+      ['C3',1],['G3',1],['C3',1],['G3',1],['F3',1],['C3',1],['G3',1],['G3',1],
+      ['A3',1],['E3',1],['F3',1],['G3',1],['C3',1],['G3',1],['C3',2] ] },
+    { type:'drum', gain:0, seq:[ ['x',1] ] }
+  ]},
+  4:{ tempo:164, tracks:[
+    { type:'mel', gain:0.30, seq:[
+      ['A4',.5],['A4',.5],['C5',.5],['A4',.5],['E5',.5],['A4',.5],['G5',1],
+      ['F5',.5],['E5',.5],['D5',.5],['C5',.5],['B4',1],['E5',1],
+      ['A4',.5],['C5',.5],['E5',.5],['A5',.5],['G5',.5],['F5',.5],['E5',1],
+      ['D5',.5],['C5',.5],['B4',.5],['A4',.5],['A4',2] ] },
+    { type:'bass', gain:0.34, seq:[
+      ['A2',1],['A2',1],['F2',1],['F2',1],['G2',1],['G2',1],['E2',1],['E2',1],
+      ['A2',1],['A2',1],['F2',1],['F2',1],['G2',1],['E2',1],['A2',2] ] },
+    { type:'drum', gain:0, seq:[ ['x',.5] ] }
+  ]},
+  5:{ tempo:186, tracks:[
+    { type:'mel', gain:0.30, seq:[
+      ['E5',.5],['r',.5],['E5',.5],['F5',.5],['E5',.5],['D#5',.5],['E5',.5],['B4',.5],
+      ['E5',.5],['G5',.5],['F#5',.5],['F5',.5],['E5',1],['r',1],
+      ['A4',.5],['C5',.5],['E5',.5],['A5',.5],['G#5',.5],['G5',.5],['F#5',.5],['F5',.5],
+      ['E5',.5],['D#5',.5],['E5',.5],['D#5',.5],['E5',2] ] },
+    { type:'bass', gain:0.36, seq:[
+      ['E2',.5],['E3',.5],['E2',.5],['E3',.5],['E2',.5],['E3',.5],['E2',.5],['E3',.5],
+      ['A2',.5],['A3',.5],['A2',.5],['A3',.5],['G2',.5],['G3',.5],['G2',.5],['G3',.5] ] },
+    { type:'drum', gain:0, seq:[ ['x',.5] ] }
+  ]}
+};
+
+let bgm=null;
+function startBGM(level){
+  stopBGM();
+  const def=BGMS[level];
+  const spb=60/def.tempo;
+  const start=audioCtx.currentTime+0.06;
+  bgm={ def, spb, running:true, tracks:def.tracks.map(t=>({...t, idx:0, next:start})) };
+  scheduleBGM();
+}
+function scheduleBGM(){
+  if(!bgm||!bgm.running) return;
+  const ahead=audioCtx.currentTime+0.18;
+  bgm.tracks.forEach(tr=>{
+    while(tr.next<ahead){
+      const step=tr.seq[tr.idx];
+      const dur=step[1]*bgm.spb;
+      if(tr.type==='drum'){ if(step[0]==='x') playDrum(tr.next); }
+      else if(step[0]!=='r'){ playNote(tr.type, NOTES[step[0]], tr.next, dur*0.92, tr.gain); }
+      tr.next += dur;
+      tr.idx = (tr.idx+1) % tr.seq.length;
+    }
+  });
+  bgm.timer=setTimeout(scheduleBGM, 45);
+}
+function stopBGM(){ if(bgm){ bgm.running=false; clearTimeout(bgm.timer); bgm=null; } }
+
+/* ===================== こうかおん ===================== */
+function sfxDokan(){                                  // しっぱい「ドカン！」
+  if(!audioCtx) return; const t=audioCtx.currentTime;
+  const len=Math.floor(audioCtx.sampleRate*0.5);
+  const buf=audioCtx.createBuffer(1,len,audioCtx.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,1.4);
+  const src=audioCtx.createBufferSource(); src.buffer=buf;
+  const f=audioCtx.createBiquadFilter(); f.type='lowpass';
+  f.frequency.setValueAtTime(1900,t); f.frequency.exponentialRampToValueAtTime(140,t+0.45);
+  const g=audioCtx.createGain(); g.gain.setValueAtTime(0.9,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+  src.connect(f); f.connect(g); g.connect(masterGain); src.start(t);
+  const o=audioCtx.createOscillator(), og=audioCtx.createGain();
+  o.type='sine'; o.frequency.setValueAtTime(170,t); o.frequency.exponentialRampToValueAtTime(38,t+0.4);
+  og.gain.setValueAtTime(0.8,t); og.gain.exponentialRampToValueAtTime(0.001,t+0.46);
+  o.connect(og); og.connect(masterGain); o.start(t); o.stop(t+0.5);
+}
+function sfxFanfare(){                                 // せいこう ファンファーレ
+  if(!audioCtx) return; const t=audioCtx.currentTime;
+  [['G4',0],['C5',.12],['E5',.24],['G5',.36],['C6',.5,.5]].forEach(([n,dt,extra])=>{
+    const s=t+dt, dur=extra?0.5:0.18;
+    playNote('mel', NOTES[n], s, dur, 0.4);
+    playNote('bass', NOTES[n]/2, s, dur, 0.22);
+  });
+}
+function sfxStar(){                                    // スター 超ごうかファンファーレ
+  if(!audioCtx) return; const t=audioCtx.currentTime;
+  const mel=[['C5',0],['E5',.1],['G5',.2],['C6',.3],['E6',.42],['D6',.56],['E6',.68],['G6',.84,.9]];
+  mel.forEach(([n,dt,hold])=>{
+    const s=t+dt, dur=hold?0.9:0.16;
+    playNote('mel', NOTES[n], s, dur, 0.38);
+    playNote('bass', NOTES[n]/2, s, dur, 0.22);
+    playNote('mel', NOTES[n]*1.5, s, dur, 0.12);   // 5度ハモリ
+  });
+  // キラキラ
+  for(let i=0;i<6;i++){
+    const s=t+0.9+i*0.08;
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type='triangle'; o.frequency.value=NOTES['C6']*Math.pow(2,i/12);
+    g.gain.setValueAtTime(0.0001,s); g.gain.linearRampToValueAtTime(0.18,s+0.01); g.gain.exponentialRampToValueAtTime(0.0001,s+0.2);
+    o.connect(g); g.connect(masterGain); o.start(s); o.stop(s+0.22);
+  }
+}
+
+/* =========================================================================
+   センサー（DeviceOrientation）
+   ========================================================================= */
+function onOrientation(e){
+  if(e.beta==null && e.gamma==null) return;
+  State.sensorSeen=true;
+  State.curBeta = e.beta||0;
+  State.curGamma = e.gamma||0;
+  if(State.calibrating){ State.baseBeta=State.curBeta; State.baseGamma=State.curGamma; }
+}
+function requestSensor(){
+  // iOS 13+ は許可が必要（ボタンタップの中で呼ぶこと）
+  if(typeof DeviceOrientationEvent!=='undefined' &&
+     typeof DeviceOrientationEvent.requestPermission==='function'){
+    DeviceOrientationEvent.requestPermission()
+      .then(res=>{ if(res==='granted') window.addEventListener('deviceorientation', onOrientation); })
+      .catch(()=>{});
+  } else if(window.DeviceOrientationEvent){
+    window.addEventListener('deviceorientation', onOrientation);
+  }
+}
+
+/* センサーが無いとき（PC等）のための ゆび操作フォールバック */
+function setupPointerFallback(){
+  const tray=document.querySelector('#game .tray-area');
+  tray.addEventListener('pointermove', ev=>{
+    if(State.sensorSeen) return;        // センサーがあれば使わない
+    State.pointerCtrl=true;
+    const r=tray.getBoundingClientRect();
+    const nx=((ev.clientX-r.left)/r.width-0.5);
+    const ny=((ev.clientY-r.top)/r.height-0.5);
+    State.curGamma = nx*60; State.curBeta = ny*60;
+    if(State.calibrating){ State.baseGamma=State.curGamma; State.baseBeta=State.curBeta; }
+  });
+}
+
+/* =========================================================================
+   ゲーム本体
+   ========================================================================= */
+const coinEl=byId('coin'), trayEl=document.querySelector('#game .tray'),
+      dangerEl=byId('dangerRing'), goalBtn=byId('goalBtn');
+
+function startGame(level){
+  State.level=level; State.play=1; State.clears=0;
+  show('game');
+  startBGM(level);
+  beginRound();
+}
+
+function beginRound(){
+  // リセット
+  State.active=false; State.ended=false;
+  State.x=0; State.y=0; State.vx=0; State.vy=0;
+  coinEl.classList.remove('win','fall');
+  coinEl.style.transform='translate(0px,0px)';
+  dangerEl.style.boxShadow='inset 0 0 0 1.2vh rgba(255,40,40,0)';
+  byId('roundResult').classList.add('hidden');
+  byId('cur').textContent=State.play;
+  goalBtn.disabled=true;
+
+  // セーフ範囲（半径）を計算
+  const rect=trayEl.getBoundingClientRect();
+  const coinR=coinEl.getBoundingClientRect().width/2;
+  State.maxR = (rect.width/2 - coinR) * CONFIG[State.level].radius;
+
+  // カウントダウン＋キャリブレーション（このあいだ「たいら」に構えてもらう）
+  State.calibrating=true;
+  if(State.last===0){ State.last=performance.now(); loop(performance.now()); }
+  countdown();
+}
+
+function countdown(){
+  const cd=byId('countdown'), num=byId('cdNum');
+  cd.classList.remove('hidden');
+  const seq=['3','2','1','スタート！'];
+  let i=0;
+  num.textContent=seq[0]; num.style.animation='none'; void num.offsetWidth; num.style.animation='';
+  const tick=()=>{
+    i++;
+    if(i<seq.length){
+      num.textContent=seq[i];
+      num.style.animation='none'; void num.offsetWidth; num.style.animation='';
+      setTimeout(tick,650);
+    } else {
+      cd.classList.add('hidden');
+      State.calibrating=false;       // ここまでの構えを「たいら」として確定
+      State.active=true;
+      goalBtn.disabled=false;
+    }
+  };
+  setTimeout(tick,650);
+}
+
+/* メインループ：傾き → コインの動き（慣性つき） */
+function loop(now){
+  State.raf=requestAnimationFrame(loop);
+  let dt=(now-State.last)/1000; State.last=now;
+  if(dt>0.05) dt=0.05;
+
+  if(State.active){
+    // 傾きを 画面の向きに合わせて回転
+    const ang=((screen.orientation&&screen.orientation.angle)||window.orientation||0)*Math.PI/180;
+    let tx=clamp(State.curGamma-State.baseGamma,-45,45);
+    let ty=clamp(State.curBeta -State.baseBeta ,-45,45);
+    const sx= tx*Math.cos(ang)+ty*Math.sin(ang);
+    const sy=-tx*Math.sin(ang)+ty*Math.cos(ang);
+
+    const k=CONFIG[State.level];
+    const G=k.sens;
+    // 加速度（坂の傾き ∝ sin）
+    State.vx += Math.sin(sx*Math.PI/180)*G*dt;
+    State.vy += Math.sin(sy*Math.PI/180)*G*dt;
+    State.vx *= k.damp; State.vy *= k.damp;
+    State.x += State.vx*dt; State.y += State.vy*dt;
+
+    const dist=Math.hypot(State.x,State.y);
+    coinEl.style.transform='translate('+State.x+'px,'+State.y+'px)';
+
+    // ふちが近づくと赤く光る
+    const ratio=clamp(dist/State.maxR,0,1);
+    dangerEl.style.boxShadow='inset 0 0 '+(ratio*4)+'vh '+(ratio*1.2)+'vh rgba(255,40,40,'+(ratio*0.9)+')';
+
+    if(dist>State.maxR){ fail(); }
+  }
+}
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+
+/* しっぱい（コインが すべりおちた） */
+function fail(){
+  if(State.ended) return;
+  State.ended=true; State.active=false; goalBtn.disabled=true;
+  sfxDokan();
+  const ff=byId('failFlash'); ff.classList.remove('on'); void ff.offsetWidth; ff.classList.add('on');
+  coinEl.classList.add('fall');
+  setTimeout(()=>showRoundResult(false), 700);
+}
+
+/* せいこう（ゴールボタン） */
+goalBtn.addEventListener('click', ()=>{
+  if(!State.active || State.ended) return;
+  State.ended=true; State.active=false; goalBtn.disabled=true;
+  State.clears++;
+  sfxFanfare();
+  coinEl.classList.add('win');
+  setTimeout(()=>showRoundResult(true), 900);
+});
+
+function showRoundResult(ok){
+  byId('rrEmo').textContent = ok ? '🎉' : '😅';
+  const msg=byId('rrMsg'), sub=byId('rrSub');
+  if(ok){ msg.textContent='せいこう！'; msg.className='rr-msg ok'; sub.textContent='たいらに あるけたね！'; }
+  else  { msg.textContent='おっとっと！'; msg.className='rr-msg ng'; sub.textContent='だいじょうぶ、つぎ がんばろう！'; }
+
+  const nb=byId('nextBtn');
+  if(State.play < TOTAL_PLAYS){ nb.textContent='つぎへ（'+(State.play+1)+'かいめ）'; }
+  else { nb.textContent='けっかを みる →'; }
+
+  byId('roundResult').classList.remove('hidden');
+}
+
+byId('nextBtn').addEventListener('click', ()=>{
+  if(State.play < TOTAL_PLAYS){ State.play++; beginRound(); }
+  else { showFinal(); }
+});
+
+/* =========================================================================
+   さいごのリザルト
+   ========================================================================= */
+function showFinal(){
+  stopBGM();
+  State.active=false;
+  const clears=State.clears;
+  const rate=Math.round(clears/TOTAL_PLAYS*100);
+
+  byId('finalHeadline').textContent = TOTAL_PLAYS+'かいちゅう '+clears+'かい くりあ！';
+  const rateEl=byId('finalRate'); rateEl.innerHTML = rate+'<span class="pct">％</span>';
+
+  const star=byId('finalStar'), praise=byId('finalPraise'), nudge=byId('finalNudge');
+  clearConfetti();
+
+  if(rate>=80){
+    star.classList.remove('hidden');
+    praise.textContent='すごい！ だいせいこう！';
+    praise.className='final-praise big';
+    nudge.textContent='バランス めいじん だね ⭐';
+    makeConfetti();
+    show('final');
+    sfxStar();
+  } else {
+    star.classList.add('hidden');
+    praise.textContent='よく がんばったね！';
+    praise.className='final-praise warm';
+    nudge.textContent='つぎは ８０％ を めざそう！';
+    show('final');
+    sfxFanfare();
+  }
+}
+
+/* かみふぶき */
+const COLORS=['#ff4d77','#ffd83a','#4cd14c','#36a8e6','#ff8a1f','#b06aff','#fff'];
+function makeConfetti(){
+  const box=byId('confetti');
+  for(let i=0;i<90;i++){
+    const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'%';
+    p.style.background=COLORS[i%COLORS.length];
+    p.style.animationDuration=(2.4+Math.random()*2.6)+'s';
+    p.style.animationDelay=(Math.random()*1.2)+'s';
+    p.style.transform='scale('+(0.7+Math.random()*1.1)+')';
+    p.style.opacity=0.85;
+    box.appendChild(p);
+  }
+}
+function clearConfetti(){ byId('confetti').innerHTML=''; }
+
+byId('restartBtn').addEventListener('click', ()=>{
+  clearConfetti();
+  byId('finalStar').classList.add('hidden');
+  State.play=1; State.clears=0; State.active=false; State.ended=false;
+  show('title');
+});
+
+/* やめる → タイトルへ */
+byId('quitBtn').addEventListener('click', ()=>{
+  stopBGM(); State.active=false; State.ended=true;
+  show('title');
+});
+
+/* =========================================================================
+   タイトルの むずかしさボタン（ここで 音と センサー許可を取得）
+   ========================================================================= */
+document.querySelectorAll('.lv-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    initAudio(); resumeAudio();
+    requestSensor();
+    const level=parseInt(btn.dataset.level,10);
+    startGame(level);
+  });
+});
+
+setupPointerFallback();
+</script>
+</body>
+</html>
