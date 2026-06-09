@@ -477,6 +477,75 @@ body{
   100%{ transform:translateY(115vh) rotate(720deg); opacity:1; }
 }
 
+/* =========================================================
+   バラのキャラクター「バラリン」🌹（すべてCSS）
+   ========================================================= */
+.rose{ position:relative; width:var(--s,12vh); height:var(--s,12vh); }
+.rose .bloom{ position:absolute; inset:0; animation:roseBob 2.6s ease-in-out infinite; }
+@keyframes roseBob{ 0%,100%{ transform:translateY(0) rotate(-1.5deg);} 50%{ transform:translateY(-7%) rotate(1.5deg);} }
+.rose .petal{
+  position:absolute; left:50%; top:50%; width:40%; height:56%; margin:-28% 0 0 -20%;
+  background:radial-gradient(circle at 36% 26%, #ff9ab0, #e0173f 60%, #9e0b29 100%);
+  border-radius:50% 50% 50% 50% / 66% 66% 34% 34%;
+  box-shadow:inset 0 -.5vh .7vh rgba(0,0,0,.18);
+}
+.rose .core{
+  position:absolute; left:50%; top:50%; width:58%; height:58%; margin:-29% 0 0 -29%; z-index:2;
+  border-radius:50%;
+  background:radial-gradient(circle at 40% 34%, #ffd6df, #ff7d97 50%, #c11030 100%);
+  box-shadow:inset 0 -.7vh .9vh rgba(120,0,20,.4), inset 0 .6vh .7vh rgba(255,255,255,.6);
+}
+.rose .face{ position:absolute; left:50%; top:50%; width:58%; height:58%; margin:-29% 0 0 -29%; z-index:3; }
+.rose .eye{ position:absolute; top:30%; width:19%; height:25%; background:#3a1020; border-radius:50%; }
+.rose .eye.l{ left:22%; } .rose .eye.r{ right:22%; }
+.rose .eye::after{ content:""; position:absolute; top:14%; left:20%; width:42%; height:42%; background:#fff; border-radius:50%; }
+.rose .cheek{ position:absolute; top:54%; width:17%; height:12%; background:rgba(255,120,150,.65); border-radius:50%; }
+.rose .cheek.l{ left:12%; } .rose .cheek.r{ right:12%; }
+.rose .mouth{ position:absolute; left:50%; top:62%; width:26%; height:15%; margin-left:-13%; border-bottom:.5vh solid #3a1020; border-radius:0 0 70% 70%; }
+.rose .sweat{ position:absolute; top:20%; right:2%; width:11%; height:15%; background:linear-gradient(#bfe9ff,#4fb0ee); border-radius:50% 50% 50% 50% / 64% 64% 36% 36%; opacity:0; }
+/* 葉っぱの手 */
+.rose .rose-arm{ position:absolute; top:46%; width:30%; height:15%; background:linear-gradient(#86e85a,#36a83a); border-radius:50% 50% 50% 50% / 70% 70% 30% 30%; z-index:1; box-shadow:inset 0 -.3vh .4vh rgba(0,0,0,.2); }
+.rose .rose-arm.l{ left:-18%; transform-origin:right center; transform:rotate(22deg); }
+.rose .rose-arm.r{ right:-18%; transform-origin:left center; transform:rotate(-22deg); }
+/* 下の葉 */
+.rose .leaf{ position:absolute; bottom:-8%; width:26%; height:17%; background:linear-gradient(#5fc22e,#2a8a1a); border-radius:50% 50% 50% 50% / 70% 70% 30% 30%; z-index:0; }
+.rose .leaf.l{ left:22%; transform:rotate(34deg); } .rose .leaf.r{ right:22%; transform:rotate(-34deg); }
+
+/* 表情：しんぱい（あせ💦） */
+.rose.worry .mouth{ width:15%; height:15%; margin-left:-7.5%; border:.4vh solid #3a1020; border-radius:50%; top:60%; }
+.rose.worry .sweat{ opacity:1; animation:sweat .7s ease-in infinite; }
+@keyframes sweat{ 0%{ transform:translateY(0); opacity:0;} 30%{opacity:1;} 100%{ transform:translateY(60%); opacity:0;} }
+/* 表情：おおよろこび */
+.rose.cheer .mouth{ width:34%; height:20%; margin-left:-17%; background:#3a1020; border-bottom:none; border-radius:10% 10% 60% 60%; }
+.rose.cheer .eye{ height:13%; background:transparent; border-radius:0 0 60% 60%; border-bottom:.6vh solid #3a1020; top:34%; }
+.rose.cheer .eye::after{ display:none; }
+/* 表情：かなしい（ドンマイ） */
+.rose.sad .mouth{ top:68%; border-bottom:none; border-top:.5vh solid #3a1020; border-radius:70% 70% 0 0; }
+.rose.sad .eye{ top:34%; }
+.rose.sad .tear{ position:absolute; top:48%; left:24%; width:9%; height:13%; background:linear-gradient(#bfe9ff,#4fb0ee); border-radius:50% 50% 50% 50% / 64% 64% 36% 36%; }
+
+/* 手をふる（タイトル） */
+.rose.wave .rose-arm.r{ animation:rwave .55s ease-in-out infinite; }
+@keyframes rwave{ 0%,100%{ transform:rotate(-22deg);} 50%{ transform:rotate(-62deg);} }
+/* ぴょこんと登場 / よろこびジャンプ */
+.rose.pop{ animation:rosePop .5s cubic-bezier(.2,1.7,.4,1) both; }
+@keyframes rosePop{ from{ transform:translateY(40%) scale(.5); opacity:0;} to{ transform:translateY(0) scale(1); opacity:1;} }
+.rose.jump .bloom{ animation:roseJump .5s ease; }
+@keyframes roseJump{ 0%,100%{ transform:translateY(0);} 40%{ transform:translateY(-26%) scale(1.08);} }
+
+/* 花びら（はなびら）まい散らし */
+.petalbox{ position:absolute; inset:0; z-index:47; pointer-events:none; overflow:hidden; }
+.petalbox i{
+  position:absolute; top:-8vh; width:2.6vh; height:3vh;
+  background:radial-gradient(circle at 38% 28%, #ffd9e2, #ff5d86 72%);
+  border-radius:50% 0 50% 50%;
+  animation:petalFall linear forwards;
+}
+@keyframes petalFall{
+  0%{ transform:translateY(-10vh) translateX(0) rotate(0); opacity:1; }
+  100%{ transform:translateY(120vh) translateX(8vh) rotate(560deg); opacity:.95; }
+}
+
 /* たてむき注意 */
 .rotate-hint{
   position:fixed; inset:0; z-index:999; display:none;
@@ -499,6 +568,8 @@ body{
   <div class="cloud c2"></div>
   <div class="pipe left"></div>
   <div class="pipe right"></div>
+
+  <div class="rose wave" id="roseTitle" style="position:absolute; left:3%; top:11%; --s:17vh; z-index:6;"></div>
 
   <div class="title-wrap">
     <div class="game-title">コインはこびゲーム</div>
@@ -563,6 +634,7 @@ body{
   <div class="cloud c2"></div>
   <div class="pipe left"></div>
   <div class="pipe right"></div>
+  <div class="rose" id="rosePlay" style="position:absolute; left:1vh; bottom:27vh; --s:15vh; z-index:2;"></div>
 
   <div class="counter">いま <b id="cur">1</b> かいめ / 5かい</div>
   <button class="quit" id="quitBtn">やめる</button>
@@ -585,6 +657,7 @@ body{
   <div class="danger-text" id="dangerText">あぶない！</div>
 
   <div class="fail-flash" id="failFlash"></div>
+  <div class="petalbox" id="petalbox"></div>
 
   <!-- カウントダウン -->
   <div class="countdown hidden" id="countdown"><div class="cd-num" id="cdNum">3</div></div>
@@ -592,7 +665,7 @@ body{
   <!-- ラウンドけっか -->
   <div class="round-result hidden" id="roundResult">
     <div class="rr-card">
-      <div class="rr-emo" id="rrEmo">🎉</div>
+      <div class="rose" id="roseRound" style="--s:16vh; margin:0 auto .6vh;"></div>
       <div class="rr-msg" id="rrMsg">せいこう！</div>
       <div class="rr-sub" id="rrSub"></div>
     </div>
@@ -606,6 +679,7 @@ body{
   <div class="confetti" id="confetti"></div>
   <div class="final-card">
     <div class="final-star hidden" id="finalStar">⭐</div>
+    <div class="rose" id="roseFinal" style="--s:15vh; margin:0 auto 1vh;"></div>
     <div class="final-headline" id="finalHeadline">5かいちゅう 0かい くりあ！</div>
     <div class="final-rate" id="finalRate">0<span class="pct">％</span></div>
     <div class="final-praise" id="finalPraise"></div>
@@ -908,6 +982,9 @@ function beginRound(){
   coinEl.style.transform='translate(0px,0px)';
   dangerEl.style.boxShadow='inset 0 0 0 1.2vh rgba(255,40,40,0)';
   clearDanger();
+  clearPetals();
+  State._roseWorry=false;
+  const rp=byId('rosePlay'); setFace(rp,'happy'); rp.classList.remove('pop'); void rp.offsetWidth; rp.classList.add('pop');
   byId('roundResult').classList.add('hidden');
   byId('cur').textContent=State.play;
   goalBtn.disabled=true;
@@ -1000,11 +1077,14 @@ function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
 /* がけっぷち警報：危険度に応じて 画面を赤くドクドク＆音を速める */
 function updateDanger(ratio, now){
   const ALERT = 0.55;                      // ここを超えると警報スタート
+  const rp=byId('rosePlay');
   if(ratio < ALERT){
     if(dangerVig.style.opacity!=='0'){ dangerVig.style.opacity='0'; dangerTxt.classList.remove('on'); }
     State.lastBeep = 0;
+    if(State._roseWorry){ State._roseWorry=false; setFace(rp,'happy'); }
     return;
   }
+  if(!State._roseWorry){ State._roseWorry=true; setFace(rp,'worry'); }   // バラリンが心配顔に
   const d = (ratio - ALERT) / (1 - ALERT);          // 0〜1 の危険度
   // 心臓のドクドク（危険なほど速く・強く）
   const period = 520 - d*360;                       // 拍の間隔(ms)：危険ほど短い
@@ -1048,7 +1128,9 @@ goalBtn.addEventListener('click', ()=>{
 });
 
 function showRoundResult(ok){
-  byId('rrEmo').textContent = ok ? '🎉' : '😅';
+  const rr=byId('roseRound');
+  setFace(rr, ok?'cheer':'sad');
+  if(ok){ roseJump(rr); makePetals(byId('petalbox'), 28); }
   const msg=byId('rrMsg'), sub=byId('rrSub');
   if(ok){ msg.textContent='せいこう！'; msg.className='rr-msg ok'; sub.textContent='たいらに あるけたね！'; }
   else  { msg.textContent='おっとっと！'; msg.className='rr-msg ng'; sub.textContent='だいじょうぶ、つぎ がんばろう！'; }
@@ -1078,6 +1160,7 @@ function showFinal(){
   const rateEl=byId('finalRate'); rateEl.innerHTML = rate+'<span class="pct">％</span>';
 
   const star=byId('finalStar'), praise=byId('finalPraise'), nudge=byId('finalNudge');
+  const rf=byId('roseFinal');
   clearConfetti();
 
   if(rate>=80){
@@ -1085,6 +1168,7 @@ function showFinal(){
     praise.textContent='すごい！ だいせいこう！';
     praise.className='final-praise big';
     nudge.textContent='バランス めいじん だね ⭐';
+    setFace(rf,'cheer'); roseJump(rf);
     makeConfetti();
     show('final');
     sfxStar();
@@ -1093,6 +1177,7 @@ function showFinal(){
     praise.textContent='よく がんばったね！';
     praise.className='final-praise warm';
     nudge.textContent='つぎは ８０％ を めざそう！';
+    setFace(rf,'happy');
     show('final');
     sfxFanfare();
   }
@@ -1141,6 +1226,45 @@ document.querySelectorAll('.lv-btn').forEach(btn=>{
 });
 
 setupPointerFallback();
+
+/* =========================================================================
+   バラのキャラクター「バラリン」🌹
+   ========================================================================= */
+function roseHTML(){
+  let petals='';
+  for(let i=0;i<8;i++){ petals += '<div class="petal" style="transform:rotate('+(i*45)+'deg) translateY(-32%)"></div>'; }
+  return '<div class="rose-arm l"></div><div class="rose-arm r"></div>'
+    + '<div class="bloom">'+petals+'<div class="core"></div>'
+    + '<div class="face">'
+    +   '<div class="eye l"></div><div class="eye r"></div>'
+    +   '<div class="cheek l"></div><div class="cheek r"></div>'
+    +   '<div class="mouth"></div><div class="sweat"></div><div class="tear" style="display:none"></div>'
+    + '</div></div>'
+    + '<div class="leaf l"></div><div class="leaf r"></div>';
+}
+document.querySelectorAll('.rose').forEach(r=>{ r.innerHTML = roseHTML(); });
+function setFace(el, expr){
+  if(!el) return;
+  el.classList.remove('happy','worry','cheer','sad');
+  if(expr) el.classList.add(expr);
+  const tear=el.querySelector('.tear'); if(tear) tear.style.display = (expr==='sad')?'block':'none';
+}
+function roseJump(el){ if(!el) return; el.classList.remove('jump'); void el.offsetWidth; el.classList.add('jump'); }
+setFace(byId('roseTitle'),'happy');
+
+/* 花びら（はなびら）をまい散らす */
+function makePetals(box, n){
+  if(!box) return;
+  for(let i=0;i<n;i++){
+    const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'%';
+    p.style.animationDuration=(2.2+Math.random()*2.4)+'s';
+    p.style.animationDelay=(Math.random()*0.6)+'s';
+    p.style.transform='scale('+(0.7+Math.random()*0.8)+')';
+    box.appendChild(p);
+  }
+}
+function clearPetals(){ const b=byId('petalbox'); if(b) b.innerHTML=''; }
 
 /* ===== 向き調整ボタン（押すと左右/前後の向きを反転、設定は記憶） ===== */
 try{
