@@ -556,6 +556,25 @@ body{
 @keyframes rot{ 0%,100%{ transform:rotate(0);} 50%{ transform:rotate(90deg);} }
 .rotate-hint .txt{ font-size:6vw; font-weight:800; text-shadow:0 .6vh 0 #2a7a2a; }
 @media (orientation:portrait){ .rotate-hint{ display:flex; } }
+
+/* バラリンの ふきだし */
+.bubble{
+  position:fixed; z-index:60; pointer-events:none;
+  max-width:46vw; padding:1.2vh 2.4vh; border-radius:2.4vh;
+  background:#fff; border:.6vh solid #ffd982; color:#3a2a00;
+  font-family:var(--font); font-size:3vh; font-weight:900; text-align:center; line-height:1.3;
+  box-shadow:0 1vh 1.8vh rgba(0,0,0,.28);
+  opacity:0; transform:scale(.6); transform-origin:center bottom;
+  transition:opacity .14s ease, transform .14s cubic-bezier(.2,1.7,.4,1);
+}
+.bubble.show{ opacity:1; transform:scale(1); }
+.bubble::after{
+  content:""; position:absolute; left:50%; bottom:-2vh; margin-left:-1.6vh;
+  border:1.6vh solid transparent; border-top-color:#ffd982; border-bottom:0;
+}
+/* 口パク（しゃべっているとき） */
+.rose.talking .mouth{ animation:rtalk .16s ease-in-out infinite alternate; }
+@keyframes rtalk{ from{ transform:scaleY(.45);} to{ transform:scaleY(1.25);} }
 </style>
 </head>
 <body>
@@ -573,13 +592,13 @@ body{
 
   <div class="title-wrap">
     <div class="game-title">コインはこびゲーム</div>
-    <div class="game-sub">⭐ たいらに あるこう！ ⭐</div>
+    <div class="game-sub">⭐ コインを おとさず あるこう！ ⭐</div>
   </div>
 
   <div class="howto">
     <div class="step"><div class="emo">🙌</div><div class="lbl">iPadを<br>りょうてで<br>もつよ</div></div>
     <div class="arrow">▶</div>
-    <div class="step"><div class="emo">🪙</div><div class="lbl">たいらに<br>キープして<br>あるこう</div></div>
+    <div class="step"><div class="emo">🪙</div><div class="lbl">コインを<br>おとさず<br>あるこう</div></div>
     <div class="arrow">▶</div>
     <div class="step"><div class="emo">🏁</div><div class="lbl">５メートル<br>すすんだら<br>ゴール！</div></div>
   </div>
@@ -638,7 +657,7 @@ body{
 
   <div class="counter">いま <b id="cur">1</b> かいめ / 5かい</div>
   <button class="quit" id="quitBtn">やめる</button>
-  <div class="hint">🪙 たいらに キープ！</div>
+  <div class="hint">🪙 コインを おとさないで！</div>
 
   <div class="tray-area">
     <div class="tray">
@@ -687,6 +706,9 @@ body{
     <button class="restart-btn" id="restartBtn">🔁 さいしょから あそぶ</button>
   </div>
 </section>
+
+<!-- バラリンの ふきだし -->
+<div class="bubble" id="bubble"></div>
 
 <!-- たてむき注意 -->
 <div class="rotate-hint">
@@ -968,6 +990,7 @@ const coinEl=byId('coin'), trayEl=document.querySelector('#game .tray'),
       dangerVig=byId('dangerVignette'), dangerTxt=byId('dangerText');
 
 function startGame(level){
+  hideBubble();
   State.level=level; State.play=1; State.clears=0;
   show('game');
   startBGM(level);
@@ -976,6 +999,7 @@ function startGame(level){
 
 function beginRound(){
   // リセット
+  hideBubble();
   State.active=false; State.ended=false;
   State.x=0; State.y=0; State.vx=0; State.vy=0;
   coinEl.classList.remove('win','fall');
@@ -1017,6 +1041,8 @@ function countdown(){
       State.calibrating=false;       // ここまでの構えを「たいら」として確定
       State.active=true;
       goalBtn.disabled=false;
+      const PLAY_LINES=['いくよ〜！','がんばって！','ゆっくりでいいよ！'];
+      speak(byId('rosePlay'), PLAY_LINES[Math.floor(Math.random()*PLAY_LINES.length)], 1600);
     }
   };
   setTimeout(tick,650);
@@ -1131,8 +1157,9 @@ function showRoundResult(ok){
   const rr=byId('roseRound');
   setFace(rr, ok?'cheer':'sad');
   if(ok){ roseJump(rr); makePetals(byId('petalbox'), 28); }
+  speak(rr, ok?'やったね！🌸':'ドンマイ！ つぎ いこう！', 2400);
   const msg=byId('rrMsg'), sub=byId('rrSub');
-  if(ok){ msg.textContent='せいこう！'; msg.className='rr-msg ok'; sub.textContent='たいらに あるけたね！'; }
+  if(ok){ msg.textContent='せいこう！'; msg.className='rr-msg ok'; sub.textContent='コインを おとさず あるけたね！'; }
   else  { msg.textContent='おっとっと！'; msg.className='rr-msg ng'; sub.textContent='だいじょうぶ、つぎ がんばろう！'; }
 
   const nb=byId('nextBtn');
@@ -1172,6 +1199,7 @@ function showFinal(){
     makeConfetti();
     show('final');
     sfxStar();
+    speak(rf, 'すごい！ やったね！🌟', 3000);
   } else {
     star.classList.add('hidden');
     praise.textContent='よく がんばったね！';
@@ -1180,6 +1208,7 @@ function showFinal(){
     setFace(rf,'happy');
     show('final');
     sfxFanfare();
+    speak(rf, 'よく がんばったね！', 3000);
   }
 }
 
@@ -1205,12 +1234,15 @@ byId('restartBtn').addEventListener('click', ()=>{
   byId('finalStar').classList.add('hidden');
   State.play=1; State.clears=0; State.active=false; State.ended=false;
   show('title');
+  greetTitle();
 });
 
 /* やめる → タイトルへ */
 byId('quitBtn').addEventListener('click', ()=>{
   stopBGM(); State.active=false; State.ended=true;
+  hideBubble(); clearDanger();
   show('title');
+  greetTitle();
 });
 
 /* =========================================================================
@@ -1251,6 +1283,9 @@ function setFace(el, expr){
 }
 function roseJump(el){ if(!el) return; el.classList.remove('jump'); void el.offsetWidth; el.classList.add('jump'); }
 setFace(byId('roseTitle'),'happy');
+const TITLE_LINES=['やあ！ いっしょに あそぼう！','コインを おとさず あるけるかな？','きみなら できるよ！'];
+function greetTitle(){ speak(byId('roseTitle'), TITLE_LINES[Math.floor(Math.random()*TITLE_LINES.length)]); }
+greetTitle();
 
 /* 花びら（はなびら）をまい散らす */
 function makePetals(box, n){
@@ -1265,6 +1300,56 @@ function makePetals(box, n){
   }
 }
 function clearPetals(){ const b=byId('petalbox'); if(b) b.innerHTML=''; }
+
+/* ===== バラリンが しゃべる（ふきだし＋8bitもごもごボイス＋口パク） ===== */
+let speakTimer=null, speakTarget=null;
+function blipVoice(text){
+  if(!audioCtx) return;
+  const t0=audioCtx.currentTime; let n=0;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(ch===' '||ch==='　'||ch==='\n'||ch==='！'||ch==='、'||ch==='。'||ch==='〜') continue;
+    const t=t0 + n*0.085; n++;
+    if(n>20) break;
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type='triangle';
+    o.frequency.value = 420 + ((i*5)%5)*60;        // 音程を少し変えて しゃべってる感
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(0.15,t+0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.07);
+    o.connect(g); g.connect(masterGain); o.start(t); o.stop(t+0.09);
+  }
+}
+function speak(target, text, ms){
+  if(!target) return;
+  const b=byId('bubble');
+  // 前のしゃべりを片づける
+  if(speakTarget) speakTarget.classList.remove('talking');
+  clearTimeout(speakTimer);
+  b.textContent=text; b.classList.add('show');
+  // ふきだしの位置（キャラの上、はみ出すなら下）
+  const r=target.getBoundingClientRect();
+  const bw=b.offsetWidth, bh=b.offsetHeight;
+  let left=r.left + r.width/2 - bw/2;
+  let top=r.top - bh - 14;
+  if(top<8){ top=r.bottom + 14; }
+  left=Math.max(8, Math.min(left, window.innerWidth-bw-8));
+  b.style.left=left+'px'; b.style.top=top+'px';
+  // 口パク＋ボイス
+  target.classList.add('talking'); speakTarget=target;
+  blipVoice(text);
+  const dur = ms || Math.min(2800, 800 + text.length*130);
+  speakTimer=setTimeout(()=>{
+    b.classList.remove('show');
+    target.classList.remove('talking');
+    if(speakTarget===target) speakTarget=null;
+  }, dur);
+}
+function hideBubble(){
+  const b=byId('bubble'); if(b) b.classList.remove('show');
+  if(speakTarget){ speakTarget.classList.remove('talking'); speakTarget=null; }
+  clearTimeout(speakTimer);
+}
 
 /* ===== 向き調整ボタン（押すと左右/前後の向きを反転、設定は記憶） ===== */
 try{
@@ -1296,6 +1381,7 @@ function calibrateNow(){           // いまの構えを「たいら」にする
   setTimeout(()=>{ State.calibrating=false; }, 700);
 }
 function enterTest(){
+  hideBubble();
   initAudio(); resumeAudio();
   requestSensor();
   show('test');
@@ -1313,6 +1399,7 @@ function exitTest(){
   State.testOn=false;
   if(State.testRaf){ cancelAnimationFrame(State.testRaf); State.testRaf=null; }
   show('title');
+  greetTitle();
 }
 function testLoop(now){
   if(!State.testOn){ State.testRaf=null; return; }
