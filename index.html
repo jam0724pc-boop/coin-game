@@ -163,6 +163,18 @@ body{
 }
 .test-enter-btn:active{ transform:translateY(1vh); box-shadow:0 .2vh 0 #5a2fb0, 0 .6vh .8vh rgba(0,0,0,.28), inset 0 .6vh .6vh rgba(255,255,255,.6); }
 
+/* モード切替（通常／てきあり） */
+.mode-pick{ position:relative; z-index:5; margin-top:1.6vh; display:flex; align-items:center; gap:1.2vh; }
+.mode-lbl{ font-size:2.2vh; font-weight:900; color:#fff; text-shadow:0 .4vh 0 #2a7a2a; }
+.mode-btn{
+  font-family:var(--font); cursor:pointer; font-size:2.4vh; font-weight:900; color:#7a7a7a;
+  background:rgba(255,255,255,.9); border:.5vh solid #fff; border-radius:999px; padding:1vh 2.4vh;
+  box-shadow:0 .8vh 1vh rgba(0,0,0,.18); transition:all .1s ease;
+}
+.mode-btn.on{ color:#fff; background:linear-gradient(180deg,#ff9a9a,#e63333); box-shadow:0 .8vh 1vh rgba(0,0,0,.25), inset 0 .4vh .4vh rgba(255,255,255,.5); }
+.mode-btn#modeNormal.on{ background:linear-gradient(180deg,#a6ee6a,#3fb320); }
+.mode-btn:active{ transform:translateY(.4vh); }
+
 /* かたむきテスト画面 */
 .test-title{
   position:relative; z-index:5; font-size:5vh; font-weight:900; color:#fff;
@@ -546,6 +558,79 @@ body{
   100%{ transform:translateY(120vh) translateX(8vh) rotate(560deg); opacity:.95; }
 }
 
+/* =========================================================
+   敵マスコット（すべてCSS）＋ 視界をじゃまする攻撃
+   ========================================================= */
+.enemy{ position:relative; width:var(--s,13vh); height:var(--s,13vh); }
+.enemy .e-body{ position:absolute; inset:0; animation:roseBob 2.2s ease-in-out infinite; }
+.enemy .e-eye{ position:absolute; width:17%; height:23%; background:#2a1830; border-radius:50%; top:34%; z-index:3; }
+.enemy .e-eye.l{ left:28%; } .enemy .e-eye.r{ right:28%; }
+.enemy .e-eye::after{ content:""; position:absolute; top:12%; left:18%; width:42%; height:42%; background:#fff; border-radius:50%; }
+.enemy .e-mouth{ position:absolute; left:50%; top:60%; width:22%; height:13%; margin-left:-11%; border-bottom:.45vh solid #2a1830; border-radius:0 0 70% 70%; z-index:3; }
+
+/* ① ぽよぐも（くも） */
+.enemy.cloud .puff{ position:absolute; background:#fff; border-radius:50%; box-shadow:0 .6vh 1vh rgba(0,0,0,.12); }
+.enemy.cloud .p1{ width:62%; height:62%; left:19%; top:30%; }
+.enemy.cloud .p2{ width:46%; height:46%; left:4%; top:42%; }
+.enemy.cloud .p3{ width:46%; height:46%; right:4%; top:42%; }
+.enemy.cloud .p4{ width:42%; height:42%; left:30%; top:20%; }
+.enemy.cloud .e-eye{ top:48%; } .enemy.cloud .e-mouth{ top:70%; border-color:#7a8aa0; }
+
+/* ② ひらりちょう（チョウ） */
+.enemy.fly .wing{ position:absolute; width:46%; height:70%; top:16%; border-radius:60% 60% 50% 50%; }
+.enemy.fly .wing.l{ left:1%; background:radial-gradient(circle at 60% 40%, #ffd36a, #ff8ad0 70%); transform:rotate(-12deg); animation:flap 0.5s ease-in-out infinite; transform-origin:right center; }
+.enemy.fly .wing.r{ right:1%; background:radial-gradient(circle at 40% 40%, #ffd36a, #ff8ad0 70%); transform:rotate(12deg); animation:flapR 0.5s ease-in-out infinite; transform-origin:left center; }
+@keyframes flap{ 0%,100%{ transform:rotate(-12deg);} 50%{ transform:rotate(-30deg);} }
+@keyframes flapR{ 0%,100%{ transform:rotate(12deg);} 50%{ transform:rotate(30deg);} }
+.enemy.fly .e-body2{ position:absolute; left:50%; top:20%; width:14%; height:62%; margin-left:-7%; background:linear-gradient(#8a5cf0,#5a2fb0); border-radius:40%; z-index:2; }
+.enemy.fly .e-eye{ top:26%; width:11%; height:15%; } .enemy.fly .e-eye.l{ left:40%; } .enemy.fly .e-eye.r{ right:40%; }
+.enemy.fly .e-mouth{ display:none; }
+
+/* ③ スミだこ（たこ） */
+.enemy.ink .head{ position:absolute; left:8%; top:6%; width:84%; height:74%; background:radial-gradient(circle at 38% 30%, #c79cff, #7a3ff0 70%); border-radius:50% 50% 42% 42%; box-shadow:inset 0 -1vh 1.2vh rgba(60,0,120,.4); }
+.enemy.ink .leg{ position:absolute; bottom:8%; width:18%; height:24%; background:#7a3ff0; border-radius:0 0 50% 50%; }
+.enemy.ink .leg.a{ left:14%; } .enemy.ink .leg.b{ left:41%; } .enemy.ink .leg.c{ right:14%; }
+.enemy.ink .e-eye{ top:30%; }
+
+/* ④ けむりモグ（もぐら） */
+.enemy.mole .head{ position:absolute; left:10%; top:14%; width:80%; height:74%; background:radial-gradient(circle at 38% 30%, #b98a5e, #6e4a28 75%); border-radius:50%; box-shadow:inset 0 -1vh 1.2vh rgba(50,30,10,.4); }
+.enemy.mole .snout{ position:absolute; left:50%; top:54%; width:34%; height:26%; margin-left:-17%; background:radial-gradient(circle at 40% 30%, #ffc0cb, #e88aa0); border-radius:50%; z-index:3; }
+.enemy.mole .nose{ position:absolute; left:50%; top:60%; width:11%; height:9%; margin-left:-5.5%; background:#5a2a30; border-radius:50%; z-index:4; }
+.enemy.mole .e-eye{ top:34%; width:13%; height:7%; background:transparent; border-bottom:.5vh solid #2a1830; border-radius:0 0 60% 60%; }
+.enemy.mole .e-eye::after{ display:none; } .enemy.mole .e-mouth{ display:none; }
+
+/* ⑤ やみオバケ（おばけ） */
+.enemy.ghost .head{ position:absolute; left:6%; top:4%; width:88%; height:88%; background:radial-gradient(circle at 38% 30%, #7a5aa0, #2e1a52 78%); border-radius:50% 50% 18% 18%; box-shadow:0 0 2vh rgba(120,80,200,.6), inset 0 -1vh 1.2vh rgba(0,0,0,.4); }
+.enemy.ghost .foot{ position:absolute; bottom:2%; width:24%; height:16%; background:#2e1a52; border-radius:50%; }
+.enemy.ghost .foot.a{ left:10%; } .enemy.ghost .foot.b{ left:38%; } .enemy.ghost .foot.c{ right:10%; }
+.enemy.ghost .e-eye{ background:#fff; top:32%; box-shadow:0 0 1vh #cdb6ff; }
+.enemy.ghost .e-eye::after{ background:#7a3ff0; top:20%; left:20%; width:55%; height:55%; }
+.enemy.ghost .e-mouth{ width:16%; height:16%; margin-left:-8%; border:.45vh solid #fff; border-radius:50%; top:58%; }
+
+/* 攻撃が出るときの 敵キャラ登場 */
+.enemy-char{ position:absolute; z-index:13; pointer-events:none; opacity:0; }
+.enemy-char.show{ animation:enemyPop .5s ease-out; opacity:1; }
+@keyframes enemyPop{ 0%{ transform:translateY(40%) scale(.4); opacity:0;} 60%{ opacity:1;} 100%{ transform:translateY(0) scale(1); opacity:1;} }
+
+/* ===== 視界じゃま攻撃のレイヤー ===== */
+.enemy-layer{ position:absolute; inset:0; z-index:12; pointer-events:none; overflow:hidden; }
+/* くも */
+.atk-cloud{ position:absolute; top:38%; left:-40vh; width:40vh; height:24vh; background:radial-gradient(circle at 50% 50%, rgba(255,255,255,.92), rgba(255,255,255,0) 70%); animation:atkCloud var(--d,2.6s) ease-in-out forwards; }
+@keyframes atkCloud{ 0%{ transform:translateX(0);} 100%{ transform:translateX(140vh);} }
+/* 葉っぱ/チョウ */
+.atk-leaf{ position:absolute; width:5vh; height:5vh; left:-8vh; background:radial-gradient(circle at 40% 35%, #ffd36a, #ff8ad0 70%); border-radius:60% 60% 50% 50%; animation:atkLeaf var(--d,2.2s) linear forwards; }
+@keyframes atkLeaf{ 0%{ transform:translateX(0) rotate(0);} 100%{ transform:translateX(125vh) rotate(540deg);} }
+/* スミのシミ */
+.atk-ink{ position:absolute; width:18vh; height:16vh; background:radial-gradient(circle at 45% 40%, rgba(60,20,90,.9), rgba(60,20,90,.7) 55%, rgba(60,20,90,0) 72%); border-radius:48% 52% 56% 44%/52% 48% 56% 44%; opacity:0; animation:atkInk var(--d,2.2s) ease-out forwards; }
+@keyframes atkInk{ 0%{ opacity:0; transform:scale(.3);} 15%{ opacity:1; transform:scale(1.05);} 70%{ opacity:1;} 100%{ opacity:0; transform:scale(1.1);} }
+/* けむり */
+.atk-smoke{ position:absolute; width:26vh; height:26vh; background:radial-gradient(circle at 50% 50%, rgba(150,150,160,.7), rgba(150,150,160,0) 70%); border-radius:50%; opacity:0; animation:atkSmoke var(--d,2.4s) ease-out forwards; }
+@keyframes atkSmoke{ 0%{ opacity:0; transform:scale(.4);} 25%{ opacity:.85; transform:scale(1);} 75%{ opacity:.8;} 100%{ opacity:0; transform:scale(1.3);} }
+/* 暗闇（まんなかだけ見える） */
+.atk-dark{ position:absolute; inset:0; opacity:0; background:radial-gradient(circle at 50% 52%, rgba(0,0,0,0) 12vh, rgba(10,0,30,.82) 30vh); animation:atkDark var(--d,2.8s) ease-in-out forwards; }
+@keyframes atkDark{ 0%{ opacity:0;} 20%{ opacity:1;} 80%{ opacity:1;} 100%{ opacity:0;} }
+.atk-mist{ position:absolute; top:30%; left:-50vh; width:50vh; height:40vh; background:radial-gradient(circle at 50% 50%, rgba(120,90,170,.5), rgba(120,90,170,0) 70%); animation:atkCloud var(--d,2.8s) linear forwards; }
+
 /* たてむき注意 */
 .rotate-hint{
   position:fixed; inset:0; z-index:999; display:none;
@@ -614,6 +699,12 @@ body{
 
   <div class="sound-note">🎵 おとが でるよ。おとを オンにしてね</div>
 
+  <div class="mode-pick">
+    <span class="mode-lbl">モード：</span>
+    <button class="mode-btn on" id="modeNormal">🛡️ つうじょう</button>
+    <button class="mode-btn" id="modeEnemy">👾 てきあり</button>
+  </div>
+
   <button class="test-enter-btn" id="testEnterBtn">🧭 かたむきテスト（むきを あわせる）</button>
 </section>
 
@@ -677,6 +768,8 @@ body{
 
   <div class="fail-flash" id="failFlash"></div>
   <div class="petalbox" id="petalbox"></div>
+  <div class="enemy-layer" id="enemyLayer"></div>
+  <div class="enemy-char" id="enemyChar"></div>
 
   <!-- カウントダウン -->
   <div class="countdown hidden" id="countdown"><div class="cd-num" id="cdNum">3</div></div>
@@ -753,6 +846,7 @@ const State = {
   sensorSeen:false, pointerCtrl:false,
   raf:null, last:0, maxR:0,
   lastBeep:0,
+  enemyMode:false, enemyTimer:null,
   // テストモード用
   testOn:false, tx:0, ty:0, tvx:0, tvy:0, testRaf:null, testLast:0, testMaxR:0
 };
@@ -1009,6 +1103,7 @@ function beginRound(){
   coinEl.style.transform='translate(0px,0px)';
   dangerEl.style.boxShadow='inset 0 0 0 1.2vh rgba(255,40,40,0)';
   clearDanger();
+  stopEnemy();
   clearPetals();
   State._roseWorry=false;
   const rp=byId('rosePlay'); setFace(rp,'happy'); rp.classList.remove('pop'); void rp.offsetWidth; rp.classList.add('pop');
@@ -1046,6 +1141,7 @@ function countdown(){
       goalBtn.disabled=false;
       const PLAY_LINES=['いくよ〜！','がんばって！','ゆっくりでいいよ！'];
       speak(byId('rosePlay'), PLAY_LINES[Math.floor(Math.random()*PLAY_LINES.length)], 1600);
+      scheduleEnemy();   // 敵モードなら 攻撃スタート
     }
   };
   setTimeout(tick,650);
@@ -1139,6 +1235,7 @@ function fail(){
   if(State.ended) return;
   State.ended=true; State.active=false; goalBtn.disabled=true;
   clearDanger();
+  stopEnemy();
   sfxDokan();
   const ff=byId('failFlash'); ff.classList.remove('on'); void ff.offsetWidth; ff.classList.add('on');
   coinEl.classList.add('fall');
@@ -1150,6 +1247,7 @@ goalBtn.addEventListener('click', ()=>{
   if(!State.active || State.ended) return;
   State.ended=true; State.active=false; goalBtn.disabled=true;
   clearDanger();
+  stopEnemy();
   State.clears++;
   sfxFanfare();
   coinEl.classList.add('win');
@@ -1243,7 +1341,7 @@ byId('restartBtn').addEventListener('click', ()=>{
 /* やめる → タイトルへ */
 byId('quitBtn').addEventListener('click', ()=>{
   stopBGM(); State.active=false; State.ended=true;
-  hideBubble(); clearDanger();
+  hideBubble(); clearDanger(); stopEnemy();
   show('title');
   greetTitle();
 });
@@ -1352,6 +1450,92 @@ function hideBubble(){
   if(speakTarget){ speakTarget.classList.remove('talking'); speakTarget=null; }
   clearTimeout(speakTimer);
 }
+
+/* =========================================================================
+   敵マスコット ＆ 視界じゃま攻撃
+   ========================================================================= */
+const EYES = '<div class="e-eye l"></div><div class="e-eye r"></div><div class="e-mouth"></div>';
+function enemyHTML(type){
+  switch(type){
+    case 'cloud': return '<div class="e-body"><div class="puff p4"></div><div class="puff p2"></div><div class="puff p3"></div><div class="puff p1"></div>'+EYES+'</div>';
+    case 'fly':   return '<div class="e-body"><div class="wing l"></div><div class="wing r"></div><div class="e-body2"></div>'+EYES+'</div>';
+    case 'ink':   return '<div class="e-body"><div class="head"></div><div class="leg a"></div><div class="leg b"></div><div class="leg c"></div>'+EYES+'</div>';
+    case 'mole':  return '<div class="e-body"><div class="head"></div><div class="snout"></div><div class="nose"></div>'+EYES+'</div>';
+    case 'ghost': return '<div class="e-body"><div class="head"></div><div class="foot a"></div><div class="foot b"></div><div class="foot c"></div>'+EYES+'</div>';
+  }
+  return '';
+}
+/* 難易度ごとの 敵・攻撃 設定 */
+const ENEMY = {
+  1:{ type:'cloud', name:'ぽよぐも',   interval:5200, dur:2600, line:'むにゃ…' },
+  2:{ type:'fly',   name:'ひらりちょう', interval:4600, dur:2200, line:'ひらひら〜' },
+  3:{ type:'ink',   name:'スミだこ',     interval:4200, dur:2200, line:'スミ ぴゅっ！' },
+  4:{ type:'mole',  name:'けむりモグ',   interval:3700, dur:2400, line:'もくもく〜' },
+  5:{ type:'ghost', name:'やみオバケ',   interval:3200, dur:2800, line:'くらやみ〜！' }
+};
+
+/* 敵キャラを 少しのあいだ登場させる */
+function showEnemyChar(type){
+  const ec=byId('enemyChar');
+  ec.className='enemy enemy-char '+type;
+  ec.style.setProperty('--s','14vh');
+  ec.innerHTML = enemyHTML(type);
+  // 右上あたりに出す（コインや枠と かぶりにくい位置）
+  ec.style.right='6vh'; ec.style.left='auto'; ec.style.top='8vh'; ec.style.bottom='auto';
+  ec.classList.remove('show'); void ec.offsetWidth; ec.classList.add('show');
+}
+function hideEnemyChar(){ const ec=byId('enemyChar'); if(ec){ ec.classList.remove('show'); ec.style.opacity='0'; } }
+
+/* 攻撃エフェクトを 出す */
+function doAttack(cfg){
+  const layer=byId('enemyLayer'); if(!layer) return;
+  showEnemyChar(cfg.type);
+  const D=(cfg.dur/1000)+'s';
+  const W=window.innerWidth, H=window.innerHeight, vh=H/100;
+  const cx=W/2, cy=H*0.52;                     // おぼんの中心あたり
+  const add=(cls, style)=>{ const e=document.createElement('div'); e.className=cls; e.style.cssText='--d:'+D+';'+(style||''); layer.appendChild(e);
+    setTimeout(()=>{ if(e.parentNode) e.parentNode.removeChild(e); }, cfg.dur+150); };
+
+  if(cfg.type==='cloud'){ add('atk-cloud','top:'+(cy-12*vh)+'px;'); }
+  else if(cfg.type==='fly'){
+    for(let i=0;i<6;i++) add('atk-leaf','top:'+(28+Math.random()*40)+'%; animation-delay:'+(i*0.12)+'s;');
+  }
+  else if(cfg.type==='ink'){          // 18vh×16vh のシミを 中心付近に3つ
+    for(let i=0;i<3;i++){ const ox=(Math.random()-0.5)*16*vh, oy=(Math.random()-0.5)*16*vh;
+      add('atk-ink','left:'+(cx-9*vh+ox)+'px; top:'+(cy-8*vh+oy)+'px; animation-delay:'+(i*0.18)+'s;'); }
+  }
+  else if(cfg.type==='mole'){         // 26vh のけむりを 中心付近に3つ
+    for(let i=0;i<3;i++){ const ox=(Math.random()-0.5)*18*vh, oy=(Math.random()-0.5)*14*vh;
+      add('atk-smoke','left:'+(cx-13*vh+ox)+'px; top:'+(cy-13*vh+oy)+'px; animation-delay:'+(i*0.22)+'s;'); }
+  }
+  else if(cfg.type==='ghost'){ add('atk-dark'); add('atk-mist','top:24%;'); }
+  if(cfg.line) speak(byId('enemyChar'), cfg.line, 1400);
+  setTimeout(hideEnemyChar, cfg.dur);
+}
+
+/* スケジュール（ラウンド中だけ くりかえし攻撃） */
+function scheduleEnemy(){
+  if(!State.enemyMode || !State.active || State.ended) return;
+  const cfg=ENEMY[State.level];
+  State.enemyTimer=setTimeout(()=>{
+    if(State.enemyMode && State.active && !State.ended){ doAttack(cfg); scheduleEnemy(); }
+  }, cfg.interval);
+}
+function stopEnemy(){
+  clearTimeout(State.enemyTimer);
+  const layer=byId('enemyLayer'); if(layer) layer.innerHTML='';
+  hideEnemyChar();
+}
+
+/* モード切替ボタン */
+try{ if(localStorage.getItem('enemyMode')==='1') State.enemyMode=true; }catch(e){}
+function refreshMode(){
+  byId('modeNormal').classList.toggle('on', !State.enemyMode);
+  byId('modeEnemy').classList.toggle('on', State.enemyMode);
+}
+refreshMode();
+byId('modeNormal').addEventListener('click', ()=>{ State.enemyMode=false; refreshMode(); try{localStorage.setItem('enemyMode','0');}catch(e){} });
+byId('modeEnemy').addEventListener('click', ()=>{ State.enemyMode=true; refreshMode(); try{localStorage.setItem('enemyMode','1');}catch(e){} });
 
 /* ===== 向き調整ボタン（押すと左右/前後の向きを反転、設定は記憶） ===== */
 try{
