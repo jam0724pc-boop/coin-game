@@ -288,6 +288,22 @@ body{
 .fail-flash.on{ animation:flashRed .5s ease-out; }
 @keyframes flashRed{ 0%{ opacity:0;} 20%{ opacity:1;} 100%{ opacity:0;} }
 
+/* がけっぷち警報（赤いドクドク） */
+.danger-vignette{
+  position:absolute; inset:0; z-index:28; pointer-events:none; opacity:0;
+  box-shadow:inset 0 0 22vh 7vh rgba(255,20,20,.9);
+}
+.danger-text{
+  position:absolute; top:14vh; left:50%; transform:translateX(-50%) scale(.6); z-index:29;
+  font-size:6vh; font-weight:900; color:#fff; opacity:0; pointer-events:none;
+  text-shadow:
+    0.4vh 0 0 #a00, -0.4vh 0 0 #a00, 0 0.4vh 0 #a00, 0 -0.4vh 0 #a00,
+    0.4vh 0.4vh 0 #a00, -0.4vh -0.4vh 0 #a00, 0.4vh -0.4vh 0 #a00, -0.4vh 0.4vh 0 #a00,
+    0 1vh 1.4vh rgba(0,0,0,.4);
+}
+.danger-text.on{ animation:dangerBlink .4s ease-in-out infinite; }
+@keyframes dangerBlink{ 0%,100%{ opacity:0; transform:translateX(-50%) scale(.7);} 50%{ opacity:1; transform:translateX(-50%) scale(1.05);} }
+
 /* カウントダウン */
 .countdown{
   position:absolute; inset:0; z-index:40; display:flex; align-items:center; justify-content:center;
@@ -499,6 +515,9 @@ body{
 
   <button class="goal-btn" id="goalBtn">ゴール！🏁</button>
 
+  <div class="danger-vignette" id="dangerVignette"></div>
+  <div class="danger-text" id="dangerText">あぶない！</div>
+
   <div class="fail-flash" id="failFlash"></div>
 
   <!-- カウントダウン -->
@@ -709,6 +728,16 @@ function scheduleBGM(){
 function stopBGM(){ if(bgm){ bgm.running=false; clearTimeout(bgm.timer); bgm=null; } }
 
 /* ===================== こうかおん ===================== */
+function sfxBeep(ratio){                               // がけっぷち警告「ピピッ」
+  if(!audioCtx) return; const t=audioCtx.currentTime;
+  const freq=1000+ratio*600;                           // 危ないほど高い音
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.type='square'; o.frequency.setValueAtTime(freq,t);
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.linearRampToValueAtTime(0.22,t+0.005);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.07);
+  o.connect(g); g.connect(masterGain); o.start(t); o.stop(t+0.09);
+}
 function sfxDokan(){                                  // しっぱい「ドカン！」
   if(!audioCtx) return; const t=audioCtx.currentTime;
   const len=Math.floor(audioCtx.sampleRate*0.5);
@@ -792,7 +821,8 @@ function setupPointerFallback(){
    ゲーム本体
    ========================================================================= */
 const coinEl=byId('coin'), trayEl=document.querySelector('#game .tray'),
-      dangerEl=byId('dangerRing'), goalBtn=byId('goalBtn');
+      dangerEl=byId('dangerRing'), goalBtn=byId('goalBtn'),
+      dangerVig=byId('dangerVignette'), dangerTxt=byId('dangerText');
 
 function startGame(level){
   State.level=level; State.play=1; State.clears=0;
@@ -808,6 +838,7 @@ function beginRound(){
   coinEl.classList.remove('win','fall');
   coinEl.style.transform='translate(0px,0px)';
   dangerEl.style.boxShadow='inset 0 0 0 1.2vh rgba(255,40,40,0)';
+  clearDanger();
   byId('roundResult').classList.add('hidden');
   byId('cur').textContent=State.play;
   goalBtn.disabled=true;
@@ -893,15 +924,47 @@ function loop(now){
     const ratio=clamp(dist/State.maxR,0,1);
     dangerEl.style.boxShadow='inset 0 0 '+(ratio*4)+'vh '+(ratio*1.2)+'vh rgba(255,40,40,'+(ratio*0.9)+')';
 
+    // ★がけっぷち警報（赤いドクドク＋ピピッ音）
+    updateDanger(ratio, now);
+
     if(dist>State.maxR){ fail(); }
   }
 }
 function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
 
+/* がけっぷち警報：危険度に応じて 画面を赤くドクドク＆音を速める */
+function updateDanger(ratio, now){
+  const ALERT = 0.55;                      // ここを超えると警報スタート
+  if(ratio < ALERT){
+    if(dangerVig.style.opacity!=='0'){ dangerVig.style.opacity='0'; dangerTxt.classList.remove('on'); }
+    State.lastBeep = 0;
+    return;
+  }
+  const d = (ratio - ALERT) / (1 - ALERT);          // 0〜1 の危険度
+  // 心臓のドクドク（危険なほど速く・強く）
+  const period = 520 - d*360;                       // 拍の間隔(ms)：危険ほど短い
+  const beat = 0.5 + 0.5*Math.sin(now/period*Math.PI*2);
+  dangerVig.style.opacity = (0.25 + d*0.65) * (0.4 + 0.6*beat);
+  // 「あぶない！」テキスト（かなり危ないとき）
+  if(d>0.55) dangerTxt.classList.add('on'); else dangerTxt.classList.remove('on');
+  // ピピッ音（危険なほど速い）
+  const interval = 520 - d*400;                     // 音の間隔(ms)
+  if(!State.lastBeep || now - State.lastBeep > interval){
+    sfxBeep(d);
+    State.lastBeep = now;
+  }
+}
+function clearDanger(){
+  if(dangerVig) dangerVig.style.opacity='0';
+  if(dangerTxt) dangerTxt.classList.remove('on');
+  State.lastBeep = 0;
+}
+
 /* しっぱい（コインが すべりおちた） */
 function fail(){
   if(State.ended) return;
   State.ended=true; State.active=false; goalBtn.disabled=true;
+  clearDanger();
   sfxDokan();
   const ff=byId('failFlash'); ff.classList.remove('on'); void ff.offsetWidth; ff.classList.add('on');
   coinEl.classList.add('fall');
@@ -912,6 +975,7 @@ function fail(){
 goalBtn.addEventListener('click', ()=>{
   if(!State.active || State.ended) return;
   State.ended=true; State.active=false; goalBtn.disabled=true;
+  clearDanger();
   State.clears++;
   sfxFanfare();
   coinEl.classList.add('win');
