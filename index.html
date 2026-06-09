@@ -733,6 +733,9 @@ const CONFIG = {
 };
 const TOTAL_PLAYS = 5;
 
+/* しゃべり用（先に宣言しておく） */
+let speakTimer=null, speakTarget=null;
+
 /* ★ 傾きの向き調整 ★
    万が一、傾けた向きと コインの動きが逆だったら、
    下の true / false を入れかえてください。
@@ -1284,7 +1287,7 @@ function setFace(el, expr){
 function roseJump(el){ if(!el) return; el.classList.remove('jump'); void el.offsetWidth; el.classList.add('jump'); }
 setFace(byId('roseTitle'),'happy');
 const TITLE_LINES=['やあ！ いっしょに あそぼう！','コインを おとさず あるけるかな？','きみなら できるよ！'];
-function greetTitle(){ speak(byId('roseTitle'), TITLE_LINES[Math.floor(Math.random()*TITLE_LINES.length)]); }
+function greetTitle(){ try{ speak(byId('roseTitle'), TITLE_LINES[Math.floor(Math.random()*TITLE_LINES.length)]); }catch(e){} }
 greetTitle();
 
 /* 花びら（はなびら）をまい散らす */
@@ -1302,7 +1305,6 @@ function makePetals(box, n){
 function clearPetals(){ const b=byId('petalbox'); if(b) b.innerHTML=''; }
 
 /* ===== バラリンが しゃべる（ふきだし＋8bitもごもごボイス＋口パク） ===== */
-let speakTimer=null, speakTarget=null;
 function blipVoice(text){
   if(!audioCtx) return;
   const t0=audioCtx.currentTime; let n=0;
