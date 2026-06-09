@@ -607,10 +607,11 @@ body{
 .enemy.ghost .e-eye::after{ background:#7a3ff0; top:20%; left:20%; width:55%; height:55%; }
 .enemy.ghost .e-mouth{ width:16%; height:16%; margin-left:-8%; border:.45vh solid #fff; border-radius:50%; top:58%; }
 
-/* 攻撃が出るときの 敵キャラ登場 */
-.enemy-char{ position:absolute; z-index:13; pointer-events:none; opacity:0; }
-.enemy-char.show{ animation:enemyPop .5s ease-out; opacity:1; }
-@keyframes enemyPop{ 0%{ transform:translateY(40%) scale(.4); opacity:0;} 60%{ opacity:1;} 100%{ transform:translateY(0) scale(1); opacity:1;} }
+/* 敵キャラ（プレイ中ずっと 右の土管の上に いる） */
+.enemy-char{ position:absolute; z-index:13; pointer-events:none; opacity:0; transition:opacity .3s ease; }
+.enemy-char.in{ opacity:1; }
+.enemy-char.attacking{ animation:enemyLunge .55s ease; }
+@keyframes enemyLunge{ 0%,100%{ transform:translateX(0) scale(1) rotate(0);} 35%{ transform:translateX(-4vh) scale(1.15) rotate(-5deg);} }
 
 /* ===== 視界じゃま攻撃のレイヤー ===== */
 .enemy-layer{ position:absolute; inset:0; z-index:12; pointer-events:none; overflow:hidden; }
@@ -1104,6 +1105,7 @@ function beginRound(){
   dangerEl.style.boxShadow='inset 0 0 0 1.2vh rgba(255,40,40,0)';
   clearDanger();
   stopEnemy();
+  if(State.enemyMode) mountEnemy(ENEMY[State.level].type);   // 敵が 右の土管に 待機
   clearPetals();
   State._roseWorry=false;
   const rp=byId('rosePlay'); setFace(rp,'happy'); rp.classList.remove('pop'); void rp.offsetWidth; rp.classList.add('pop');
@@ -1474,22 +1476,22 @@ const ENEMY = {
   5:{ type:'ghost', name:'やみオバケ',   interval:3200, dur:2800, line:'くらやみ〜！' }
 };
 
-/* 敵キャラを 少しのあいだ登場させる */
-function showEnemyChar(type){
+/* 敵キャラを 右の土管の上に 出す（プレイ中ずっと） */
+function mountEnemy(type){
   const ec=byId('enemyChar');
   ec.className='enemy enemy-char '+type;
-  ec.style.setProperty('--s','14vh');
+  ec.style.setProperty('--s','15vh');
   ec.innerHTML = enemyHTML(type);
-  // 右上あたりに出す（コインや枠と かぶりにくい位置）
-  ec.style.right='6vh'; ec.style.left='auto'; ec.style.top='8vh'; ec.style.bottom='auto';
-  ec.classList.remove('show'); void ec.offsetWidth; ec.classList.add('show');
+  ec.style.right='1.5vh'; ec.style.left='auto'; ec.style.bottom='27vh'; ec.style.top='auto';
+  void ec.offsetWidth; ec.classList.add('in');     // ふわっと表示（ずっと いる）
 }
-function hideEnemyChar(){ const ec=byId('enemyChar'); if(ec){ ec.classList.remove('show'); ec.style.opacity='0'; } }
+function hideEnemyChar(){ const ec=byId('enemyChar'); if(ec){ ec.classList.remove('in','attacking'); } }
+function lungeEnemy(){ const ec=byId('enemyChar'); if(!ec) return; ec.classList.remove('attacking'); void ec.offsetWidth; ec.classList.add('attacking'); setTimeout(()=>ec.classList.remove('attacking'),600); }
 
 /* 攻撃エフェクトを 出す */
 function doAttack(cfg){
   const layer=byId('enemyLayer'); if(!layer) return;
-  showEnemyChar(cfg.type);
+  lungeEnemy();                                 // ずっといる敵が ぐいっと乗り出す
   const D=(cfg.dur/1000)+'s';
   const W=window.innerWidth, H=window.innerHeight, vh=H/100;
   const cx=W/2, cy=H*0.52;                     // おぼんの中心あたり
@@ -1510,7 +1512,6 @@ function doAttack(cfg){
   }
   else if(cfg.type==='ghost'){ add('atk-dark'); add('atk-mist','top:24%;'); }
   if(cfg.line) speak(byId('enemyChar'), cfg.line, 1400);
-  setTimeout(hideEnemyChar, cfg.dur);
 }
 
 /* スケジュール（ラウンド中だけ くりかえし攻撃） */
