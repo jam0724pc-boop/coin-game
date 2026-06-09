@@ -153,15 +153,57 @@ body{
 
 .sound-note{ position:relative; z-index:5; margin-top:2vh; font-size:1.9vh; color:#2a5a10; font-weight:800; background:rgba(255,255,255,.7); padding:.6vh 1.6vh; border-radius:999px; }
 
-.tilt-fix{ position:relative; z-index:5; margin-top:1.2vh; display:flex; align-items:center; gap:1vh; }
-.tilt-fix-lbl{ font-size:1.7vh; font-weight:800; color:#2a5a10; background:rgba(255,255,255,.6); padding:.4vh 1vh; border-radius:999px; }
+.test-enter-btn{
+  position:relative; z-index:5; margin-top:1.8vh; font-family:var(--font); cursor:pointer;
+  font-size:2.6vh; font-weight:900; color:#fff;
+  padding:1.4vh 3.4vh; border-radius:999px; border:.6vh solid #fff;
+  background:linear-gradient(180deg,#c0a8ff,#8a5cf0);
+  box-shadow:0 1.2vh 0 #5a2fb0, 0 1.8vh 2vh rgba(0,0,0,.28), inset 0 .6vh .6vh rgba(255,255,255,.6);
+  text-shadow:0 .4vh .6vh rgba(0,0,0,.3); transition:transform .08s ease, box-shadow .08s ease;
+}
+.test-enter-btn:active{ transform:translateY(1vh); box-shadow:0 .2vh 0 #5a2fb0, 0 .6vh .8vh rgba(0,0,0,.28), inset 0 .6vh .6vh rgba(255,255,255,.6); }
+
+/* かたむきテスト画面 */
+.test-title{
+  position:relative; z-index:5; font-size:5vh; font-weight:900; color:#fff;
+  text-shadow:
+    0.3vh 0 0 #5a2fb0, -0.3vh 0 0 #5a2fb0, 0 0.3vh 0 #5a2fb0, 0 -0.3vh 0 #5a2fb0,
+    0.3vh 0.3vh 0 #5a2fb0, -0.3vh -0.3vh 0 #5a2fb0, 0 .9vh 1vh rgba(0,0,0,.3);
+}
+.test-guide{
+  position:relative; z-index:5; margin-top:1.2vh; font-size:2.6vh; font-weight:800; color:#3a2a00;
+  background:rgba(255,255,255,.92); padding:1.2vh 2.6vh; border-radius:2.4vh; text-align:center; line-height:1.5;
+  border:.4vh solid #fff; box-shadow:0 .8vh 1.4vh rgba(0,0,0,.2);
+}
+.test-guide b{ color:#e63333; }
+.tray-test{ width:42vh; height:42vh; }
+.coin-test{ width:11vh; height:11vh; margin-left:-5.5vh; margin-top:-5.5vh; }
+.coin-test .face{ font-size:5.4vh; }
+.test-controls{ position:relative; z-index:5; margin-top:1.6vh; display:flex; gap:1.6vh; flex-wrap:wrap; justify-content:center; }
 .tfix-btn{
   font-family:var(--font); cursor:pointer; font-size:1.8vh; font-weight:800; color:#777;
-  background:rgba(255,255,255,.85); border:.3vh solid #fff; border-radius:999px; padding:.6vh 1.6vh;
+  background:rgba(255,255,255,.9); border:.3vh solid #fff; border-radius:999px; padding:.6vh 1.6vh;
   box-shadow:0 .5vh .8vh rgba(0,0,0,.18); transition:all .1s ease;
 }
+.tfix-btn.big{ font-size:2.4vh; padding:1.2vh 2.6vh; }
 .tfix-btn.on{ background:linear-gradient(180deg,#ffe46a,#ffb01f); color:#fff; box-shadow:0 .5vh .8vh rgba(0,0,0,.25), inset 0 .3vh .3vh rgba(255,255,255,.6); }
 .tfix-btn:active{ transform:translateY(.3vh); }
+.test-reset-btn{
+  font-family:var(--font); cursor:pointer; font-size:2.4vh; font-weight:800; color:#fff;
+  background:linear-gradient(180deg,#9fdcff,#36a8e6); border:.3vh solid #fff; border-radius:999px; padding:1.2vh 2.6vh;
+  box-shadow:0 .8vh 1vh rgba(0,0,0,.22), inset 0 .3vh .3vh rgba(255,255,255,.5); transition:transform .08s ease;
+}
+.test-reset-btn:active{ transform:translateY(.4vh); }
+.test-ok-btn{
+  position:relative; z-index:5; margin-top:2vh; font-family:var(--font); cursor:pointer;
+  font-size:3.4vh; font-weight:900; color:#fff;
+  padding:1.8vh 5vh; border-radius:999px; border:.7vh solid #fff;
+  background:linear-gradient(180deg,#b8ff6e,#3fb320);
+  box-shadow:0 1.4vh 0 #1a6a0a, 0 2vh 2.2vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.65);
+  text-shadow:0 .4vh .6vh rgba(0,0,0,.3); transition:transform .08s ease, box-shadow .08s ease;
+}
+.test-ok-btn:active{ transform:translateY(1.4vh); box-shadow:0 .2vh 0 #1a6a0a, 0 .8vh 1vh rgba(0,0,0,.3), inset 0 .6vh .8vh rgba(255,255,255,.65); }
+#test{ justify-content:center; gap:0.4vh; }
 
 /* =========================================================
    ゲーム画面
@@ -194,7 +236,7 @@ body{
 .tray-area{ position:relative; z-index:10; display:flex; align-items:center; justify-content:center; }
 .tray{
   position:relative;
-  width:54vh; height:54vh; border-radius:9vh;
+  width:64vh; height:64vh; border-radius:10vh;
   background:
     radial-gradient(circle at 48% 35%, rgba(255,255,255,.72), rgba(255,255,255,0) 52%),
     radial-gradient(ellipse at 50% 50%, #fff8d0, #ffe8a0 35%, #e8b640 65%, #d4941a 100%);
@@ -207,7 +249,7 @@ body{
 }
 /* あぶないゾーン（ふち）の光 */
 .danger-ring{
-  position:absolute; inset:0; border-radius:9vh; pointer-events:none;
+  position:absolute; inset:0; border-radius:10vh; pointer-events:none;
   box-shadow:inset 0 0 0 1.2vh rgba(255,40,40,0);
   transition:box-shadow .05s linear;
 }
@@ -482,11 +524,35 @@ body{
 
   <div class="sound-note">🎵 おとが でるよ。おとを オンにしてね</div>
 
-  <div class="tilt-fix">
-    <span class="tilt-fix-lbl">むきが ぎゃくのとき →</span>
-    <button class="tfix-btn" id="tfixX">↔ ひだりみぎ</button>
-    <button class="tfix-btn" id="tfixY">↕ まえうしろ</button>
+  <button class="test-enter-btn" id="testEnterBtn">🧭 かたむきテスト（むきを あわせる）</button>
+</section>
+
+<!-- ============ かたむきテスト ============ -->
+<section id="test" class="screen hidden">
+  <div class="sky-bg"></div>
+  <div class="pipe left"></div>
+  <div class="pipe right"></div>
+
+  <div class="test-title">🧭 かたむき テスト</div>
+  <div class="test-guide" id="testGuide">iPadを <b>みぎ</b>にかたむけて、コインが <b>みぎ</b>にうごけば OK！<br>ぎゃくに うごいたら、したの ボタンを おしてね</div>
+
+  <div class="tray-area">
+    <div class="tray tray-test">
+      <div class="tray-center-mark"></div>
+      <div class="coin coin-test" id="testCoin">
+        <div class="shine"></div>
+        <div class="face">$</div>
+      </div>
+    </div>
   </div>
+
+  <div class="test-controls">
+    <button class="tfix-btn big" id="tfixX">↔ ひだりみぎ を ぎゃくにする</button>
+    <button class="tfix-btn big" id="tfixY">↕ まえうしろ を ぎゃくにする</button>
+    <button class="test-reset-btn" id="testResetBtn">📐 いまを「たいら」にする</button>
+  </div>
+
+  <button class="test-ok-btn" id="testOkBtn">✅ これでOK！ もどる</button>
 </section>
 
 <!-- ============ ゲーム ============ -->
@@ -586,11 +652,14 @@ const State = {
   baseBeta:0, baseGamma:0,
   curBeta:0, curGamma:0,
   sensorSeen:false, pointerCtrl:false,
-  raf:null, last:0, maxR:0
+  raf:null, last:0, maxR:0,
+  lastBeep:0,
+  // テストモード用
+  testOn:false, tx:0, ty:0, tvx:0, tvy:0, testRaf:null, testLast:0, testMaxR:0
 };
 
 /* ===================== 画面のきりかえ ===================== */
-const screens = { title:byId('title'), game:byId('game'), final:byId('final') };
+const screens = { title:byId('title'), test:byId('test'), game:byId('game'), final:byId('final') };
 function show(name){
   for(const k in screens) screens[k].classList.add('hidden');
   screens[name].classList.remove('hidden');
@@ -876,6 +945,27 @@ function countdown(){
   setTimeout(tick,650);
 }
 
+/* 傾き → 画面上の左右(tiltX)・前後(tiltY) を計算（ゲームとテストで共通）*/
+function computeTilt(){
+  let dBeta  = State.curBeta  - State.baseBeta;
+  let dGamma = State.curGamma - State.baseGamma;
+  const landscape = (window.matchMedia && window.matchMedia('(orientation: landscape)').matches)
+                    || (window.innerWidth >= window.innerHeight);
+  let o = (typeof window.orientation === 'number') ? window.orientation
+          : (screen.orientation && typeof screen.orientation.angle==='number' ? screen.orientation.angle : 90);
+  let tiltX, tiltY;
+  if(landscape){
+    if(o === -90 || o === 270){ tiltX = -dBeta;  tiltY =  dGamma; }
+    else                      { tiltX =  dBeta;  tiltY = -dGamma; }
+  } else {
+    if(o === 180){ tiltX = -dGamma; tiltY = -dBeta; }
+    else         { tiltX =  dGamma; tiltY =  dBeta; }
+  }
+  if(TILT.invertX) tiltX = -tiltX;
+  if(TILT.invertY) tiltY = -tiltY;
+  return { tiltX: clamp(tiltX,-45,45), tiltY: clamp(tiltY,-45,45) };
+}
+
 /* メインループ：傾き → コインの動き（慣性つき） */
 function loop(now){
   State.raf=requestAnimationFrame(loop);
@@ -883,37 +973,12 @@ function loop(now){
   if(dt>0.05) dt=0.05;
 
   if(State.active){
-    // 傾きから 加速度を計算
-    let dBeta  = State.curBeta  - State.baseBeta;   // 端末の前後の傾き
-    let dGamma = State.curGamma - State.baseGamma;  // 端末の左右の傾き
-
-    // 画面が横向きか縦向きかを確実に判定（iPad Safariでは角度が取れないことがあるため）
-    const landscape = (window.matchMedia && window.matchMedia('(orientation: landscape)').matches)
-                      || (window.innerWidth >= window.innerHeight);
-    // 横向きの「どちら向き」かを取得（取れなければ既定値）
-    let o = (typeof window.orientation === 'number') ? window.orientation
-            : (screen.orientation && typeof screen.orientation.angle==='number' ? screen.orientation.angle : 90);
-
-    let tiltX, tiltY;
-    if(landscape){
-      // ★横向き：画面の左右 = 端末のbeta、画面の前後 = 端末のgamma
-      if(o === -90 || o === 270){ tiltX = -dBeta;  tiltY =  dGamma; }
-      else                      { tiltX =  dBeta;  tiltY = -dGamma; }
-    } else {
-      // 縦向き（保険）
-      if(o === 180){ tiltX = -dGamma; tiltY = -dBeta; }
-      else         { tiltX =  dGamma; tiltY =  dBeta; }
-    }
-    if(TILT.invertX) tiltX = -tiltX;
-    if(TILT.invertY) tiltY = -tiltY;
-    tiltX = clamp(tiltX,-45,45);
-    tiltY = clamp(tiltY,-45,45);
-
+    const t = computeTilt();
     const k=CONFIG[State.level];
     const G=k.sens;
     // 加速度（坂の傾き ∝ sin）：コインは「下り坂」の向きへ転がる
-    State.vx += Math.sin(tiltX*Math.PI/180)*G*dt;
-    State.vy += Math.sin(tiltY*Math.PI/180)*G*dt;
+    State.vx += Math.sin(t.tiltX*Math.PI/180)*G*dt;
+    State.vy += Math.sin(t.tiltY*Math.PI/180)*G*dt;
     State.vx *= k.damp; State.vy *= k.damp;
     State.x += State.vx*dt; State.y += State.vy*dt;
 
@@ -1096,6 +1161,55 @@ tfixY.addEventListener('click', ()=>{
   TILT.invertY=!TILT.invertY; refreshTfix();
   try{ localStorage.setItem('tiltInvertY', TILT.invertY?'1':'0'); }catch(e){}
 });
+
+/* =========================================================================
+   かたむきテストモード
+   ========================================================================= */
+const testCoin=byId('testCoin'), testTrayEl=document.querySelector('#test .tray-test');
+
+function calibrateNow(){           // いまの構えを「たいら」にする
+  State.calibrating=true;
+  setTimeout(()=>{ State.calibrating=false; }, 700);
+}
+function enterTest(){
+  initAudio(); resumeAudio();
+  requestSensor();
+  show('test');
+  State.testOn=true;
+  State.tx=State.ty=State.tvx=State.tvy=0;
+  testCoin.style.transform='translate(0px,0px)';
+  const rect=testTrayEl.getBoundingClientRect();
+  const coinR=testCoin.getBoundingClientRect().width/2;
+  State.testMaxR=(rect.width/2 - coinR);
+  calibrateNow();
+  State.testLast=performance.now();
+  if(!State.testRaf) testLoop(performance.now());
+}
+function exitTest(){
+  State.testOn=false;
+  if(State.testRaf){ cancelAnimationFrame(State.testRaf); State.testRaf=null; }
+  show('title');
+}
+function testLoop(now){
+  if(!State.testOn){ State.testRaf=null; return; }
+  State.testRaf=requestAnimationFrame(testLoop);
+  let dt=(now-State.testLast)/1000; State.testLast=now; if(dt>0.05) dt=0.05;
+  const t=computeTilt();
+  const G=2400;                    // テスト用の すべりやすさ（ふつう程度）
+  State.tvx += Math.sin(t.tiltX*Math.PI/180)*G*dt;
+  State.tvy += Math.sin(t.tiltY*Math.PI/180)*G*dt;
+  State.tvx*=0.95; State.tvy*=0.95;
+  State.tx += State.tvx*dt; State.ty += State.tvy*dt;
+  const r=Math.hypot(State.tx,State.ty);
+  if(r>State.testMaxR && r>0){      // テストでは落ちず、ふちで止まる
+    const s=State.testMaxR/r; State.tx*=s; State.ty*=s; State.tvx*=0.4; State.tvy*=0.4;
+  }
+  testCoin.style.transform='translate('+State.tx+'px,'+State.ty+'px)';
+}
+
+byId('testEnterBtn').addEventListener('click', enterTest);
+byId('testOkBtn').addEventListener('click', exitTest);
+byId('testResetBtn').addEventListener('click', calibrateNow);
 </script>
 </body>
 </html>
