@@ -562,50 +562,60 @@ body{
    敵マスコット（すべてCSS）＋ 視界をじゃまする攻撃
    ========================================================= */
 .enemy{ position:relative; width:var(--s,13vh); height:var(--s,13vh); }
-.enemy .e-body{ position:absolute; inset:0; animation:roseBob 2.2s ease-in-out infinite; }
-.enemy .e-eye{ position:absolute; width:17%; height:23%; background:#2a1830; border-radius:50%; top:34%; z-index:3; }
-.enemy .e-eye.l{ left:28%; } .enemy .e-eye.r{ right:28%; }
-.enemy .e-eye::after{ content:""; position:absolute; top:12%; left:18%; width:42%; height:42%; background:#fff; border-radius:50%; }
-.enemy .e-mouth{ position:absolute; left:50%; top:60%; width:22%; height:13%; margin-left:-11%; border-bottom:.45vh solid #2a1830; border-radius:0 0 70% 70%; z-index:3; }
+.enemy .m-body{ position:absolute; inset:0; animation:roseBob 2.2s ease-in-out infinite; }
+.enemy .m-head{ position:absolute; left:9%; top:16%; width:82%; height:76%; border-radius:46% 46% 44% 44%; box-shadow:inset 0 -1.2vh 1.4vh rgba(0,0,0,.3), inset 0 .8vh .8vh rgba(255,255,255,.28); z-index:2; }
+.enemy .e-eye{ position:absolute; width:15%; height:20%; background:#2a1830; border-radius:50%; top:40%; z-index:4; }
+.enemy .e-eye.l{ left:29%; } .enemy .e-eye.r{ right:29%; }
+.enemy .e-eye::after{ content:""; position:absolute; top:10%; left:16%; width:40%; height:40%; background:#fff; border-radius:50%; }
+/* 口・きば */
+.enemy .m-mouth{ position:absolute; left:50%; top:63%; width:30%; height:15%; margin-left:-15%; background:#5a1020; border-radius:14% 14% 50% 50%; z-index:3; overflow:hidden; }
+.enemy .m-fang{ position:absolute; top:-1%; width:18%; height:60%; background:#fff; }
+.enemy .m-fang.l{ left:14%; clip-path:polygon(0 0,100% 0,50% 100%); }
+.enemy .m-fang.r{ right:14%; clip-path:polygon(0 0,100% 0,50% 100%); }
+/* つの */
+.enemy .m-horn{ position:absolute; top:-1%; width:15%; height:28%; background:linear-gradient(#fff,#e3dcc8); z-index:1; }
+.enemy .m-horn.l{ left:17%; clip-path:polygon(0 100%,100% 100%,28% 0); }
+.enemy .m-horn.r{ right:17%; clip-path:polygon(0 100%,100% 100%,72% 0); }
+/* まゆ（おこり顔） */
+.enemy .m-brow{ position:absolute; width:24%; height:6%; background:#2a1020; top:33%; z-index:5; border-radius:30%; }
+.enemy .m-brow.l{ left:20%; transform:rotate(16deg); } .enemy .m-brow.r{ right:20%; transform:rotate(-16deg); }
+/* せなかトゲ */
+.enemy .m-spike{ position:absolute; top:8%; width:11%; height:15%; background:#eaeaea; clip-path:polygon(0 100%,100% 100%,50% 0); z-index:0; }
+/* かんむり・ほのお（ボス用） */
+.enemy .m-crown{ position:absolute; top:-13%; left:29%; width:42%; height:22%; background:linear-gradient(#ffe46a,#ffae00); clip-path:polygon(0 100%,16% 26%,34% 72%,50% 8%,66% 72%,84% 26%,100% 100%); z-index:6; filter:drop-shadow(0 .3vh .3vh rgba(0,0,0,.3)); }
+.enemy .m-flame{ position:absolute; left:-8%; right:-8%; top:-16%; height:50%; background:radial-gradient(circle at 50% 75%, rgba(255,170,0,.9), rgba(255,70,0,.4) 55%, transparent 72%); border-radius:50%; z-index:0; animation:flameFlick .35s ease-in-out infinite alternate; }
+@keyframes flameFlick{ from{ transform:scaleY(1) scaleX(1);} to{ transform:scaleY(1.18) scaleX(1.05);} }
 
-/* ① ぽよぐも（くも） */
-.enemy.cloud .puff{ position:absolute; background:#fff; border-radius:50%; box-shadow:0 .6vh 1vh rgba(0,0,0,.12); }
-.enemy.cloud .p1{ width:62%; height:62%; left:19%; top:30%; }
-.enemy.cloud .p2{ width:46%; height:46%; left:4%; top:42%; }
-.enemy.cloud .p3{ width:46%; height:46%; right:4%; top:42%; }
-.enemy.cloud .p4{ width:42%; height:42%; left:30%; top:20%; }
-.enemy.cloud .e-eye{ top:48%; } .enemy.cloud .e-mouth{ top:70%; border-color:#7a8aa0; }
-
-/* ② ひらりちょう（チョウ） */
-.enemy.fly .wing{ position:absolute; width:46%; height:70%; top:16%; border-radius:60% 60% 50% 50%; }
-.enemy.fly .wing.l{ left:1%; background:radial-gradient(circle at 60% 40%, #ffd36a, #ff8ad0 70%); transform:rotate(-12deg); animation:flap 0.5s ease-in-out infinite; transform-origin:right center; }
-.enemy.fly .wing.r{ right:1%; background:radial-gradient(circle at 40% 40%, #ffd36a, #ff8ad0 70%); transform:rotate(12deg); animation:flapR 0.5s ease-in-out infinite; transform-origin:left center; }
-@keyframes flap{ 0%,100%{ transform:rotate(-12deg);} 50%{ transform:rotate(-30deg);} }
-@keyframes flapR{ 0%,100%{ transform:rotate(12deg);} 50%{ transform:rotate(30deg);} }
-.enemy.fly .e-body2{ position:absolute; left:50%; top:20%; width:14%; height:62%; margin-left:-7%; background:linear-gradient(#8a5cf0,#5a2fb0); border-radius:40%; z-index:2; }
-.enemy.fly .e-eye{ top:26%; width:11%; height:15%; } .enemy.fly .e-eye.l{ left:40%; } .enemy.fly .e-eye.r{ right:40%; }
-.enemy.fly .e-mouth{ display:none; }
-
-/* ③ スミだこ（たこ） */
-.enemy.ink .head{ position:absolute; left:8%; top:6%; width:84%; height:74%; background:radial-gradient(circle at 38% 30%, #c79cff, #7a3ff0 70%); border-radius:50% 50% 42% 42%; box-shadow:inset 0 -1vh 1.2vh rgba(60,0,120,.4); }
-.enemy.ink .leg{ position:absolute; bottom:8%; width:18%; height:24%; background:#7a3ff0; border-radius:0 0 50% 50%; }
-.enemy.ink .leg.a{ left:14%; } .enemy.ink .leg.b{ left:41%; } .enemy.ink .leg.c{ right:14%; }
-.enemy.ink .e-eye{ top:30%; }
-
-/* ④ けむりモグ（もぐら） */
-.enemy.mole .head{ position:absolute; left:10%; top:14%; width:80%; height:74%; background:radial-gradient(circle at 38% 30%, #b98a5e, #6e4a28 75%); border-radius:50%; box-shadow:inset 0 -1vh 1.2vh rgba(50,30,10,.4); }
-.enemy.mole .snout{ position:absolute; left:50%; top:54%; width:34%; height:26%; margin-left:-17%; background:radial-gradient(circle at 40% 30%, #ffc0cb, #e88aa0); border-radius:50%; z-index:3; }
-.enemy.mole .nose{ position:absolute; left:50%; top:60%; width:11%; height:9%; margin-left:-5.5%; background:#5a2a30; border-radius:50%; z-index:4; }
-.enemy.mole .e-eye{ top:34%; width:13%; height:7%; background:transparent; border-bottom:.5vh solid #2a1830; border-radius:0 0 60% 60%; }
-.enemy.mole .e-eye::after{ display:none; } .enemy.mole .e-mouth{ display:none; }
-
-/* ⑤ やみオバケ（おばけ） */
-.enemy.ghost .head{ position:absolute; left:6%; top:4%; width:88%; height:88%; background:radial-gradient(circle at 38% 30%, #7a5aa0, #2e1a52 78%); border-radius:50% 50% 18% 18%; box-shadow:0 0 2vh rgba(120,80,200,.6), inset 0 -1vh 1.2vh rgba(0,0,0,.4); }
-.enemy.ghost .foot{ position:absolute; bottom:2%; width:24%; height:16%; background:#2e1a52; border-radius:50%; }
-.enemy.ghost .foot.a{ left:10%; } .enemy.ghost .foot.b{ left:38%; } .enemy.ghost .foot.c{ right:10%; }
-.enemy.ghost .e-eye{ background:#fff; top:32%; box-shadow:0 0 1vh #cdb6ff; }
-.enemy.ghost .e-eye::after{ background:#7a3ff0; top:20%; left:20%; width:55%; height:55%; }
-.enemy.ghost .e-mouth{ width:16%; height:16%; margin-left:-8%; border:.45vh solid #fff; border-radius:50%; top:58%; }
+/* ===== レベル1：コロぽん（ちいさい・よわい・かわいい） ===== */
+.enemy.b1 .m-head{ background:radial-gradient(circle at 38% 30%, #f3ddb0, #cda063 80%); }
+.enemy.b1 .m-mouth{ width:16%; height:9%; margin-left:-8%; background:transparent; border-bottom:.5vh solid #6a4020; border-radius:0 0 60% 60%; top:64%; }
+.enemy.b1 .e-eye{ width:17%; height:23%; }
+/* ===== レベル2：ツノこぞう（ちいさいツノ・いたずら） ===== */
+.enemy.b2 .m-head{ background:radial-gradient(circle at 38% 30%, #c2ee82, #6aa83a 80%); }
+.enemy.b2 .m-horn{ height:22%; width:13%; }
+.enemy.b2 .m-mouth{ width:24%; height:11%; margin-left:-12%; }
+.enemy.b2 .m-fang{ height:50%; }
+/* ===== レベル3：キバモン（オレンジ・キバ・トゲ） ===== */
+.enemy.b3 .m-head{ background:radial-gradient(circle at 38% 30%, #ffb066, #df7a14 80%); }
+.enemy.b3 .m-horn{ height:30%; width:15%; }
+.enemy.b3 .m-spike.s1{ left:24%; } .enemy.b3 .m-spike.s2{ right:24%; }
+/* ===== レベル4：オニドロ（あかぐろ・大きいツノ・おこり） ===== */
+.enemy.b4 .m-head{ background:radial-gradient(circle at 38% 30%, #ec6a55, #a02216 82%); box-shadow:inset 0 -1.2vh 1.4vh rgba(0,0,0,.4), inset 0 .8vh .8vh rgba(255,255,255,.2); }
+.enemy.b4 .m-horn{ height:38%; width:18%; background:linear-gradient(#fff,#c9c0aa); }
+.enemy.b4 .m-mouth{ width:38%; height:20%; margin-left:-19%; top:60%; }
+.enemy.b4 .m-fang{ height:55%; width:20%; }
+.enemy.b4 .m-spike{ width:13%; height:18%; background:#d8d2c0; }
+.enemy.b4 .m-spike.s1{ left:20%; } .enemy.b4 .m-spike.s2{ right:20%; } .enemy.b4 .m-spike.s3{ left:44.5%; top:3%; }
+/* ===== レベル5：ラスボス（巨大・くろ・赤目・かんむり・ほのお） ===== */
+.enemy.b5 .m-head{ background:radial-gradient(circle at 38% 28%, #6a5878, #281830 82%); box-shadow:inset 0 -1.4vh 1.6vh rgba(0,0,0,.55), 0 0 2.6vh rgba(255,40,40,.55); }
+.enemy.b5 .e-eye{ background:#ff2a2a; box-shadow:0 0 1.6vh #ff2a2a; }
+.enemy.b5 .e-eye::after{ background:#ffd0d0; top:18%; left:18%; width:50%; height:50%; }
+.enemy.b5 .m-horn{ height:46%; width:22%; background:linear-gradient(#fff,#bdb39a); }
+.enemy.b5 .m-horn.l{ left:9%; transform:rotate(-10deg); } .enemy.b5 .m-horn.r{ right:9%; transform:rotate(10deg); }
+.enemy.b5 .m-mouth{ width:44%; height:24%; margin-left:-22%; top:58%; background:#3a0010; }
+.enemy.b5 .m-fang{ height:58%; width:20%; }
+.enemy.b5 .m-spike{ width:14%; height:20%; background:#b0e0e0; }
+.enemy.b5 .m-spike.s1{ left:16%; } .enemy.b5 .m-spike.s2{ right:16%; } .enemy.b5 .m-spike.s3{ left:43%; top:1%; }
 
 /* 敵キャラ（プレイ中ずっと 右の土管の上に いる） */
 .enemy-char{ position:absolute; z-index:13; pointer-events:none; opacity:0; transition:opacity .3s ease; }
@@ -1105,7 +1115,7 @@ function beginRound(){
   dangerEl.style.boxShadow='inset 0 0 0 1.2vh rgba(255,40,40,0)';
   clearDanger();
   stopEnemy();
-  if(State.enemyMode) mountEnemy(ENEMY[State.level].type);   // 敵が 右の土管に 待機
+  if(State.enemyMode) mountEnemy(State.level);   // 敵が 右の土管に 待機
   clearPetals();
   State._roseWorry=false;
   const rp=byId('rosePlay'); setFace(rp,'happy'); rp.classList.remove('pop'); void rp.offsetWidth; rp.classList.add('pop');
@@ -1456,33 +1466,38 @@ function hideBubble(){
 /* =========================================================================
    敵マスコット ＆ 視界じゃま攻撃
    ========================================================================= */
-const EYES = '<div class="e-eye l"></div><div class="e-eye r"></div><div class="e-mouth"></div>';
-function enemyHTML(type){
-  switch(type){
-    case 'cloud': return '<div class="e-body"><div class="puff p4"></div><div class="puff p2"></div><div class="puff p3"></div><div class="puff p1"></div>'+EYES+'</div>';
-    case 'fly':   return '<div class="e-body"><div class="wing l"></div><div class="wing r"></div><div class="e-body2"></div>'+EYES+'</div>';
-    case 'ink':   return '<div class="e-body"><div class="head"></div><div class="leg a"></div><div class="leg b"></div><div class="leg c"></div>'+EYES+'</div>';
-    case 'mole':  return '<div class="e-body"><div class="head"></div><div class="snout"></div><div class="nose"></div>'+EYES+'</div>';
-    case 'ghost': return '<div class="e-body"><div class="head"></div><div class="foot a"></div><div class="foot b"></div><div class="foot c"></div>'+EYES+'</div>';
+const EYES = '<div class="e-eye l"></div><div class="e-eye r"></div>';
+function enemyHTML(boss){
+  const head='<div class="m-head"></div>';
+  const mouth='<div class="m-mouth"></div>';
+  const mouthFang='<div class="m-mouth"><div class="m-fang l"></div><div class="m-fang r"></div></div>';
+  const horns='<div class="m-horn l"></div><div class="m-horn r"></div>';
+  const brows='<div class="m-brow l"></div><div class="m-brow r"></div>';
+  switch(boss){
+    case 'b1': return '<div class="m-body">'+head+EYES+mouth+'</div>';
+    case 'b2': return '<div class="m-body">'+horns+head+EYES+mouthFang+'</div>';
+    case 'b3': return '<div class="m-body"><div class="m-spike s1"></div><div class="m-spike s2"></div>'+horns+head+brows+EYES+mouthFang+'</div>';
+    case 'b4': return '<div class="m-body"><div class="m-spike s1"></div><div class="m-spike s2"></div><div class="m-spike s3"></div>'+horns+head+brows+EYES+mouthFang+'</div>';
+    case 'b5': return '<div class="m-body"><div class="m-flame"></div><div class="m-spike s1"></div><div class="m-spike s2"></div><div class="m-spike s3"></div>'+horns+'<div class="m-crown"></div>'+head+brows+EYES+mouthFang+'</div>';
   }
   return '';
 }
-/* 難易度ごとの 敵・攻撃 設定 */
+/* 難易度ごとの 敵（見た目＝boss / 攻撃＝atk / 大きさ＝size）。攻撃は今までどおり。 */
 const ENEMY = {
-  1:{ type:'cloud', name:'ぽよぐも',   interval:5200, dur:2600, line:'むにゃ…' },
-  2:{ type:'fly',   name:'ひらりちょう', interval:4600, dur:2200, line:'ひらひら〜' },
-  3:{ type:'ink',   name:'スミだこ',     interval:4200, dur:2200, line:'スミ ぴゅっ！' },
-  4:{ type:'mole',  name:'けむりモグ',   interval:3700, dur:2400, line:'もくもく〜' },
-  5:{ type:'ghost', name:'やみオバケ',   interval:3200, dur:2800, line:'くらやみ〜！' }
+  1:{ boss:'b1', atk:'cloud', size:11,   interval:5200, dur:2600, name:'コロぽん',   line:'むにゃ…' },
+  2:{ boss:'b2', atk:'fly',   size:13.5, interval:4600, dur:2200, name:'ツノこぞう', line:'ちょろちょろ〜' },
+  3:{ boss:'b3', atk:'ink',   size:16,   interval:4200, dur:2200, name:'キバモン',   line:'スミ ぴゅっ！' },
+  4:{ boss:'b4', atk:'smoke', size:19,   interval:3700, dur:2400, name:'オニドロ',   line:'もくもく〜！' },
+  5:{ boss:'b5', atk:'dark',  size:23,   interval:3200, dur:2800, name:'ラスボス',   line:'くらやみだ！' }
 };
 
 /* 敵キャラを 右の土管の上に 出す（プレイ中ずっと） */
-function mountEnemy(type){
-  const ec=byId('enemyChar');
-  ec.className='enemy enemy-char '+type;
-  ec.style.setProperty('--s','15vh');
-  ec.innerHTML = enemyHTML(type);
-  ec.style.right='1.5vh'; ec.style.left='auto'; ec.style.bottom='27vh'; ec.style.top='auto';
+function mountEnemy(level){
+  const ec=byId('enemyChar'); const cfg=ENEMY[level];
+  ec.className='enemy enemy-char '+cfg.boss;
+  ec.style.setProperty('--s', cfg.size+'vh');
+  ec.innerHTML = enemyHTML(cfg.boss);
+  ec.style.right='1.5vh'; ec.style.left='auto'; ec.style.bottom='30vh'; ec.style.top='auto';
   void ec.offsetWidth; ec.classList.add('in');     // ふわっと表示（ずっと いる）
 }
 function hideEnemyChar(){ const ec=byId('enemyChar'); if(ec){ ec.classList.remove('in','attacking'); } }
@@ -1498,19 +1513,19 @@ function doAttack(cfg){
   const add=(cls, style)=>{ const e=document.createElement('div'); e.className=cls; e.style.cssText='--d:'+D+';'+(style||''); layer.appendChild(e);
     setTimeout(()=>{ if(e.parentNode) e.parentNode.removeChild(e); }, cfg.dur+150); };
 
-  if(cfg.type==='cloud'){ add('atk-cloud','top:'+(cy-12*vh)+'px;'); }
-  else if(cfg.type==='fly'){
+  if(cfg.atk==='cloud'){ add('atk-cloud','top:'+(cy-12*vh)+'px;'); }
+  else if(cfg.atk==='fly'){
     for(let i=0;i<6;i++) add('atk-leaf','top:'+(28+Math.random()*40)+'%; animation-delay:'+(i*0.12)+'s;');
   }
-  else if(cfg.type==='ink'){          // 18vh×16vh のシミを 中心付近に3つ
+  else if(cfg.atk==='ink'){          // 18vh×16vh のシミを 中心付近に3つ
     for(let i=0;i<3;i++){ const ox=(Math.random()-0.5)*16*vh, oy=(Math.random()-0.5)*16*vh;
       add('atk-ink','left:'+(cx-9*vh+ox)+'px; top:'+(cy-8*vh+oy)+'px; animation-delay:'+(i*0.18)+'s;'); }
   }
-  else if(cfg.type==='mole'){         // 26vh のけむりを 中心付近に3つ
+  else if(cfg.atk==='smoke'){         // 26vh のけむりを 中心付近に3つ
     for(let i=0;i<3;i++){ const ox=(Math.random()-0.5)*18*vh, oy=(Math.random()-0.5)*14*vh;
       add('atk-smoke','left:'+(cx-13*vh+ox)+'px; top:'+(cy-13*vh+oy)+'px; animation-delay:'+(i*0.22)+'s;'); }
   }
-  else if(cfg.type==='ghost'){ add('atk-dark'); add('atk-mist','top:24%;'); }
+  else if(cfg.atk==='dark'){ add('atk-dark'); add('atk-mist','top:24%;'); }
   if(cfg.line) speak(byId('enemyChar'), cfg.line, 1400);
 }
 
