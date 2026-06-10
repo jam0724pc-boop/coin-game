@@ -261,20 +261,65 @@ body{
     inset 0 1.8vh 2.4vh rgba(255,255,255,.85),
     inset 0 0 2.2vh rgba(255,255,255,.45);
 }
-/* ===== ステージ別の背景（レベルが上がるほど あやしい雰囲気）===== */
+/* ===== ステージ別の背景（5つの別ワールド）===== */
 /* プレイ中は バラリンを出さない */
 #rosePlay{ display:none; }
 #game.bg1 .sky-bg{ background:linear-gradient(180deg,#2fc7ff 0%,#6dd6ff 25%,#b0eaff 45%,#d4f56f 52%,#95e636 60%,#60b71a 100%); }
-#game.bg2 .sky-bg{ background:linear-gradient(180deg,#1f9fe6 0%,#5fc0f0 26%,#a8e6c0 48%,#bfe85a 56%,#6db81f 100%); }
-#game.bg3 .sky-bg{ background:linear-gradient(180deg,#ff7a3a 0%,#ffae5a 28%,#ffd79a 46%,#bcae4a 56%,#6a7a2a 100%); }
-#game.bg4 .sky-bg{ background:linear-gradient(180deg,#2a1f5a 0%,#5a3f8a 30%,#9a5fa0 48%,#5a4a5a 58%,#33402a 100%); }
-#game.bg5 .sky-bg{ background:linear-gradient(180deg,#150616 0%,#3a0a18 28%,#6e0e12 48%,#c0300a 60%,#4a0a06 100%); }
-/* 夜・夕方は 太陽と雲をひかえめに */
-#game.bg3 .sun{ background:radial-gradient(circle at 40% 35%,#fff0c7,#ff9e4a 60%,#ff7a2a 100%); }
-#game.bg4 .sun, #game.bg5 .sun{ display:none; }
-#game.bg4 .cloud, #game.bg5 .cloud{ opacity:.25; filter:brightness(.6); }
+#game.bg2 .sky-bg{ background:linear-gradient(180deg,#62cdff 0%,#9ee4ff 26%,#33a6e6 44%,#1f8ad6 58%,#f3dca0 61%,#e6c474 100%); }
+#game.bg3 .sky-bg{ background:linear-gradient(180deg,#bfe2ff 0%,#dcecff 34%,#ffe2ef 66%,#ffd0e2 100%); }
+#game.bg4 .sky-bg{ background:linear-gradient(180deg,#a6d8f2 0%,#cfeaff 42%,#eef7ff 60%,#ffffff 100%); }
+#game.bg5 .sky-bg{ background:linear-gradient(180deg,#120514 0%,#380a18 28%,#6e0e12 48%,#c0300a 62%,#4a0a06 100%); }
+/* 太陽・雲は ワールドに合わせて出し分け */
+#game.bg3 .sun, #game.bg4 .sun, #game.bg5 .sun{ display:none; }
+#game.bg3 .cloud, #game.bg4 .cloud, #game.bg5 .cloud{ display:none; }
 #game.bg5 .pipe{ filter:brightness(.7) saturate(1.2); }
 #game.bg5 .tray{ box-shadow:0 2.4vh 3.6vh rgba(0,0,0,.5), inset 0 -2.4vh 3.6vh rgba(130,70,0,.42), inset 0 1.8vh 2.4vh rgba(255,255,255,.85), 0 0 3vh rgba(255,60,0,.5); }
+
+/* ===== 各ワールドの飾り（CSS）===== */
+.world{ position:absolute; inset:0; z-index:1; pointer-events:none; display:none; }
+#game.bg1 .w1, #game.bg2 .w2, #game.bg3 .w3, #game.bg4 .w4, #game.bg5 .w5{ display:block; }
+
+/* W1 くさはら：みどりの丘 */
+.w1 .hill{ position:absolute; border-radius:50%; }
+.w1 .h1{ left:-12vh; bottom:26vh; width:58vh; height:38vh; background:#88da40; }
+.w1 .h2{ right:-14vh; bottom:24vh; width:70vh; height:44vh; background:#72c12c; }
+
+/* W2 すなはま：海の波＋ヤシの木 */
+.w2 .wave{ position:absolute; left:0; right:0; height:1.4vh; background:rgba(255,255,255,.7); border-radius:50%; }
+.w2 .wv1{ top:47%; } .w2 .wv2{ top:51%; opacity:.5; } .w2 .wv3{ top:55%; opacity:.35; }
+.w2 .trunk{ position:absolute; bottom:26vh; left:7vh; width:3.4vh; height:24vh; background:linear-gradient(90deg,#8a5a2e,#c89456 60%,#9a6a38); border-radius:40%; transform:rotate(-7deg); transform-origin:bottom; }
+.w2 .frond{ position:absolute; bottom:48vh; left:8.6vh; width:20vh; height:7vh; background:linear-gradient(#54c23a,#2f8a24); border-radius:60% 60% 50% 50%; transform-origin:left center; }
+.w2 .f1{ transform:rotate(-18deg); } .w2 .f2{ transform:rotate(10deg); } .w2 .f3{ transform:rotate(38deg); } .w2 .f4{ transform:scaleX(-1) rotate(-18deg); left:auto; right:calc(100% - 8.6vh); }
+
+/* W3 そら：ふわふわ雲＋浮島 */
+.w3 .scloud{ position:absolute; background:#fff; border-radius:50%; box-shadow:0 1vh 2vh rgba(120,120,160,.12); }
+.w3 .sc1{ left:8%; top:24%; width:26vh; height:12vh; }
+.w3 .sc2{ right:10%; top:38%; width:32vh; height:14vh; }
+.w3 .sc3{ left:30%; top:56%; width:38vh; height:15vh; opacity:.9; }
+.w3 .island{ position:absolute; left:50%; bottom:18vh; width:30vh; height:9vh; margin-left:-15vh; background:linear-gradient(#7fcf3a 38%,#7a4a28 38%); border-radius:50%; opacity:.5; }
+
+/* W4 ゆきやま：雪の山＋ふる雪 */
+.w4 .mtn{ position:absolute; bottom:30vh; width:0; height:0; border-style:solid; border-color:transparent; border-bottom-color:#fff; }
+.w4 .m1{ left:6%; border-width:0 22vh 30vh 22vh; }
+.w4 .m2{ right:2%; border-width:0 26vh 36vh 26vh; border-bottom-color:#eaf4ff; }
+.w4 .m3{ left:34%; border-width:0 18vh 24vh 18vh; border-bottom-color:#f4faff; }
+.w4 .snowbox{ position:absolute; inset:0; overflow:hidden; }
+.w4 .snowbox i{ position:absolute; top:-4vh; width:1.6vh; height:1.6vh; background:#fff; border-radius:50%; box-shadow:0 0 .6vh #fff; animation:snowFall linear infinite; }
+@keyframes snowFall{ 0%{ transform:translateY(-6vh) translateX(0);} 100%{ transform:translateY(105vh) translateX(4vh);} }
+
+/* W5 ようがん城：お城＋溶岩＋火の粉 */
+.w5 .castle{ position:absolute; left:50%; bottom:28vh; width:44vh; height:26vh; margin-left:-22vh; background:#241526; border-radius:2vh 2vh 0 0; box-shadow:inset 0 2vh 3vh rgba(0,0,0,.4); }
+.w5 .castle::before{ content:""; position:absolute; top:-4vh; left:0; right:0; height:4vh; background:
+  repeating-linear-gradient(90deg,#241526 0 5vh, transparent 5vh 9vh); }
+.w5 .tower{ position:absolute; bottom:28vh; width:12vh; height:36vh; background:#1c1020; }
+.w5 .tower.tl{ left:18%; } .w5 .tower.tr{ right:18%; }
+.w5 .tower::before{ content:""; position:absolute; top:-3vh; left:0; right:0; height:3vh; background:repeating-linear-gradient(90deg,#1c1020 0 3vh, transparent 3vh 6vh); }
+.w5 .lava{ position:absolute; left:0; right:0; bottom:0; height:16vh; background:linear-gradient(180deg,#ffc24a,#ff6a00 40%,#c81800 100%); box-shadow:0 -2vh 5vh rgba(255,90,0,.7); }
+.w5 .lava::after{ content:""; position:absolute; inset:0; background:radial-gradient(circle at 30% 30%, rgba(255,230,120,.8), transparent 30%), radial-gradient(circle at 70% 50%, rgba(255,200,80,.7), transparent 28%); animation:lavaGlow 2s ease-in-out infinite alternate; }
+@keyframes lavaGlow{ from{ opacity:.6;} to{ opacity:1;} }
+.w5 .emberbox{ position:absolute; inset:0; overflow:hidden; }
+.w5 .emberbox i{ position:absolute; bottom:-3vh; width:1.4vh; height:1.4vh; background:radial-gradient(circle,#ffd24a,#ff5a00 70%); border-radius:50%; box-shadow:0 0 1vh #ff7a00; animation:emberRise linear infinite; }
+@keyframes emberRise{ 0%{ transform:translateY(0) translateX(0); opacity:1;} 100%{ transform:translateY(-95vh) translateX(6vh); opacity:0;} }
 /* あぶないゾーン（ふち）の光 */
 .danger-ring{
   position:absolute; inset:0; border-radius:11vh; pointer-events:none;
@@ -771,6 +816,11 @@ body{
   <div class="cloud c2"></div>
   <div class="pipe left"></div>
   <div class="pipe right"></div>
+  <div class="world w1"><div class="hill h1"></div><div class="hill h2"></div></div>
+  <div class="world w2"><div class="wave wv1"></div><div class="wave wv2"></div><div class="wave wv3"></div><div class="trunk"></div><div class="frond f1"></div><div class="frond f2"></div><div class="frond f3"></div><div class="frond f4"></div></div>
+  <div class="world w3"><div class="scloud sc1"></div><div class="scloud sc2"></div><div class="scloud sc3"></div><div class="island"></div></div>
+  <div class="world w4"><div class="mtn m1"></div><div class="mtn m3"></div><div class="mtn m2"></div><div class="snowbox" id="snowbox"></div></div>
+  <div class="world w5"><div class="tower tl"></div><div class="tower tr"></div><div class="castle"></div><div class="lava"></div><div class="emberbox" id="emberbox"></div></div>
   <div class="rose" id="rosePlay" style="position:absolute; left:1vh; bottom:27vh; --s:15vh; z-index:2;"></div>
 
   <div class="counter">いま <b id="cur">1</b> かいめ / 5かい</div>
@@ -1388,6 +1438,24 @@ document.querySelectorAll('.lv-btn').forEach(btn=>{
 });
 
 setupPointerFallback();
+
+/* ゆき（W4）と 火の粉（W5）の粒をつくる（常にループ、表示はワールド時だけ） */
+(function(){
+  const sb=byId('snowbox');
+  if(sb){ for(let i=0;i<16;i++){ const s=document.createElement('i');
+    s.style.left=(Math.random()*100)+'%';
+    s.style.animationDuration=(4+Math.random()*4)+'s';
+    s.style.animationDelay=(Math.random()*5)+'s';
+    s.style.transform='scale('+(0.5+Math.random())+')';
+    sb.appendChild(s); } }
+  const eb=byId('emberbox');
+  if(eb){ for(let i=0;i<18;i++){ const e=document.createElement('i');
+    e.style.left=(Math.random()*100)+'%';
+    e.style.animationDuration=(2.6+Math.random()*2.6)+'s';
+    e.style.animationDelay=(Math.random()*3)+'s';
+    e.style.transform='scale('+(0.5+Math.random()*0.9)+')';
+    eb.appendChild(e); } }
+})();
 
 /* =========================================================================
    バラのキャラクター「バラリン」🌹
