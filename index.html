@@ -81,14 +81,16 @@ body{
 /* ===== タイトル文字 ===== */
 .title-wrap{ position:relative; z-index:5; text-align:center; }
 .game-title{
-  font-size:8.8vh; line-height:1; font-weight:900; letter-spacing:.01em;
-  color:#ffd21a;
-  text-shadow:
-    0.3vh 0 0 #5a3500, -0.3vh 0 0 #5a3500, 0 0.3vh 0 #5a3500, 0 -0.3vh 0 #5a3500,
-    0.3vh 0.3vh 0 #5a3500, -0.3vh -0.3vh 0 #5a3500, 0.3vh -0.3vh 0 #5a3500, -0.3vh 0.3vh 0 #5a3500,
-    0 0.7vh 0 #5a3500, 0 0.9vh 0 #5a3500;
+  font-size:9.2vh; line-height:1; font-weight:900; letter-spacing:.02em;
   transform:rotate(-2deg);
   animation:titlePop .6s cubic-bezier(.2,1.8,.4,1) both;
+}
+.game-title span{
+  display:inline-block;
+  text-shadow:
+    0.48vh 0 0 #111, -0.48vh 0 0 #111, 0 0.48vh 0 #111, 0 -0.48vh 0 #111,
+    0.48vh 0.48vh 0 #111, -0.48vh -0.48vh 0 #111, 0.48vh -0.48vh 0 #111, -0.48vh 0.48vh 0 #111,
+    0 0.7vh 0 #111, 0 0.95vh 0 #111, 0 1.3vh .5vh rgba(0,0,0,.45);
 }
 .game-sub{
   display:inline-block; margin-top:2vh; font-size:3.4vh; font-weight:800;
@@ -248,7 +250,7 @@ body{
 .tray-area{ position:relative; z-index:10; display:flex; align-items:center; justify-content:center; }
 .tray{
   position:relative;
-  width:64vh; height:64vh; border-radius:10vh;
+  width:76vh; height:76vh; border-radius:11vh;
   background:
     radial-gradient(circle at 48% 35%, rgba(255,255,255,.72), rgba(255,255,255,0) 52%),
     radial-gradient(ellipse at 50% 50%, #fff8d0, #ffe8a0 35%, #e8b640 65%, #d4941a 100%);
@@ -259,9 +261,23 @@ body{
     inset 0 1.8vh 2.4vh rgba(255,255,255,.85),
     inset 0 0 2.2vh rgba(255,255,255,.45);
 }
+/* ===== ステージ別の背景（レベルが上がるほど あやしい雰囲気）===== */
+/* プレイ中は バラリンを出さない */
+#rosePlay{ display:none; }
+#game.bg1 .sky-bg{ background:linear-gradient(180deg,#2fc7ff 0%,#6dd6ff 25%,#b0eaff 45%,#d4f56f 52%,#95e636 60%,#60b71a 100%); }
+#game.bg2 .sky-bg{ background:linear-gradient(180deg,#1f9fe6 0%,#5fc0f0 26%,#a8e6c0 48%,#bfe85a 56%,#6db81f 100%); }
+#game.bg3 .sky-bg{ background:linear-gradient(180deg,#ff7a3a 0%,#ffae5a 28%,#ffd79a 46%,#bcae4a 56%,#6a7a2a 100%); }
+#game.bg4 .sky-bg{ background:linear-gradient(180deg,#2a1f5a 0%,#5a3f8a 30%,#9a5fa0 48%,#5a4a5a 58%,#33402a 100%); }
+#game.bg5 .sky-bg{ background:linear-gradient(180deg,#150616 0%,#3a0a18 28%,#6e0e12 48%,#c0300a 60%,#4a0a06 100%); }
+/* 夜・夕方は 太陽と雲をひかえめに */
+#game.bg3 .sun{ background:radial-gradient(circle at 40% 35%,#fff0c7,#ff9e4a 60%,#ff7a2a 100%); }
+#game.bg4 .sun, #game.bg5 .sun{ display:none; }
+#game.bg4 .cloud, #game.bg5 .cloud{ opacity:.25; filter:brightness(.6); }
+#game.bg5 .pipe{ filter:brightness(.7) saturate(1.2); }
+#game.bg5 .tray{ box-shadow:0 2.4vh 3.6vh rgba(0,0,0,.5), inset 0 -2.4vh 3.6vh rgba(130,70,0,.42), inset 0 1.8vh 2.4vh rgba(255,255,255,.85), 0 0 3vh rgba(255,60,0,.5); }
 /* あぶないゾーン（ふち）の光 */
 .danger-ring{
-  position:absolute; inset:0; border-radius:10vh; pointer-events:none;
+  position:absolute; inset:0; border-radius:11vh; pointer-events:none;
   box-shadow:inset 0 0 0 1.2vh rgba(255,40,40,0);
   transition:box-shadow .05s linear;
 }
@@ -687,7 +703,7 @@ body{
   <div class="rose wave" id="roseTitle" style="position:absolute; left:3%; top:11%; --s:17vh; z-index:6;"></div>
 
   <div class="title-wrap">
-    <div class="game-title">コインはこびゲーム</div>
+    <div class="game-title" id="gameTitle">コインはこびゲーム</div>
     <div class="game-sub">⭐ コインを おとさず あるこう！ ⭐</div>
   </div>
 
@@ -1100,6 +1116,7 @@ const coinEl=byId('coin'), trayEl=document.querySelector('#game .tray'),
 function startGame(level){
   hideBubble();
   State.level=level; State.play=1; State.clears=0;
+  byId('game').className='screen bg'+level;   // ステージ別の背景
   show('game');
   startBGM(level);
   beginRound();
@@ -1152,7 +1169,7 @@ function countdown(){
       State.active=true;
       goalBtn.disabled=false;
       const PLAY_LINES=['いくよ〜！','がんばって！','ゆっくりでいいよ！'];
-      speak(byId('rosePlay'), PLAY_LINES[Math.floor(Math.random()*PLAY_LINES.length)], 1600);
+      speak(byId('coin'), PLAY_LINES[Math.floor(Math.random()*PLAY_LINES.length)], 1600);
       scheduleEnemy();   // 敵モードなら 攻撃スタート
     }
   };
@@ -1396,6 +1413,18 @@ function setFace(el, expr){
 }
 function roseJump(el){ if(!el) return; el.classList.remove('jump'); void el.offsetWidth; el.classList.add('jump'); }
 setFace(byId('roseTitle'),'happy');
+/* タイトルをマリオ風カラフル文字に（1文字ずつ色＆かたむき） */
+(function(){
+  const el=byId('gameTitle'); if(!el) return;
+  const txt=el.textContent;
+  const cols=['#e8352e','#ffd21a','#2aa53a','#2a7ade','#ff8a1f'];
+  let html='';
+  for(let i=0;i<txt.length;i++){
+    const r=((i%2)?1:-1)*(2+(i%3));
+    html+='<span style="color:'+cols[i%cols.length]+'; transform:rotate('+r+'deg)">'+txt[i]+'</span>';
+  }
+  el.innerHTML=html;
+})();
 const TITLE_LINES=['やあ！ いっしょに あそぼう！','コインを おとさず あるけるかな？','きみなら できるよ！'];
 function greetTitle(){ try{ speak(byId('roseTitle'), TITLE_LINES[Math.floor(Math.random()*TITLE_LINES.length)]); }catch(e){} }
 greetTitle();
