@@ -654,9 +654,10 @@ body{
 /* ===== 演出強化（A:タイトル / B:結果 / C:コイン / D:敵） ===== */
 @keyframes letterFloat{ 0%,100%{ transform:rotate(var(--rt,0deg)) translateY(0);} 50%{ transform:rotate(var(--rt,0deg)) translateY(-1vh);} }
 @keyframes logoGlow{ from{ filter:drop-shadow(0 0 .5vh rgba(255,215,70,.2));} to{ filter:drop-shadow(0 0 2.2vh rgba(255,215,70,.7));} }
-.enemy-parade{ position:absolute; right:1.6vh; top:7%; z-index:6; text-align:center; }
-.ep-lbl{ display:inline-block; font-size:2.1vh; font-weight:900; color:#fff; background:rgba(40,20,60,.35); padding:.5vh 1.4vh; border-radius:2vh; margin-bottom:.8vh; text-shadow:0 .25vh .4vh rgba(0,0,0,.4); }
-.ep-row{ display:flex; align-items:flex-end; gap:1vh; justify-content:center; }
+.enemy-parade{ position:absolute; right:-1vh; bottom:31vh; width:21vh; z-index:6; text-align:center; pointer-events:none; }
+.ep-lbl{ display:inline-block; font-size:2vh; font-weight:900; color:#fff; background:rgba(40,20,60,.38); padding:.4vh 1.3vh; border-radius:2vh; margin-bottom:.7vh; text-shadow:0 .25vh .4vh rgba(0,0,0,.4); }
+.ep-row{ display:flex; flex-direction:column-reverse; align-items:center; gap:.4vh; }
+.bottom-row{ display:flex; align-items:center; justify-content:center; gap:2.4vh; flex-wrap:wrap; }
 .rr-msg.stamp{ animation:stampIn .55s cubic-bezier(.2,1.5,.4,1) both; }
 @keyframes stampIn{ 0%{ transform:scale(2.4) rotate(-14deg); opacity:0;} 55%{ transform:scale(.9) rotate(3deg); opacity:1;} 100%{ transform:scale(1) rotate(-2deg); opacity:1;} }
 .bstar{ position:absolute; left:50%; top:44%; font-size:3vh; pointer-events:none; z-index:60; animation:burstFly .9s ease-out forwards; text-shadow:0 0 1.2vh rgba(255,210,60,.9); }
@@ -880,7 +881,7 @@ body{
   <div class="pipe left"></div>
   <div class="pipe right"></div>
 
-  <div class="rose wave" id="roseTitle" style="position:absolute; left:3%; top:9%; --s:21vh; z-index:6;"></div>
+  <div class="rose wave" id="roseTitle" style="position:absolute; left:0.5vh; bottom:30vh; --s:18vh; z-index:6;"></div>
 
   <div class="title-wrap">
     <div class="game-title" id="gameTitle">コインはこびゲーム</div>
@@ -906,15 +907,16 @@ body{
 
   <div class="sound-note">🎵 おとが でるよ。おとを オンにしてね</div>
 
-  <div class="mode-pick">
-    <span class="mode-lbl">モード：</span>
-    <button class="mode-btn on" id="modeNormal">🛡️ つうじょう</button>
-    <button class="mode-btn" id="modeEnemy">👾 てきあり</button>
+  <div class="bottom-row">
+    <div class="mode-pick">
+      <span class="mode-lbl">モード：</span>
+      <button class="mode-btn on" id="modeNormal">🛡️ つうじょう</button>
+      <button class="mode-btn" id="modeEnemy">👾 てきあり</button>
+    </div>
+    <button class="test-enter-btn" id="testEnterBtn">🧭 かたむきテスト（むきを あわせる）</button>
   </div>
 
-  <div class="enemy-parade"><div class="ep-lbl">👾 レベルが あがると てきも つよくなる！</div><div class="ep-row" id="epRow"></div></div>
-
-  <button class="test-enter-btn" id="testEnterBtn">🧭 かたむきテスト（むきを あわせる）</button>
+  <div class="enemy-parade"><div class="ep-lbl">👾 つよさの かいだん</div><div class="ep-row" id="epRow"></div></div>
 </section>
 
 <!-- ============ かたむきテスト ============ -->
@@ -1981,7 +1983,7 @@ byId('modeEnemy').addEventListener('click', ()=>{ State.enemyMode=true; refreshM
 /* タイトルの敵パレード（5体ならべて強さの階段を見せる） */
 (function(){
   const row=byId('epRow'); if(!row) return;
-  const sizes={b1:6.5,b2:7.5,b3:8.5,b4:9.5,b5:11};
+  const sizes={b1:5.5,b2:6.5,b3:7.5,b4:8.5,b5:10};
   ['b1','b2','b3','b4','b5'].forEach((b,i)=>{
     const d=document.createElement('div');
     d.className='enemy '+b;
