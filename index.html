@@ -285,14 +285,14 @@ body{
 .ol{ filter: drop-shadow(.42vh 0 0 #2b241c) drop-shadow(-.42vh 0 0 #2b241c) drop-shadow(0 .42vh 0 #2b241c) drop-shadow(0 -.42vh 0 #2b241c); }
 
 /* --- W1 くさはら：丘＋お花 --- */
-.w1 .hill{ position:absolute; border-radius:50% 50% 0 0; }
+.w1 .hill{ position:absolute; border-radius:50% 50% 0 0 / 100% 100% 0 0; }
 .w1 .h1{ left:-7vh; bottom:9vh; width:38vh; height:27vh; background:linear-gradient(160deg,#a8ee5c,#69bd28); }
 .w1 .h2{ right:-9vh; bottom:7vh; width:44vh; height:31vh; background:linear-gradient(160deg,#92e146,#53a41e); }
 .w1 .hill::after{ content:""; position:absolute; left:18%; top:14%; width:34%; height:26%; background:rgba(255,255,255,.3); border-radius:50%; }
 .w1 .flower{ position:absolute; width:4.6vh; height:4.6vh; border-radius:50%; background:#ff7eb0;
   box-shadow:3.2vh 0 #ffd23a, -3.2vh 0 #ff7eb0, 0 3.2vh #6fd0ff, 0 0 0 .4vh #2b241c; }
 .w1 .flower::after{ content:""; position:absolute; left:50%; top:50%; width:42%; height:42%; margin:-21% 0 0 -21%; background:#fff8c0; border-radius:50%; box-shadow:0 0 0 .3vh #ca8f00; }
-.w1 .fl1{ left:8vh; bottom:9vh; } .w1 .fl2{ left:3vh; bottom:5vh; transform:scale(.75); }
+.w1 .fl1{ left:11vh; bottom:14vh; } .w1 .fl2{ left:4vh; bottom:7vh; transform:scale(.8); }
 
 /* --- W2 すなはま：ヤシ・波・ビーチボール --- */
 .w2 .wave{ position:absolute; left:0; right:0; height:1.4vh; background:rgba(255,255,255,.7); border-radius:50%; }
@@ -303,7 +303,7 @@ body{
 .w2 .f1{ transform:rotate(-22deg);} .w2 .f2{ transform:rotate(6deg);} .w2 .f3{ transform:rotate(34deg);} .w2 .f4{ transform:rotate(-50deg);} 
 .w2 .coco{ position:absolute; top:5.5vh; left:5vh; width:3vh; height:3vh; border-radius:50%; background:radial-gradient(circle at 35% 30%,#8a5a2e,#4a2c12); }
 .w2 .coco.c2{ left:8vh; top:6.5vh; } .w2 .coco.c3{ left:3vh; top:7vh; }
-.w2 .ball{ position:absolute; right:5vh; bottom:7vh; width:11vh; height:11vh; border-radius:50%;
+.w2 .ball{ position:absolute; right:36vh; bottom:5vh; width:11vh; height:11vh; border-radius:50%;
   background:conic-gradient(#ff5a5a 0 25%,#fff 0 50%,#ffd23a 0 75%,#5ab0ff 0); box-shadow:inset -1vh -1vh 1.4vh rgba(0,0,0,.25); }
 
 /* --- W3 そら：ふわふわ雲＋浮島 --- */
@@ -338,14 +338,19 @@ body{
 .w5 .vl{ left:-7vh; top:13vh; width:32vh; height:28vh; opacity:.8; }
 .w5 .vr{ right:-9vh; top:10vh; width:38vh; height:33vh; opacity:.8; }
 .w5 .vmtn::after{ content:""; position:absolute; left:50%; top:0; width:2.4vh; height:40%; margin-left:-1.2vh; background:linear-gradient(180deg,#ffb43a,#ff5a00); border-radius:0 0 40% 40%; box-shadow:0 0 2vh rgba(255,90,0,.7); }
-.w5 .tower{ position:absolute; bottom:11vh; width:17vh; height:50vh; border-radius:1vh 1vh 0 0;
+.w5 .tower{ position:absolute; bottom:11vh; width:17vh; height:50vh; border-radius:1.2vh 1.2vh 0 0;
   background:
-   radial-gradient(circle at 50% 18%, rgba(255,205,95,.95) 1.5vh, transparent 1.8vh),
-   radial-gradient(circle at 50% 40%, rgba(255,205,95,.95) 1.5vh, transparent 1.8vh),
-   radial-gradient(circle at 50% 62%, rgba(255,205,95,.95) 1.5vh, transparent 1.8vh),
-   repeating-linear-gradient(0deg, rgba(0,0,0,.24) 0 .36vh, transparent .36vh 4.4vh),
-   repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 .36vh, transparent .36vh 4.4vh),
-   linear-gradient(90deg,#5b5f6a 0%, #949aa6 46%, #565a65 100%); }
+   repeating-linear-gradient(0deg, rgba(12,15,24,.26) 0 .5vh, transparent .5vh 6vh),
+   repeating-linear-gradient(90deg, rgba(12,15,24,.13) 0 .45vh, transparent .45vh 5.6vh),
+   radial-gradient(circle at 26% 28%, rgba(255,255,255,.12), transparent 30%),
+   linear-gradient(90deg,#4e525c 0%, #9aa0ad 46%, #474b55 100%); }
+.w5 .tower::after{ content:""; position:absolute; inset:0;
+  background:
+   radial-gradient(circle at 50% 16%, rgba(255,210,100,.95) 1.6vh, rgba(255,120,20,.5) 2.3vh, transparent 2.8vh),
+   radial-gradient(circle at 50% 38%, rgba(255,210,100,.95) 1.6vh, rgba(255,120,20,.5) 2.3vh, transparent 2.8vh),
+   radial-gradient(circle at 50% 60%, rgba(255,210,100,.95) 1.6vh, rgba(255,120,20,.5) 2.3vh, transparent 2.8vh);
+  animation:winFlick 1.6s ease-in-out infinite alternate; }
+@keyframes winFlick{ from{ opacity:.66;} to{ opacity:1;} }
 .w5 .tl{ left:3vh; } .w5 .tr{ right:3vh; }
 .w5 .tower::before{ content:""; position:absolute; top:-3vh; left:-.4vh; right:-.4vh; height:3vh;
   background:repeating-linear-gradient(90deg,#787d88 0 3.6vh, transparent 3.6vh 7.2vh); }
@@ -368,7 +373,7 @@ body{
 .sun{ animation:sunPulse 4s ease-in-out infinite; }
 @keyframes sunPulse{ 0%,100%{ box-shadow:0 0 40px 14px rgba(255,225,90,.6);} 50%{ box-shadow:0 0 58px 22px rgba(255,225,90,.85);} }
 /* W1 奥の丘（うすい色で遠近感） */
-.w1 .hillback{ position:absolute; bottom:18vh; border-radius:50% 50% 0 0; opacity:.7; }
+.w1 .hillback{ position:absolute; bottom:18vh; border-radius:50% 50% 0 0 / 100% 100% 0 0; opacity:.7; }
 .w1 .hb1{ left:16vh; width:48vh; height:22vh; background:linear-gradient(160deg,#bff07a,#8fd455); }
 .w1 .hb2{ right:14vh; width:54vh; height:26vh; background:linear-gradient(160deg,#aceb6a,#7fca44); }
 /* W2 ヤシがゆれる・波がきらめく */
@@ -387,11 +392,16 @@ body{
 .w4 .mb1{ left:13vh; bottom:14vh; width:34vh; height:30vh; }
 .w4 .mb2{ right:11vh; bottom:14vh; width:40vh; height:34vh; }
 /* W5 たいまつの炎がゆらめく */
-.w5 .torch{ position:absolute; width:3vh; height:5vh; bottom:42vh; border-radius:45% 45% 50% 50%;
-  background:radial-gradient(circle at 50% 72%, #fff3a0, #ff8a10 52%, #ff4a00 82%); box-shadow:0 0 2.6vh rgba(255,120,0,.9);
+.w5 .torch{ position:absolute; width:3.4vh; height:5.4vh; bottom:62.5vh; border-radius:45% 45% 50% 50%;
+  background:radial-gradient(circle at 50% 72%, #fff3a0, #ff8a10 52%, #ff4a00 82%); box-shadow:0 0 3vh rgba(255,120,0,.95);
   animation:torchFlick .25s ease-in-out infinite alternate; }
-.w5 .torchL{ left:11vh; } .w5 .torchR{ right:11vh; }
+.w5 .torchL{ left:9.8vh; } .w5 .torchR{ right:9.8vh; }
 @keyframes torchFlick{ from{ transform:scale(1) translateY(0); opacity:.9;} to{ transform:scale(1.14) translateY(-.4vh); opacity:1;} }
+/* SVGで描いた飾りの配置 */
+.wsvg{ position:absolute; pointer-events:none; }
+.palmS{ left:2vh; bottom:8vh; width:26vh; height:37vh; transform-origin:60% 100%; animation:palmSway 4.5s ease-in-out infinite; }
+.islandS{ right:3vh; bottom:15vh; width:26vh; height:18vh; animation:skyDrift 28s ease-in-out infinite; }
+.snowS{ left:5vh; bottom:7vh; width:17vh; height:21vh; }
 /* あぶないゾーン（ふち）の光 */
 .danger-ring{
   position:absolute; inset:0; border-radius:11vh; pointer-events:none;
@@ -903,10 +913,10 @@ body{
   <div class="pipe left"></div>
   <div class="pipe right"></div>
   <div class="world w1"><div class="hillback hb1"></div><div class="hillback hb2"></div><div class="hill h1 ol"></div><div class="hill h2 ol"></div><div class="flower fl1"></div><div class="flower fl2"></div></div>
-  <div class="world w2"><div class="wave wv1"></div><div class="wave wv2"></div><div class="wave wv3"></div><div class="palm ol"><div class="trunk"></div><div class="frond f1"></div><div class="frond f2"></div><div class="frond f3"></div><div class="frond f4"></div><div class="coco c1"></div><div class="coco c2"></div><div class="coco c3"></div></div><div class="ball ol"></div></div>
-  <div class="world w3"><div class="scloud sc1 ol"></div><div class="scloud sc2 ol"></div><div class="scloud sc3 ol"></div><div class="island ol"></div></div>
-  <div class="world w4"><div class="mback mb1"></div><div class="mback mb2"></div><div class="mtn m1 ol"></div><div class="mtn m2 ol"></div><div class="snowman ol"><div class="sb bot"></div><div class="sb top"></div><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="hat"></div></div><div class="snowbox" id="snowbox"></div></div>
-  <div class="world w5"><div class="vmtn vl"></div><div class="vmtn vr"></div><div class="tower tl ol"></div><div class="tower tr ol"></div><div class="torch torchL"></div><div class="torch torchR"></div><div class="fall fl"></div><div class="fall fr"></div><div class="lava"></div><div class="emberbox" id="emberbox"></div></div>
+  <div class="world w2"><div class="wave wv1"></div><div class="wave wv2"></div><div class="wave wv3"></div><svg class="wsvg palmS" viewBox="0 0 120 170"><defs><linearGradient id="ptr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a4a22"/><stop offset=".55" stop-color="#c08c50"/><stop offset="1" stop-color="#8a5a2e"/></linearGradient><radialGradient id="plf" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#6fd148"/><stop offset="1" stop-color="#2c7e1e"/></radialGradient></defs><path d="M56 168 C54 128 58 94 66 60 L78 64 C70 96 68 128 72 166 Z" fill="url(#ptr)" stroke="#3a2a14" stroke-width="3"/><path d="M58 140 q8 4 14 0 M59 116 q8 4 13 0 M61 92 q7 4 12 0" fill="none" stroke="#6e431f" stroke-width="2.4"/><g stroke="#1e5a14" stroke-width="3" stroke-linejoin="round"><path d="M70 60 C46 46 22 50 8 66 C30 70 54 68 70 64 Z" fill="url(#plf)"/><path d="M70 58 C52 36 30 30 12 36 C28 48 52 56 70 62 Z" fill="url(#plf)"/><path d="M70 58 C68 32 78 14 96 8 C92 28 84 46 72 60 Z" fill="url(#plf)"/><path d="M72 60 C94 44 112 46 118 60 C100 64 84 64 72 64 Z" fill="url(#plf)"/><path d="M72 62 C92 64 104 76 106 90 C90 84 78 74 70 66 Z" fill="url(#plf)"/></g><path d="M14 62 C32 64 52 64 66 62 M18 38 C32 46 50 53 64 58 M78 54 C84 38 88 24 92 14 M114 58 C100 60 86 61 76 62 M100 84 C90 78 80 70 74 65" fill="none" stroke="#1e5a14" stroke-width="1.6" opacity=".7"/><circle cx="64" cy="66" r="6.4" fill="#7a4a22" stroke="#3a2a14" stroke-width="2.2"/><circle cx="76" cy="70" r="6" fill="#8a5a30" stroke="#3a2a14" stroke-width="2.2"/><circle cx="69" cy="75" r="5.6" fill="#6e431f" stroke="#3a2a14" stroke-width="2.2"/></svg><div class="ball ol"></div></div>
+  <div class="world w3"><div class="scloud sc1 ol"></div><div class="scloud sc2 ol"></div><div class="scloud sc3 ol"></div><svg class="wsvg islandS" viewBox="0 0 160 112"><defs><linearGradient id="idrt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6638"/><stop offset="1" stop-color="#5e3a1c"/></linearGradient><radialGradient id="igrs" cx="40%" cy="25%" r="85%"><stop offset="0" stop-color="#9ee65c"/><stop offset="1" stop-color="#4f9e2a"/></radialGradient></defs><path d="M22 48 C22 84 58 102 80 102 C102 102 138 84 138 48 Z" fill="url(#idrt)" stroke="#3a2412" stroke-width="3"/><path d="M30 64 C50 72 110 72 130 64 M44 84 C60 90 100 90 116 84" fill="none" stroke="#7a4e26" stroke-width="2.2" opacity=".8"/><ellipse cx="80" cy="46" rx="62" ry="22" fill="url(#igrs)" stroke="#2c6e16" stroke-width="3"/><path d="M28 56 l6 8 M48 62 l5 8 M112 62 l-5 8 M132 56 l-6 8" stroke="#3f8a20" stroke-width="3" stroke-linecap="round"/><rect x="96" y="14" width="6" height="18" rx="2.4" fill="#7a4a22" stroke="#3a2412" stroke-width="2"/><circle cx="99" cy="10" r="12" fill="url(#igrs)" stroke="#2c6e16" stroke-width="2.6"/></svg></div>
+  <div class="world w4"><div class="mback mb1"></div><div class="mback mb2"></div><div class="mtn m1 ol"></div><div class="mtn m2 ol"></div><svg class="wsvg snowS" viewBox="0 0 120 150"><defs><radialGradient id="snb" cx="38%" cy="28%" r="80%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c8dcec"/></radialGradient></defs><ellipse cx="60" cy="141" rx="42" ry="8" fill="rgba(40,60,90,.16)"/><circle cx="60" cy="102" r="38" fill="url(#snb)" stroke="#27303c" stroke-width="2.8"/><circle cx="60" cy="48" r="27" fill="url(#snb)" stroke="#27303c" stroke-width="2.8"/><path d="M37 64 C48 74 72 74 83 64 L81 76 C70 84 50 84 39 76 Z" fill="#e8483a" stroke="#27303c" stroke-width="2.4"/><path d="M70 78 L75 98 L62 95 Z" fill="#e8483a" stroke="#27303c" stroke-width="2.4"/><rect x="42" y="8" width="36" height="24" rx="3" fill="#3a2440" stroke="#27303c" stroke-width="2.4"/><rect x="32" y="29" width="56" height="8" rx="4" fill="#3a2440" stroke="#27303c" stroke-width="2.4"/><rect x="42" y="22" width="36" height="6" fill="#7a5fa0"/><circle cx="51" cy="44" r="3.2" fill="#27303c"/><circle cx="69" cy="44" r="3.2" fill="#27303c"/><path d="M60 50 L76 55 L60 59 Z" fill="#ff8a2a" stroke="#b85a10" stroke-width="1.6"/><circle cx="60" cy="98" r="3" fill="#27303c"/><circle cx="60" cy="112" r="3" fill="#27303c"/></svg><div class="snowbox" id="snowbox"></div></div>
+  <div class="world w5"><div class="tower tl ol"></div><div class="tower tr ol"></div><div class="torch torchL"></div><div class="torch torchR"></div><div class="fall fl"></div><div class="fall fr"></div><div class="lava"></div><div class="emberbox" id="emberbox"></div></div>
   <div class="rose" id="rosePlay" style="position:absolute; left:1vh; bottom:27vh; --s:15vh; z-index:2;"></div>
 
   <div class="counter">いま <b id="cur">1</b> かいめ / 5かい</div>
@@ -1649,82 +1659,148 @@ function hideBubble(){
 /* =========================================================================
    敵マスコット ＆ 視界じゃま攻撃
    ========================================================================= */
-/* ===== 敵キャラ：SVGで描画（なめらか・陰影・ふちどり・まばたき）===== */
-const ENEMY_SPEC = {
-  b1:{ c1:'#f6e2b4', c2:'#cda05e', eye:'dark', horn:'none', brow:false, spike:'none', crown:false, flame:false, mouth:'smile',   cheek:true  },
-  b2:{ c1:'#c8ef86', c2:'#5fa233', eye:'dark', horn:'small',brow:false, spike:'none', crown:false, flame:false, mouth:'fang',    cheek:true  },
-  b3:{ c1:'#ffb066', c2:'#df7a14', eye:'dark', horn:'med',  brow:true,  spike:'two',  crown:false, flame:false, mouth:'fang',    cheek:false },
-  b4:{ c1:'#ef6e58', c2:'#9e2014', eye:'dark', horn:'big',  brow:true,  spike:'three',crown:false, flame:false, mouth:'bigfang', cheek:false },
-  b5:{ c1:'#6a5a78', c2:'#251830', eye:'red',  horn:'huge', brow:true,  spike:'three',crown:true,  flame:true,  mouth:'bigfang', cheek:false }
-};
-function svgHorns(t){
-  if(t==='none') return '';
-  const ty={small:24,med:15,big:7,huge:-1}[t];
-  return `<path d="M26 35 L41 30 L31 ${ty} Z" fill="url(#ehorn)" stroke="#241a2e" stroke-width="2.4" stroke-linejoin="round"/>`
-       + `<path d="M74 35 L59 30 L69 ${ty} Z" fill="url(#ehorn)" stroke="#241a2e" stroke-width="2.4" stroke-linejoin="round"/>`;
+/* ===== 敵キャラ：SVGで描画（シルエットで5段階を描き分け）===== */
+const EOL='stroke="#241a2e" stroke-linejoin="round"';
+function eShadow(){ return '<ellipse cx="50" cy="117" rx="30" ry="6" fill="rgba(20,20,40,.18)"/>'; }
+function eEyes(y,dx){ dx=dx||13;
+  return '<g class="esvg-eyes">'
+   +'<ellipse cx="'+(50-dx)+'" cy="'+y+'" rx="8" ry="9.5" fill="#fff" stroke="#241a2e" stroke-width="2"/>'
+   +'<ellipse cx="'+(50+dx)+'" cy="'+y+'" rx="8" ry="9.5" fill="#fff" stroke="#241a2e" stroke-width="2"/>'
+   +'<circle cx="'+(50-dx+1.5)+'" cy="'+(y+2)+'" r="4.6" fill="#241a2e"/>'
+   +'<circle cx="'+(50+dx-1.5)+'" cy="'+(y+2)+'" r="4.6" fill="#241a2e"/>'
+   +'<circle cx="'+(50-dx+3)+'" cy="'+y+'" r="1.7" fill="#fff"/>'
+   +'<circle cx="'+(50+dx)+'" cy="'+y+'" r="1.7" fill="#fff"/></g>';
 }
-function svgSpikes(t){
-  if(t==='none') return '';
-  const sp=(x)=>`<path d="M${x-6} 31 L${x+6} 31 L${x} 13 Z" fill="#e6e6e6" stroke="#241a2e" stroke-width="2" stroke-linejoin="round"/>`;
-  return t==='two' ? sp(30)+sp(70) : sp(27)+sp(50)+sp(73);
+function eEyesRed(y,dx){ dx=dx||13;
+  return '<g class="esvg-eyes">'
+   +'<circle cx="'+(50-dx)+'" cy="'+y+'" r="10" fill="#ff2a2a" opacity="0.28"/>'
+   +'<circle cx="'+(50+dx)+'" cy="'+y+'" r="10" fill="#ff2a2a" opacity="0.28"/>'
+   +'<circle cx="'+(50-dx)+'" cy="'+y+'" r="6.4" fill="#ff2a2a" stroke="#5a0000" stroke-width="1.6"/>'
+   +'<circle cx="'+(50+dx)+'" cy="'+y+'" r="6.4" fill="#ff2a2a" stroke="#5a0000" stroke-width="1.6"/>'
+   +'<circle cx="'+(50-dx-2)+'" cy="'+(y-2)+'" r="2" fill="#ffdede"/>'
+   +'<circle cx="'+(50+dx-2)+'" cy="'+(y-2)+'" r="2" fill="#ffdede"/></g>';
 }
-function svgBrows(b){
-  if(!b) return '';
-  return `<path d="M27 41 L45 47" stroke="#241a2e" stroke-width="4.6" stroke-linecap="round"/>`
-       + `<path d="M73 41 L55 47" stroke="#241a2e" stroke-width="4.6" stroke-linecap="round"/>`;
+function eBrows(y,dx){ dx=dx||14;
+  return '<path d="M'+(50-dx-8)+' '+(y-6)+' L'+(50-dx+5)+' '+y+'" stroke="#241a2e" stroke-width="4.4" stroke-linecap="round"/>'
+       + '<path d="M'+(50+dx+8)+' '+(y-6)+' L'+(50+dx-5)+' '+y+'" stroke="#241a2e" stroke-width="4.4" stroke-linecap="round"/>';
 }
-function svgEyes(eye){
-  if(eye==='red'){
-    return `<g class="esvg-eyes">
-      <circle cx="37" cy="55" r="11" fill="#ff2a2a" opacity="0.3"/><circle cx="63" cy="55" r="11" fill="#ff2a2a" opacity="0.3"/>
-      <circle cx="37" cy="55" r="7" fill="#ff2a2a" stroke="#5a0000" stroke-width="1.5"/><circle cx="63" cy="55" r="7" fill="#ff2a2a" stroke="#5a0000" stroke-width="1.5"/>
-      <circle cx="34.6" cy="52.6" r="2.2" fill="#ffdede"/><circle cx="60.6" cy="52.6" r="2.2" fill="#ffdede"/></g>`;
-  }
-  return `<g class="esvg-eyes">
-    <ellipse cx="37" cy="54" rx="8.5" ry="10.5" fill="#fff" stroke="#241a2e" stroke-width="2"/>
-    <ellipse cx="63" cy="54" rx="8.5" ry="10.5" fill="#fff" stroke="#241a2e" stroke-width="2"/>
-    <circle cx="38" cy="56" r="5" fill="#2a1830"/><circle cx="62" cy="56" r="5" fill="#2a1830"/>
-    <circle cx="40" cy="54" r="1.8" fill="#fff"/><circle cx="64" cy="54" r="1.8" fill="#fff"/></g>`;
+function eSmile(y){ return '<path d="M42 '+y+' Q50 '+(y+7)+' 58 '+y+'" fill="none" stroke="#6a3a18" stroke-width="3.2" stroke-linecap="round"/>'; }
+function eFang(y,w,h){
+  return '<path d="M'+(50-w)+' '+y+' Q50 '+(y-4)+' '+(50+w)+' '+y+' Q'+(50+w-2)+' '+(y+h)+' 50 '+(y+h)+' Q'+(50-w+2)+' '+(y+h)+' '+(50-w)+' '+y+' Z" fill="#5a1020" stroke="#241a2e" stroke-width="2.2"/>'
+       + '<path d="M'+(50-w+3)+' '+(y+1)+' l4.4 0 l-2.2 6.4 z" fill="#fff"/>'
+       + '<path d="M'+(50+w-7.4)+' '+(y+1)+' l4.4 0 l-2.2 6.4 z" fill="#fff"/>';
 }
-function svgMouth(m){
-  if(m==='smile') return `<path d="M41 70 Q50 77 59 70" fill="none" stroke="#6a3a18" stroke-width="3.4" stroke-linecap="round"/>`;
-  const big = m==='bigfang';
-  const w = big?16:12, top=70, bot=big?86:82;
-  const mouth=`<path d="M${50-w} ${top} Q50 ${top-5} ${50+w} ${top} Q${50+w-2} ${bot} 50 ${bot} Q${50-w+2} ${bot} ${50-w} ${top} Z" fill="#5a1020" stroke="#241a2e" stroke-width="2.4"/>`;
-  const fangs=`<path d="M${50-w+3} ${top+1} l4 0 l-2 7 z" fill="#fff"/><path d="M${50+w-7} ${top+1} l4 0 l-2 7 z" fill="#fff"/>`;
-  return mouth+fangs;
+function eCheeks(y,dx){ dx=dx||22;
+  return '<ellipse cx="'+(50-dx)+'" cy="'+y+'" rx="5.4" ry="3.6" fill="rgba(255,120,150,.5)"/>'
+       + '<ellipse cx="'+(50+dx)+'" cy="'+y+'" rx="5.4" ry="3.6" fill="rgba(255,120,150,.5)"/>';
 }
-function svgCheeks(c){
-  if(!c) return '';
-  return `<ellipse cx="27" cy="64" rx="6" ry="4" fill="rgba(255,120,150,.55)"/><ellipse cx="73" cy="64" rx="6" ry="4" fill="rgba(255,120,150,.55)"/>`;
-}
-function svgCrown(c){
-  if(!c) return '';
-  return `<path d="M33 18 L40 28 L50 12 L60 28 L67 18 L65 33 L35 33 Z" fill="url(#ecrown)" stroke="#241a2e" stroke-width="2.2" stroke-linejoin="round"/>`
-       + `<circle cx="50" cy="13" r="2.4" fill="#ff5a5a" stroke="#241a2e" stroke-width="1.4"/>`;
-}
-function svgFlame(f){
-  if(!f) return '';
-  return `<ellipse class="esvg-flame" cx="50" cy="42" rx="52" ry="42" fill="url(#eflame)"/>`;
+function eWrap(inner){
+  return '<div class="m-body"><svg class="esvg" viewBox="0 0 100 124" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg></div>';
 }
 function enemyHTML(boss){
-  const S = ENEMY_SPEC[boss]; if(!S) return '';
-  const defs = `<defs>
-    <radialGradient id="ebody" cx="38%" cy="30%" r="78%">
-      <stop offset="0%" stop-color="${S.c1}"/><stop offset="100%" stop-color="${S.c2}"/></radialGradient>
-    <linearGradient id="ehorn" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfc6ad"/></linearGradient>
-    <linearGradient id="ecrown" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffe874"/><stop offset="100%" stop-color="#ffab12"/></linearGradient>
-    <radialGradient id="eflame" cx="50%" cy="64%" r="55%">
-      <stop offset="0%" stop-color="rgba(255,185,45,.92)"/><stop offset="55%" stop-color="rgba(255,70,0,.4)"/><stop offset="76%" stop-color="rgba(255,70,0,0)"/></radialGradient></defs>`;
-  const body = `<ellipse cx="50" cy="55" rx="40" ry="41" fill="url(#ebody)" stroke="#241a2e" stroke-width="3"/>`
-             + `<ellipse cx="38" cy="33" rx="16" ry="11" fill="#fff" opacity="0.45"/>`;
-  return `<div class="m-body"><svg class="esvg" viewBox="-6 -14 112 112" xmlns="http://www.w3.org/2000/svg">`
-       + defs + svgFlame(S.flame) + svgSpikes(S.spike) + svgHorns(S.horn)
-       + body + svgCrown(S.crown) + svgCheeks(S.cheek) + svgBrows(S.brow)
-       + svgEyes(S.eye) + svgMouth(S.mouth)
-       + `</svg></div>`;
+  /* --- Lv1 コロぽん：どんぐり型（手足なし・とぼけ顔） --- */
+  if(boss==='b1'){
+    return eWrap(
+      '<defs><radialGradient id="b1g" cx="38%" cy="30%" r="80%"><stop offset="0%" stop-color="#f8e6bc"/><stop offset="100%" stop-color="#c39148"/></radialGradient>'
+      +'<linearGradient id="b1c" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9a6a38"/><stop offset="100%" stop-color="#6e4520"/></linearGradient></defs>'
+      + eShadow()
+      +'<path d="M50 16 C74 16 87 42 87 74 C87 101 71 114 50 114 C29 114 13 101 13 74 C13 42 26 16 50 16 Z" fill="url(#b1g)" '+EOL+' stroke-width="3"/>'
+      +'<path d="M50 16 C70 16 82 32 85 49 Q50 37 15 49 C18 32 30 16 50 16 Z" fill="url(#b1c)" '+EOL+' stroke-width="2.6"/>'
+      +'<ellipse cx="38" cy="30" rx="12" ry="6" fill="rgba(255,255,255,.35)"/>'
+      +'<ellipse cx="38" cy="62" rx="13" ry="8" fill="rgba(255,255,255,.4)"/>'
+      + eEyes(72,12) + eCheeks(84,21) + eSmile(88)
+    );
+  }
+  /* --- Lv2 ツノこぞう：2頭身（小さな体と足つき） --- */
+  if(boss==='b2'){
+    return eWrap(
+      '<defs><radialGradient id="b2g" cx="38%" cy="30%" r="80%"><stop offset="0%" stop-color="#d2f598"/><stop offset="100%" stop-color="#549426"/></radialGradient>'
+      +'<linearGradient id="b2b" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7cba48"/><stop offset="100%" stop-color="#46801e"/></linearGradient>'
+      +'<linearGradient id="b2h" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#cfc6ad"/></linearGradient></defs>'
+      + eShadow()
+      +'<ellipse cx="36" cy="111" rx="10" ry="6.4" fill="url(#b2b)" '+EOL+' stroke-width="2.4"/>'
+      +'<ellipse cx="64" cy="111" rx="10" ry="6.4" fill="url(#b2b)" '+EOL+' stroke-width="2.4"/>'
+      +'<rect x="31" y="70" width="38" height="38" rx="15" fill="url(#b2b)" '+EOL+' stroke-width="2.8"/>'
+      +'<ellipse cx="50" cy="91" rx="12" ry="13" fill="rgba(255,255,255,.32)"/>'
+      +'<path d="M33 24 L43 28 L37 12 Z" fill="url(#b2h)" '+EOL+' stroke-width="2.2"/>'
+      +'<path d="M67 24 L57 28 L63 12 Z" fill="url(#b2h)" '+EOL+' stroke-width="2.2"/>'
+      +'<circle cx="50" cy="45" r="28" fill="url(#b2g)" '+EOL+' stroke-width="3"/>'
+      +'<ellipse cx="40" cy="32" rx="11" ry="7" fill="rgba(255,255,255,.4)"/>'
+      + eEyes(42,12) + eCheeks(54,20) + eFang(57,11,9)
+    );
+  }
+  /* --- Lv3 キバモン：トゲ甲羅の亀型（腕つき） --- */
+  if(boss==='b3'){
+    return eWrap(
+      '<defs><radialGradient id="b3g" cx="38%" cy="30%" r="80%"><stop offset="0%" stop-color="#ffc888"/><stop offset="100%" stop-color="#d86f0c"/></radialGradient>'
+      +'<radialGradient id="b3s" cx="40%" cy="28%" r="80%"><stop offset="0%" stop-color="#b86a2a"/><stop offset="100%" stop-color="#7a3c0c"/></radialGradient>'
+      +'<linearGradient id="b3h" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#d8cfb6"/></linearGradient></defs>'
+      + eShadow()
+      +'<ellipse cx="34" cy="114" rx="10" ry="6" fill="url(#b3g)" '+EOL+' stroke-width="2.4"/>'
+      +'<ellipse cx="66" cy="114" rx="10" ry="6" fill="url(#b3g)" '+EOL+' stroke-width="2.4"/>'
+      +'<path d="M24 50 L36 44 L30 28 Z" fill="url(#b3h)" '+EOL+' stroke-width="2.2"/>'
+      +'<path d="M76 50 L64 44 L70 28 Z" fill="url(#b3h)" '+EOL+' stroke-width="2.2"/>'
+      +'<circle cx="50" cy="74" r="34" fill="url(#b3s)" '+EOL+' stroke-width="3"/>'
+      +'<path d="M20 86 C30 100 70 100 80 86 C72 106 28 106 20 86 Z" fill="#f3d9a4" '+EOL+' stroke-width="2.4"/>'
+      +'<ellipse cx="13" cy="80" rx="8" ry="12" fill="url(#b3g)" '+EOL+' stroke-width="2.6"/>'
+      +'<ellipse cx="87" cy="80" rx="8" ry="12" fill="url(#b3g)" '+EOL+' stroke-width="2.6"/>'
+      +'<circle cx="50" cy="40" r="21" fill="url(#b3g)" '+EOL+' stroke-width="3"/>'
+      +'<ellipse cx="42" cy="30" rx="9" ry="5.4" fill="rgba(255,255,255,.42)"/>'
+      + eBrows(34,11) + eEyes(40,10) + eFang(52,12,9)
+    );
+  }
+  /* --- Lv4 オニドロ：腕を振り上げた筋肉ポーズ --- */
+  if(boss==='b4'){
+    return eWrap(
+      '<defs><radialGradient id="b4g" cx="38%" cy="28%" r="82%"><stop offset="0%" stop-color="#f58868"/><stop offset="100%" stop-color="#8e1408"/></radialGradient>'
+      +'<linearGradient id="b4h" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#c9bfa2"/></linearGradient></defs>'
+      + eShadow()
+      +'<ellipse cx="38" cy="111" rx="11" ry="7" fill="url(#b4g)" '+EOL+' stroke-width="2.6"/>'
+      +'<ellipse cx="62" cy="111" rx="11" ry="7" fill="url(#b4g)" '+EOL+' stroke-width="2.6"/>'
+      +'<path d="M28 60 C14 54 8 40 12 26 L24 30 C22 42 27 50 38 55 Z" fill="url(#b4g)" '+EOL+' stroke-width="2.8"/>'
+      +'<path d="M72 60 C86 54 92 40 88 26 L76 30 C78 42 73 50 62 55 Z" fill="url(#b4g)" '+EOL+' stroke-width="2.8"/>'
+      +'<circle cx="15" cy="22" r="9" fill="url(#b4g)" '+EOL+' stroke-width="2.8"/>'
+      +'<circle cx="85" cy="22" r="9" fill="url(#b4g)" '+EOL+' stroke-width="2.8"/>'
+      +'<path d="M40 14 L50 18 L44 2 Z" fill="url(#b4h)" '+EOL+' stroke-width="2.2"/>'
+      +'<path d="M60 14 L50 18 L56 2 Z" fill="url(#b4h)" '+EOL+' stroke-width="2.2"/>'
+      +'<ellipse cx="50" cy="72" rx="32" ry="38" fill="url(#b4g)" '+EOL+' stroke-width="3.2"/>'
+      +'<ellipse cx="40" cy="46" rx="12" ry="7" fill="rgba(255,255,255,.34)"/>'
+      +'<ellipse cx="50" cy="92" rx="16" ry="13" fill="#f6cfa6" stroke="#241a2e" stroke-width="2.2"/>'
+      +'<path d="M42 88 L58 88 M42 96 L58 96" stroke="#caa172" stroke-width="1.8"/>'
+      + eBrows(52,12) + eEyes(58,11) + eFang(74,15,11)
+    );
+  }
+  /* --- Lv5 ラスボス：体・腕・しっぽ・かんむり・ほのお --- */
+  if(boss==='b5'){
+    return eWrap(
+      '<defs><radialGradient id="b5g" cx="38%" cy="26%" r="84%"><stop offset="0%" stop-color="#7e6a92"/><stop offset="100%" stop-color="#1e1228"/></radialGradient>'
+      +'<linearGradient id="b5h" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#b8ae94"/></linearGradient>'
+      +'<linearGradient id="b5c" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffe874"/><stop offset="100%" stop-color="#ffab12"/></linearGradient>'
+      +'<radialGradient id="b5f" cx="50%" cy="62%" r="55%"><stop offset="0%" stop-color="rgba(255,185,45,.9)"/><stop offset="55%" stop-color="rgba(255,70,0,.38)"/><stop offset="78%" stop-color="rgba(255,70,0,0)"/></radialGradient></defs>'
+      +'<ellipse class="esvg-flame" cx="50" cy="56" rx="56" ry="52" fill="url(#b5f)"/>'
+      + eShadow()
+      +'<path d="M80 98 C96 94 100 78 92 64 C97 80 90 92 76 93 Z" fill="url(#b5g)" '+EOL+' stroke-width="2.6"/>'
+      +'<path d="M91 66 L97 56 L86 60 Z" fill="url(#b5h)" '+EOL+' stroke-width="2"/>'
+      +'<ellipse cx="36" cy="112" rx="12" ry="8" fill="url(#b5g)" '+EOL+' stroke-width="2.8"/>'
+      +'<ellipse cx="64" cy="112" rx="12" ry="8" fill="url(#b5g)" '+EOL+' stroke-width="2.8"/>'
+      +'<ellipse cx="12" cy="74" rx="9" ry="14" fill="url(#b5g)" '+EOL+' stroke-width="2.8"/>'
+      +'<ellipse cx="88" cy="74" rx="9" ry="14" fill="url(#b5g)" '+EOL+' stroke-width="2.8"/>'
+      +'<path d="M8 64 L2 56 L12 60 Z" fill="#fff"/>'
+      +'<path d="M92 64 L98 56 L88 60 Z" fill="#fff"/>'
+      +'<path d="M28 34 C16 24 14 8 26 2 C24 14 30 24 42 30 Z" fill="url(#b5h)" '+EOL+' stroke-width="2.4"/>'
+      +'<path d="M72 34 C84 24 86 8 74 2 C76 14 70 24 58 30 Z" fill="url(#b5h)" '+EOL+' stroke-width="2.4"/>'
+      +'<path d="M36 24 L46 28 L41 12 Z" fill="#cfe7ee" '+EOL+' stroke-width="2"/>'
+      +'<path d="M64 24 L54 28 L59 12 Z" fill="#cfe7ee" '+EOL+' stroke-width="2"/>'
+      +'<ellipse cx="50" cy="70" rx="34" ry="40" fill="url(#b5g)" '+EOL+' stroke-width="3.4"/>'
+      +'<ellipse cx="38" cy="42" rx="13" ry="7" fill="rgba(255,255,255,.26)"/>'
+      +'<ellipse cx="50" cy="90" rx="17" ry="17" fill="#8d7da0" stroke="#241a2e" stroke-width="2.2"/>'
+      +'<path d="M37 86 L63 86 M37 94 L63 94" stroke="#5f5274" stroke-width="2"/>'
+      +'<path d="M36 12 L42 20 L50 6 L58 20 L64 12 L62 24 L38 24 Z" fill="url(#b5c)" '+EOL+' stroke-width="2.2"/>'
+      +'<circle cx="50" cy="8" r="2.4" fill="#ff5a5a" stroke="#241a2e" stroke-width="1.4"/>'
+      + eBrows(50,12) + eEyesRed(57,12) + eFang(74,16,12)
+    );
+  }
+  return '';
 }
 /* 難易度ごとの 敵（見た目＝boss / 攻撃＝atk / 大きさ＝size）。攻撃は今までどおり。 */
 const ENEMY = {
