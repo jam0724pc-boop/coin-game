@@ -65,9 +65,10 @@ body{
 
 /* 左右の土管（どかん） */
 .pipe{
-  position:absolute; bottom:0; width:13vh; height:30vh; z-index:1;
+  position:absolute; bottom:0; width:13vh; height:30vh; z-index:2;
   background:linear-gradient(90deg,#0e5e0e 0%, #2f9e2f 22%, #b6ffba 46%, #3aa83a 64%, #0c4f0c 100%);
   border-radius:6px 6px 0 0;
+  box-shadow:inset 0 0 0 .35vh rgba(10,50,10,.55);
 }
 .pipe::before{ /* 土管のフチ */
   content:""; position:absolute; top:-3.6vh; left:-1.4vh; width:calc(100% + 2.8vh); height:5.4vh;
@@ -264,6 +265,8 @@ body{
 /* ===== ステージ別の背景（5つの別ワールド）===== */
 /* プレイ中は バラリンを出さない */
 #rosePlay{ display:none; }
+/* プレイ中は 土管を出さない */
+#game .pipe{ display:none; }
 #game.bg1 .sky-bg{ background:linear-gradient(180deg,#2fc7ff 0%,#6dd6ff 25%,#b0eaff 45%,#d4f56f 52%,#95e636 60%,#60b71a 100%); }
 #game.bg2 .sky-bg{ background:linear-gradient(180deg,#62cdff 0%,#9ee4ff 26%,#33a6e6 44%,#1f8ad6 58%,#f3dca0 61%,#e6c474 100%); }
 #game.bg3 .sky-bg{ background:linear-gradient(180deg,#bfe2ff 0%,#dcecff 34%,#ffe2ef 66%,#ffd0e2 100%); }
@@ -275,48 +278,84 @@ body{
 #game.bg5 .pipe{ filter:brightness(.7) saturate(1.2); }
 #game.bg5 .tray{ box-shadow:0 2.4vh 3.6vh rgba(0,0,0,.5), inset 0 -2.4vh 3.6vh rgba(130,70,0,.42), inset 0 1.8vh 2.4vh rgba(255,255,255,.85), 0 0 3vh rgba(255,60,0,.5); }
 
-/* ===== 各ワールドの飾り（CSS）===== */
+/* ===== 各ワールドの飾り（CSS）===== トレイの左右・下の見える所に配置 */
 .world{ position:absolute; inset:0; z-index:1; pointer-events:none; display:none; }
 #game.bg1 .w1, #game.bg2 .w2, #game.bg3 .w3, #game.bg4 .w4, #game.bg5 .w5{ display:block; }
+/* マンガ風の輪郭線 */
+.ol{ filter: drop-shadow(.42vh 0 0 #2b241c) drop-shadow(-.42vh 0 0 #2b241c) drop-shadow(0 .42vh 0 #2b241c) drop-shadow(0 -.42vh 0 #2b241c); }
 
-/* W1 くさはら：みどりの丘 */
-.w1 .hill{ position:absolute; border-radius:50%; }
-.w1 .h1{ left:-12vh; bottom:26vh; width:58vh; height:38vh; background:#88da40; }
-.w1 .h2{ right:-14vh; bottom:24vh; width:70vh; height:44vh; background:#72c12c; }
+/* --- W1 くさはら：丘＋お花 --- */
+.w1 .hill{ position:absolute; border-radius:50% 50% 0 0; }
+.w1 .h1{ left:-7vh; bottom:9vh; width:38vh; height:27vh; background:linear-gradient(160deg,#a8ee5c,#69bd28); }
+.w1 .h2{ right:-9vh; bottom:7vh; width:44vh; height:31vh; background:linear-gradient(160deg,#92e146,#53a41e); }
+.w1 .hill::after{ content:""; position:absolute; left:18%; top:14%; width:34%; height:26%; background:rgba(255,255,255,.3); border-radius:50%; }
+.w1 .flower{ position:absolute; width:4.6vh; height:4.6vh; border-radius:50%; background:#ff7eb0;
+  box-shadow:3.2vh 0 #ffd23a, -3.2vh 0 #ff7eb0, 0 3.2vh #6fd0ff, 0 0 0 .4vh #2b241c; }
+.w1 .flower::after{ content:""; position:absolute; left:50%; top:50%; width:42%; height:42%; margin:-21% 0 0 -21%; background:#fff8c0; border-radius:50%; box-shadow:0 0 0 .3vh #ca8f00; }
+.w1 .fl1{ left:8vh; bottom:9vh; } .w1 .fl2{ left:3vh; bottom:5vh; transform:scale(.75); }
 
-/* W2 すなはま：海の波＋ヤシの木 */
+/* --- W2 すなはま：ヤシ・波・ビーチボール --- */
 .w2 .wave{ position:absolute; left:0; right:0; height:1.4vh; background:rgba(255,255,255,.7); border-radius:50%; }
-.w2 .wv1{ top:47%; } .w2 .wv2{ top:51%; opacity:.5; } .w2 .wv3{ top:55%; opacity:.35; }
-.w2 .trunk{ position:absolute; bottom:26vh; left:7vh; width:3.4vh; height:24vh; background:linear-gradient(90deg,#8a5a2e,#c89456 60%,#9a6a38); border-radius:40%; transform:rotate(-7deg); transform-origin:bottom; }
-.w2 .frond{ position:absolute; bottom:48vh; left:8.6vh; width:20vh; height:7vh; background:linear-gradient(#54c23a,#2f8a24); border-radius:60% 60% 50% 50%; transform-origin:left center; }
-.w2 .f1{ transform:rotate(-18deg); } .w2 .f2{ transform:rotate(10deg); } .w2 .f3{ transform:rotate(38deg); } .w2 .f4{ transform:scaleX(-1) rotate(-18deg); left:auto; right:calc(100% - 8.6vh); }
+.w2 .wv1{ top:46%; } .w2 .wv2{ top:50%; opacity:.5; } .w2 .wv3{ top:54%; opacity:.35; }
+.w2 .palm{ position:absolute; left:4vh; bottom:8vh; width:24vh; height:42vh; }
+.w2 .trunk{ position:absolute; bottom:0; left:6vh; width:3.6vh; height:30vh; background:linear-gradient(90deg,#7a4a22,#c89456 55%,#8a5a2e); border-radius:40%; transform:rotate(-6deg); transform-origin:bottom; }
+.w2 .frond{ position:absolute; top:0; left:5vh; width:19vh; height:7vh; background:linear-gradient(#5cc83e,#2f8a24); border-radius:60% 60% 50% 50%; transform-origin:8% 50%; }
+.w2 .f1{ transform:rotate(-22deg);} .w2 .f2{ transform:rotate(6deg);} .w2 .f3{ transform:rotate(34deg);} .w2 .f4{ transform:rotate(-50deg);} 
+.w2 .coco{ position:absolute; top:5.5vh; left:5vh; width:3vh; height:3vh; border-radius:50%; background:radial-gradient(circle at 35% 30%,#8a5a2e,#4a2c12); }
+.w2 .coco.c2{ left:8vh; top:6.5vh; } .w2 .coco.c3{ left:3vh; top:7vh; }
+.w2 .ball{ position:absolute; right:5vh; bottom:7vh; width:11vh; height:11vh; border-radius:50%;
+  background:conic-gradient(#ff5a5a 0 25%,#fff 0 50%,#ffd23a 0 75%,#5ab0ff 0); box-shadow:inset -1vh -1vh 1.4vh rgba(0,0,0,.25); }
 
-/* W3 そら：ふわふわ雲＋浮島 */
-.w3 .scloud{ position:absolute; background:#fff; border-radius:50%; box-shadow:0 1vh 2vh rgba(120,120,160,.12); }
-.w3 .sc1{ left:8%; top:24%; width:26vh; height:12vh; }
-.w3 .sc2{ right:10%; top:38%; width:32vh; height:14vh; }
-.w3 .sc3{ left:30%; top:56%; width:38vh; height:15vh; opacity:.9; }
-.w3 .island{ position:absolute; left:50%; bottom:18vh; width:30vh; height:9vh; margin-left:-15vh; background:linear-gradient(#7fcf3a 38%,#7a4a28 38%); border-radius:50%; opacity:.5; }
+/* --- W3 そら：ふわふわ雲＋浮島 --- */
+.w3 .scloud{ position:absolute; height:11vh; background:#fff; border-radius:50%; box-shadow:0 1vh 1.6vh rgba(110,120,170,.14), inset 0 -1.4vh 1.4vh rgba(180,195,230,.4); }
+.w3 .scloud::before{ content:""; position:absolute; width:55%; height:130%; left:8%; top:-44%; background:#fff; border-radius:50%; }
+.w3 .scloud::after{ content:""; position:absolute; width:46%; height:118%; right:8%; top:-30%; background:#fff; border-radius:50%; }
+.w3 .sc1{ left:2vh; top:16%; width:24vh; }
+.w3 .sc2{ right:2vh; top:30%; width:28vh; }
+.w3 .sc3{ left:1vh; top:64%; width:26vh; }
+.w3 .island{ position:absolute; right:4vh; bottom:16vh; width:24vh; height:9vh; background:linear-gradient(#86d83e 42%,#7a4a28 42%); border-radius:50%; }
+.w3 .island::after{ content:""; position:absolute; left:50%; bottom:-5vh; width:1vh; height:6vh; margin-left:-.5vh; background:#5a8a2a; }
 
-/* W4 ゆきやま：雪の山＋ふる雪 */
-.w4 .mtn{ position:absolute; bottom:30vh; width:0; height:0; border-style:solid; border-color:transparent; border-bottom-color:#fff; }
-.w4 .m1{ left:6%; border-width:0 22vh 30vh 22vh; }
-.w4 .m2{ right:2%; border-width:0 26vh 36vh 26vh; border-bottom-color:#eaf4ff; }
-.w4 .m3{ left:34%; border-width:0 18vh 24vh 18vh; border-bottom-color:#f4faff; }
+/* --- W4 ゆきやま：雪山・ふる雪・雪だるま --- */
+.w4 .mtn{ position:absolute; clip-path:polygon(50% 0,100% 100%,0 100%); background:linear-gradient(180deg,#ffffff 0 36%,#c9e2f2 36%); }
+.w4 .m1{ left:-4vh; bottom:9vh; width:30vh; height:34vh; }
+.w4 .m2{ right:-6vh; bottom:7vh; width:36vh; height:40vh; }
+.w4 .snowman{ position:absolute; left:5vh; bottom:8vh; width:14vh; height:23vh; }
+.w4 .snowman .sb{ position:absolute; left:50%; border-radius:50%; background:radial-gradient(circle at 40% 32%,#fff,#d6e6f2); }
+.w4 .snowman .bot{ width:14vh; height:14vh; bottom:0; margin-left:-7vh; }
+.w4 .snowman .top{ width:10vh; height:10vh; bottom:10vh; margin-left:-5vh; }
+.w4 .snowman .eye{ position:absolute; width:1.4vh; height:1.4vh; background:#2b241c; border-radius:50%; bottom:17vh; }
+.w4 .snowman .eye.l{ left:4.6vh; } .w4 .snowman .eye.r{ left:8vh; }
+.w4 .snowman .nose{ position:absolute; left:6.4vh; bottom:15.4vh; width:3.4vh; height:1.4vh; background:#ff8a2a; clip-path:polygon(0 0,100% 50%,0 100%); }
+.w4 .snowman .hat{ position:absolute; left:3.6vh; bottom:19.4vh; width:6.8vh; height:3.6vh; background:#3a2440; border-radius:.6vh .6vh 0 0; box-shadow:-1.4vh 0 0 -1.2vh #3a2440,0 0 0 0 #3a2440; }
+.w4 .snowman .hat::before{ content:""; position:absolute; left:-1.8vh; bottom:0; width:10.4vh; height:1.4vh; background:#3a2440; border-radius:1vh; }
 .w4 .snowbox{ position:absolute; inset:0; overflow:hidden; }
 .w4 .snowbox i{ position:absolute; top:-4vh; width:1.6vh; height:1.6vh; background:#fff; border-radius:50%; box-shadow:0 0 .6vh #fff; animation:snowFall linear infinite; }
 @keyframes snowFall{ 0%{ transform:translateY(-6vh) translateX(0);} 100%{ transform:translateY(105vh) translateX(4vh);} }
 
-/* W5 ようがん城：お城＋溶岩＋火の粉 */
-.w5 .castle{ position:absolute; left:50%; bottom:28vh; width:44vh; height:26vh; margin-left:-22vh; background:#241526; border-radius:2vh 2vh 0 0; box-shadow:inset 0 2vh 3vh rgba(0,0,0,.4); }
-.w5 .castle::before{ content:""; position:absolute; top:-4vh; left:0; right:0; height:4vh; background:
-  repeating-linear-gradient(90deg,#241526 0 5vh, transparent 5vh 9vh); }
-.w5 .tower{ position:absolute; bottom:28vh; width:12vh; height:36vh; background:#1c1020; }
-.w5 .tower.tl{ left:18%; } .w5 .tower.tr{ right:18%; }
-.w5 .tower::before{ content:""; position:absolute; top:-3vh; left:0; right:0; height:3vh; background:repeating-linear-gradient(90deg,#1c1020 0 3vh, transparent 3vh 6vh); }
-.w5 .lava{ position:absolute; left:0; right:0; bottom:0; height:16vh; background:linear-gradient(180deg,#ffc24a,#ff6a00 40%,#c81800 100%); box-shadow:0 -2vh 5vh rgba(255,90,0,.7); }
-.w5 .lava::after{ content:""; position:absolute; inset:0; background:radial-gradient(circle at 30% 30%, rgba(255,230,120,.8), transparent 30%), radial-gradient(circle at 70% 50%, rgba(255,200,80,.7), transparent 28%); animation:lavaGlow 2s ease-in-out infinite alternate; }
-@keyframes lavaGlow{ from{ opacity:.6;} to{ opacity:1;} }
+/* --- W5 ようがん城：石の塔・溶岩の滝・火山・火の粉 --- */
+.w5 .vmtn{ position:absolute; clip-path:polygon(50% 0,100% 100%,0 100%); background:linear-gradient(180deg,#3a1e22,#190a0e); }
+.w5 .vl{ left:-7vh; top:13vh; width:32vh; height:28vh; opacity:.8; }
+.w5 .vr{ right:-9vh; top:10vh; width:38vh; height:33vh; opacity:.8; }
+.w5 .vmtn::after{ content:""; position:absolute; left:50%; top:0; width:2.4vh; height:40%; margin-left:-1.2vh; background:linear-gradient(180deg,#ffb43a,#ff5a00); border-radius:0 0 40% 40%; box-shadow:0 0 2vh rgba(255,90,0,.7); }
+.w5 .tower{ position:absolute; bottom:11vh; width:17vh; height:50vh; border-radius:1vh 1vh 0 0;
+  background:
+   radial-gradient(circle at 50% 18%, rgba(255,205,95,.95) 1.5vh, transparent 1.8vh),
+   radial-gradient(circle at 50% 40%, rgba(255,205,95,.95) 1.5vh, transparent 1.8vh),
+   radial-gradient(circle at 50% 62%, rgba(255,205,95,.95) 1.5vh, transparent 1.8vh),
+   repeating-linear-gradient(0deg, rgba(0,0,0,.24) 0 .36vh, transparent .36vh 4.4vh),
+   repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 .36vh, transparent .36vh 4.4vh),
+   linear-gradient(90deg,#5b5f6a 0%, #949aa6 46%, #565a65 100%); }
+.w5 .tl{ left:3vh; } .w5 .tr{ right:3vh; }
+.w5 .tower::before{ content:""; position:absolute; top:-3vh; left:-.4vh; right:-.4vh; height:3vh;
+  background:repeating-linear-gradient(90deg,#787d88 0 3.6vh, transparent 3.6vh 7.2vh); }
+.w5 .fall{ position:absolute; width:3.4vh; top:18vh; bottom:12vh; border-radius:1.6vh;
+  background:linear-gradient(180deg, rgba(255,190,60,.25), #ff8a18 28%, #ff5200 78%, #d63000 100%);
+  box-shadow:0 0 2.4vh rgba(255,90,0,.75); filter:blur(.25vh); animation:lavaGlow 1.4s ease-in-out infinite alternate; }
+.w5 .fall.fl{ left:21vh; } .w5 .fall.fr{ right:21vh; }
+.w5 .lava{ position:absolute; left:0; right:0; bottom:0; height:15vh; background:linear-gradient(180deg,#ffd24a,#ff6a00 42%,#b81400 100%); box-shadow:0 -2.4vh 6vh rgba(255,90,0,.8); }
+.w5 .lava::after{ content:""; position:absolute; inset:0; background:radial-gradient(circle at 22% 42%, rgba(255,240,160,.9), transparent 24%), radial-gradient(circle at 54% 58%, rgba(255,215,95,.85), transparent 22%), radial-gradient(circle at 84% 40%, rgba(255,240,150,.85), transparent 20%); animation:lavaGlow 1.8s ease-in-out infinite alternate; }
+@keyframes lavaGlow{ from{ opacity:.55;} to{ opacity:1;} }
 .w5 .emberbox{ position:absolute; inset:0; overflow:hidden; }
 .w5 .emberbox i{ position:absolute; bottom:-3vh; width:1.4vh; height:1.4vh; background:radial-gradient(circle,#ffd24a,#ff5a00 70%); border-radius:50%; box-shadow:0 0 1vh #ff7a00; animation:emberRise linear infinite; }
 @keyframes emberRise{ 0%{ transform:translateY(0) translateX(0); opacity:1;} 100%{ transform:translateY(-95vh) translateX(6vh); opacity:0;} }
@@ -553,7 +592,8 @@ body{
 /* =========================================================
    バラのキャラクター「バラリン」🌹（すべてCSS）
    ========================================================= */
-.rose{ position:relative; width:var(--s,12vh); height:var(--s,12vh); }
+.rose{ position:relative; width:var(--s,12vh); height:var(--s,12vh);
+  filter: drop-shadow(.32vh 0 0 #6a2330) drop-shadow(-.32vh 0 0 #6a2330) drop-shadow(0 .32vh 0 #6a2330) drop-shadow(0 -.32vh 0 #6a2330); }
 .rose .bloom{ position:absolute; inset:0; animation:roseBob 2.6s ease-in-out infinite; }
 @keyframes roseBob{ 0%,100%{ transform:translateY(0) rotate(-1.5deg);} 50%{ transform:translateY(-7%) rotate(1.5deg);} }
 .rose .petal{
@@ -622,7 +662,8 @@ body{
 /* =========================================================
    敵マスコット（すべてCSS）＋ 視界をじゃまする攻撃
    ========================================================= */
-.enemy{ position:relative; width:var(--s,13vh); height:var(--s,13vh); }
+.enemy{ position:relative; width:var(--s,13vh); height:var(--s,13vh);
+  filter: drop-shadow(.4vh 0 0 #1c1018) drop-shadow(-.4vh 0 0 #1c1018) drop-shadow(0 .4vh 0 #1c1018) drop-shadow(0 -.4vh 0 #1c1018); }
 .enemy .m-body{ position:absolute; inset:0; animation:roseBob 2.2s ease-in-out infinite; }
 .enemy .m-head{ position:absolute; left:9%; top:16%; width:82%; height:76%; border-radius:46% 46% 44% 44%; box-shadow:inset 0 -1.2vh 1.4vh rgba(0,0,0,.3), inset 0 .8vh .8vh rgba(255,255,255,.28); z-index:2; }
 .enemy .e-eye{ position:absolute; width:15%; height:20%; background:#2a1830; border-radius:50%; top:40%; z-index:4; }
@@ -646,6 +687,13 @@ body{
 .enemy .m-crown{ position:absolute; top:-13%; left:29%; width:42%; height:22%; background:linear-gradient(#ffe46a,#ffae00); clip-path:polygon(0 100%,16% 26%,34% 72%,50% 8%,66% 72%,84% 26%,100% 100%); z-index:6; filter:drop-shadow(0 .3vh .3vh rgba(0,0,0,.3)); }
 .enemy .m-flame{ position:absolute; left:-8%; right:-8%; top:-16%; height:50%; background:radial-gradient(circle at 50% 75%, rgba(255,170,0,.9), rgba(255,70,0,.4) 55%, transparent 72%); border-radius:50%; z-index:0; animation:flameFlick .35s ease-in-out infinite alternate; }
 @keyframes flameFlick{ from{ transform:scaleY(1) scaleX(1);} to{ transform:scaleY(1.18) scaleX(1.05);} }
+/* つやつやハイライト（全員） */
+.enemy .m-head::before{ content:""; position:absolute; left:16%; top:8%; width:46%; height:32%; background:radial-gradient(ellipse at 42% 38%, rgba(255,255,255,.6), rgba(255,255,255,0) 70%); border-radius:50%; z-index:3; pointer-events:none; }
+.enemy .e-eye::after{ box-shadow:-0.3vh 0.3vh 0 rgba(255,255,255,.55); }
+/* ほっぺ（やさしい子 b1・b2） */
+.enemy.b1 .m-head::after, .enemy.b2 .m-head::after{ content:""; position:absolute; inset:0; border-radius:inherit; z-index:3; pointer-events:none; background:
+  radial-gradient(circle at 21% 66%, rgba(255,120,150,.55) 4.5%, transparent 8.5%),
+  radial-gradient(circle at 79% 66%, rgba(255,120,150,.55) 4.5%, transparent 8.5%); }
 
 /* ===== レベル1：コロぽん（ちいさい・よわい・かわいい） ===== */
 .enemy.b1 .m-head{ background:radial-gradient(circle at 38% 30%, #f3ddb0, #cda063 80%); }
@@ -816,11 +864,11 @@ body{
   <div class="cloud c2"></div>
   <div class="pipe left"></div>
   <div class="pipe right"></div>
-  <div class="world w1"><div class="hill h1"></div><div class="hill h2"></div></div>
-  <div class="world w2"><div class="wave wv1"></div><div class="wave wv2"></div><div class="wave wv3"></div><div class="trunk"></div><div class="frond f1"></div><div class="frond f2"></div><div class="frond f3"></div><div class="frond f4"></div></div>
-  <div class="world w3"><div class="scloud sc1"></div><div class="scloud sc2"></div><div class="scloud sc3"></div><div class="island"></div></div>
-  <div class="world w4"><div class="mtn m1"></div><div class="mtn m3"></div><div class="mtn m2"></div><div class="snowbox" id="snowbox"></div></div>
-  <div class="world w5"><div class="tower tl"></div><div class="tower tr"></div><div class="castle"></div><div class="lava"></div><div class="emberbox" id="emberbox"></div></div>
+  <div class="world w1"><div class="hill h1 ol"></div><div class="hill h2 ol"></div><div class="flower fl1"></div><div class="flower fl2"></div></div>
+  <div class="world w2"><div class="wave wv1"></div><div class="wave wv2"></div><div class="wave wv3"></div><div class="palm ol"><div class="trunk"></div><div class="frond f1"></div><div class="frond f2"></div><div class="frond f3"></div><div class="frond f4"></div><div class="coco c1"></div><div class="coco c2"></div><div class="coco c3"></div></div><div class="ball ol"></div></div>
+  <div class="world w3"><div class="scloud sc1 ol"></div><div class="scloud sc2 ol"></div><div class="scloud sc3 ol"></div><div class="island ol"></div></div>
+  <div class="world w4"><div class="mtn m1 ol"></div><div class="mtn m2 ol"></div><div class="snowman ol"><div class="sb bot"></div><div class="sb top"></div><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="hat"></div></div><div class="snowbox" id="snowbox"></div></div>
+  <div class="world w5"><div class="vmtn vl"></div><div class="vmtn vr"></div><div class="tower tl ol"></div><div class="tower tr ol"></div><div class="fall fl"></div><div class="fall fr"></div><div class="lava"></div><div class="emberbox" id="emberbox"></div></div>
   <div class="rose" id="rosePlay" style="position:absolute; left:1vh; bottom:27vh; --s:15vh; z-index:2;"></div>
 
   <div class="counter">いま <b id="cur">1</b> かいめ / 5かい</div>
