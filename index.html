@@ -191,7 +191,7 @@ body{
   border:.4vh solid #fff; box-shadow:0 .8vh 1.4vh rgba(0,0,0,.2);
 }
 .test-guide b{ color:#e63333; }
-.tray-test{ width:42vh; height:42vh; }
+.tray.tray-test{ width:46vh !important; height:46vh !important; border-radius:7vh; }
 .coin-test{ width:11vh; height:11vh; margin-left:-5.5vh; margin-top:-5.5vh; }
 .coin-test .face{ font-size:5.4vh; }
 .test-controls{ position:relative; z-index:5; margin-top:1.6vh; display:flex; gap:1.6vh; flex-wrap:wrap; justify-content:center; }
@@ -251,7 +251,7 @@ body{
 .tray-area{ position:relative; z-index:10; display:flex; align-items:center; justify-content:center; }
 .tray{
   position:relative;
-  width:76vh; height:76vh; border-radius:11vh;
+  width:72vh; height:72vh; border-radius:11vh;
   background:
     radial-gradient(circle at 48% 35%, rgba(255,255,255,.72), rgba(255,255,255,0) 52%),
     radial-gradient(ellipse at 50% 50%, #fff8d0, #ffe8a0 35%, #e8b640 65%, #d4941a 100%);
@@ -1033,11 +1033,13 @@ body{
    - radius : おぼんのセーフ範囲のわりあい（小さいほど落ちやすい）
    ========================================================================= */
 const CONFIG = {
-  1:{ sens:1200, damp:0.945, radius:0.90 },  // とってもかんたん
-  2:{ sens:1900, damp:0.948, radius:0.84 },  // かんたん
-  3:{ sens:2700, damp:0.951, radius:0.77 },  // ふつう
-  4:{ sens:3700, damp:0.953, radius:0.69 },  // むずかしい
-  5:{ sens:5200, damp:0.956, radius:0.61 }   // ゲキムズ
+  /* sens=かたむきへの敏感さ（大きいほど速く転がる） / damp=すべり（1に近いほど止まりにくい）
+     ※「ふちから落ちるリアル設定」に合わせて再調整。radius は現在未使用 */
+  1:{ sens:1600, damp:0.946, radius:0.90 },  // とってもかんたん
+  2:{ sens:2700, damp:0.952, radius:0.84 },  // かんたん
+  3:{ sens:4200, damp:0.958, radius:0.77 },  // ふつう
+  4:{ sens:6300, damp:0.964, radius:0.69 },  // むずかしい
+  5:{ sens:9500, damp:0.970, radius:0.61 }   // ゲキムズ
 };
 const TOTAL_PLAYS = 5;
 
