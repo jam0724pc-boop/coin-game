@@ -558,27 +558,27 @@ body{
   animation:cdPop .6s cubic-bezier(.2,1.6,.4,1) both;
 }
 .final-star{
-  font-size:30vh; line-height:1; filter:drop-shadow(0 0 5vh #ffe35a);
+  font-size:15vh; line-height:1; filter:drop-shadow(0 0 4vh #ffe35a);
   animation:starSpin 2.4s ease-in-out infinite;
 }
 @keyframes starSpin{ 0%,100%{ transform:scale(1) rotate(-6deg);} 50%{ transform:scale(1.12) rotate(6deg);} }
 .final-headline{
-  font-size:7vh; font-weight:900; color:#fff;
+  font-size:5.6vh; font-weight:900; color:#fff;
   text-shadow:
     0.35vh 0 0 #5a3500, -0.35vh 0 0 #5a3500, 0 0.35vh 0 #5a3500, 0 -0.35vh 0 #5a3500,
     0.35vh 0.35vh 0 #5a3500, -0.35vh -0.35vh 0 #5a3500, 0.35vh -0.35vh 0 #5a3500, -0.35vh 0.35vh 0 #5a3500,
     0 1.1vh 1.4vh rgba(0,0,0,.5);
 }
 .final-rate{
-  margin-top:1.6vh; font-size:13vh; font-weight:900; line-height:1;
+  margin-top:1vh; font-size:10vh; font-weight:900; line-height:1;
   color:#ffe800;
   text-shadow:
     0.5vh 0 0 #a82a00, -0.5vh 0 0 #a82a00, 0 0.5vh 0 #a82a00, 0 -0.5vh 0 #a82a00,
     0.5vh 0.5vh 0 #a82a00, -0.5vh -0.5vh 0 #a82a00, 0.5vh -0.5vh 0 #a82a00, -0.5vh 0.5vh 0 #a82a00,
     0 1.4vh 1.6vh rgba(0,0,0,.45);
 }
-.final-rate .pct{ font-size:8vh; }
-.final-praise{ margin-top:1.8vh; font-size:5vh; font-weight:900; }
+.final-rate .pct{ font-size:6.5vh; }
+.final-praise{ margin-top:1.2vh; font-size:4.2vh; font-weight:900; }
 .final-praise.big{
   color:#fff;
   text-shadow:
@@ -594,14 +594,14 @@ body{
     0 1vh 1.2vh rgba(0,0,0,.4);
 }
 .final-nudge{
-  margin-top:1.4vh; font-size:3.6vh; font-weight:900; color:#fff;
+  margin-top:1vh; font-size:3.2vh; font-weight:900; color:#fff;
   text-shadow:
     0.3vh 0 0 #1a6a1a, -0.3vh 0 0 #1a6a1a, 0 0.3vh 0 #1a6a1a, 0 -0.3vh 0 #1a6a1a,
     0.3vh 0.3vh 0 #1a6a1a, -0.3vh -0.3vh 0 #1a6a1a,
     0 .8vh 1vh rgba(0,0,0,.35);
 }
 .restart-btn{
-  margin-top:3vh; font-family:var(--font); cursor:pointer;
+  margin-top:1.8vh; font-family:var(--font); cursor:pointer;
   font-size:4.2vh; font-weight:900; color:#fff;
   padding:2.4vh 5.6vh; border-radius:999px; border:.8vh solid #fff;
   background:linear-gradient(180deg,#a8f0ff,#2a9ae6);
@@ -916,7 +916,6 @@ body{
     <button class="test-enter-btn" id="testEnterBtn">🧭 かたむきテスト（むきを あわせる）</button>
   </div>
 
-  <div class="enemy-parade"><div class="ep-lbl">👾 つよさの かいだん</div><div class="ep-row" id="epRow"></div></div>
 </section>
 
 <!-- ============ かたむきテスト ============ -->
@@ -1007,7 +1006,7 @@ body{
   <div class="confetti" id="confetti"></div>
   <div class="final-card">
     <div class="final-star hidden" id="finalStar">⭐</div>
-    <div class="rose" id="roseFinal" style="--s:19vh; margin:0 auto 1vh;"></div>
+    <div class="rose" id="roseFinal" style="--s:14vh; margin:0 auto .6vh;"></div>
     <div class="final-headline" id="finalHeadline">5かいちゅう 0かい くりあ！</div>
     <div class="final-rate" id="finalRate">0<span class="pct">％</span></div>
     <div class="final-praise" id="finalPraise"></div>
@@ -1332,7 +1331,7 @@ function beginRound(){
   // セーフ範囲（半径）を計算
   const rect=trayEl.getBoundingClientRect();
   const coinR=coinEl.getBoundingClientRect().width/2;
-  State.maxR = (rect.width/2 - coinR) * CONFIG[State.level].radius;
+  State.maxR = rect.width/2;   // トレイの外わくまで OK（実物と同じ、ふちを こえたら 落ちる）
 
   // カウントダウン＋キャリブレーション（このあいだ「たいら」に構えてもらう）
   State.calibrating=true;
@@ -1402,7 +1401,7 @@ function loop(now){
     State.vx *= k.damp; State.vy *= k.damp;
     State.x += State.vx*dt; State.y += State.vy*dt;
 
-    const dist=Math.hypot(State.x,State.y);
+    const dist=Math.max(Math.abs(State.x),Math.abs(State.y));   // 四角いトレイの ふちまでの きょり
     coinEl.style.transform='translate('+State.x+'px,'+State.y+'px)';
     // うごいた あとに 光のあとが のこる
     if(State.active && now-(State._lt||0)>80 && (Math.abs(State.vx)+Math.abs(State.vy))>0.15){
