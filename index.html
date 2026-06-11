@@ -359,6 +359,39 @@ body{
 .w5 .emberbox{ position:absolute; inset:0; overflow:hidden; }
 .w5 .emberbox i{ position:absolute; bottom:-3vh; width:1.4vh; height:1.4vh; background:radial-gradient(circle,#ffd24a,#ff5a00 70%); border-radius:50%; box-shadow:0 0 1vh #ff7a00; animation:emberRise linear infinite; }
 @keyframes emberRise{ 0%{ transform:translateY(0) translateX(0); opacity:1;} 100%{ transform:translateY(-95vh) translateX(6vh); opacity:0;} }
+
+/* ===== クオリティUP：奥行き・光・動き ===== */
+/* 画面全体のやわらかい光と影（ムード） */
+#game::after{ content:""; position:absolute; inset:0; z-index:3; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 34%, rgba(255,255,255,.10), rgba(0,0,0,0) 48%, rgba(0,0,0,.16) 100%); }
+/* 太陽がふんわり脈打つ */
+.sun{ animation:sunPulse 4s ease-in-out infinite; }
+@keyframes sunPulse{ 0%,100%{ box-shadow:0 0 40px 14px rgba(255,225,90,.6);} 50%{ box-shadow:0 0 58px 22px rgba(255,225,90,.85);} }
+/* W1 奥の丘（うすい色で遠近感） */
+.w1 .hillback{ position:absolute; bottom:18vh; border-radius:50% 50% 0 0; opacity:.7; }
+.w1 .hb1{ left:16vh; width:48vh; height:22vh; background:linear-gradient(160deg,#bff07a,#8fd455); }
+.w1 .hb2{ right:14vh; width:54vh; height:26vh; background:linear-gradient(160deg,#aceb6a,#7fca44); }
+/* W2 ヤシがゆれる・波がきらめく */
+.w2 .palm{ transform-origin:bottom center; animation:palmSway 4.5s ease-in-out infinite; }
+@keyframes palmSway{ 0%,100%{ transform:rotate(-1.6deg);} 50%{ transform:rotate(1.6deg);} }
+.w2 .wave{ animation:waveShim 4s ease-in-out infinite; }
+.w2 .wv2{ animation-duration:5s; } .w2 .wv3{ animation-duration:6s; }
+@keyframes waveShim{ 0%,100%{ transform:translateX(0);} 50%{ transform:translateX(2.4vh);} }
+/* W3 雲がゆっくり流れる */
+.w3 .sc1{ animation:skyDrift 26s ease-in-out infinite; }
+.w3 .sc2{ animation:skyDrift 34s ease-in-out infinite reverse; }
+.w3 .sc3{ animation:skyDrift 30s ease-in-out infinite; }
+@keyframes skyDrift{ 0%,100%{ transform:translateX(0);} 50%{ transform:translateX(5vh);} }
+/* W4 奥の雪山（うすい色で遠近感） */
+.w4 .mback{ position:absolute; clip-path:polygon(50% 0,100% 100%,0 100%); opacity:.6; background:linear-gradient(180deg,#ffffff 0 42%,#dceaf5 42%); }
+.w4 .mb1{ left:13vh; bottom:14vh; width:34vh; height:30vh; }
+.w4 .mb2{ right:11vh; bottom:14vh; width:40vh; height:34vh; }
+/* W5 たいまつの炎がゆらめく */
+.w5 .torch{ position:absolute; width:3vh; height:5vh; bottom:42vh; border-radius:45% 45% 50% 50%;
+  background:radial-gradient(circle at 50% 72%, #fff3a0, #ff8a10 52%, #ff4a00 82%); box-shadow:0 0 2.6vh rgba(255,120,0,.9);
+  animation:torchFlick .25s ease-in-out infinite alternate; }
+.w5 .torchL{ left:11vh; } .w5 .torchR{ right:11vh; }
+@keyframes torchFlick{ from{ transform:scale(1) translateY(0); opacity:.9;} to{ transform:scale(1.14) translateY(-.4vh); opacity:1;} }
 /* あぶないゾーン（ふち）の光 */
 .danger-ring{
   position:absolute; inset:0; border-radius:11vh; pointer-events:none;
@@ -663,8 +696,13 @@ body{
    敵マスコット（すべてCSS）＋ 視界をじゃまする攻撃
    ========================================================= */
 .enemy{ position:relative; width:var(--s,13vh); height:var(--s,13vh);
-  filter: drop-shadow(.4vh 0 0 #1c1018) drop-shadow(-.4vh 0 0 #1c1018) drop-shadow(0 .4vh 0 #1c1018) drop-shadow(0 -.4vh 0 #1c1018); }
+  filter: drop-shadow(0 .7vh .6vh rgba(0,0,0,.32)); }
 .enemy .m-body{ position:absolute; inset:0; animation:roseBob 2.2s ease-in-out infinite; }
+.enemy .esvg{ width:100%; height:100%; display:block; overflow:visible; }
+.enemy .esvg-eyes{ transform-box:fill-box; transform-origin:center; animation:eblink 4.2s infinite; }
+@keyframes eblink{ 0%,93%,100%{ transform:scaleY(1);} 96%{ transform:scaleY(.12);} }
+.enemy .esvg-flame{ transform-box:fill-box; transform-origin:50% 72%; animation:eflameP .4s ease-in-out infinite alternate; }
+@keyframes eflameP{ from{ transform:scaleY(1) scaleX(1);} to{ transform:scaleY(1.16) scaleX(1.05);} }
 .enemy .m-head{ position:absolute; left:9%; top:16%; width:82%; height:76%; border-radius:46% 46% 44% 44%; box-shadow:inset 0 -1.2vh 1.4vh rgba(0,0,0,.3), inset 0 .8vh .8vh rgba(255,255,255,.28); z-index:2; }
 .enemy .e-eye{ position:absolute; width:15%; height:20%; background:#2a1830; border-radius:50%; top:40%; z-index:4; }
 .enemy .e-eye.l{ left:29%; } .enemy .e-eye.r{ right:29%; }
@@ -864,11 +902,11 @@ body{
   <div class="cloud c2"></div>
   <div class="pipe left"></div>
   <div class="pipe right"></div>
-  <div class="world w1"><div class="hill h1 ol"></div><div class="hill h2 ol"></div><div class="flower fl1"></div><div class="flower fl2"></div></div>
+  <div class="world w1"><div class="hillback hb1"></div><div class="hillback hb2"></div><div class="hill h1 ol"></div><div class="hill h2 ol"></div><div class="flower fl1"></div><div class="flower fl2"></div></div>
   <div class="world w2"><div class="wave wv1"></div><div class="wave wv2"></div><div class="wave wv3"></div><div class="palm ol"><div class="trunk"></div><div class="frond f1"></div><div class="frond f2"></div><div class="frond f3"></div><div class="frond f4"></div><div class="coco c1"></div><div class="coco c2"></div><div class="coco c3"></div></div><div class="ball ol"></div></div>
   <div class="world w3"><div class="scloud sc1 ol"></div><div class="scloud sc2 ol"></div><div class="scloud sc3 ol"></div><div class="island ol"></div></div>
-  <div class="world w4"><div class="mtn m1 ol"></div><div class="mtn m2 ol"></div><div class="snowman ol"><div class="sb bot"></div><div class="sb top"></div><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="hat"></div></div><div class="snowbox" id="snowbox"></div></div>
-  <div class="world w5"><div class="vmtn vl"></div><div class="vmtn vr"></div><div class="tower tl ol"></div><div class="tower tr ol"></div><div class="fall fl"></div><div class="fall fr"></div><div class="lava"></div><div class="emberbox" id="emberbox"></div></div>
+  <div class="world w4"><div class="mback mb1"></div><div class="mback mb2"></div><div class="mtn m1 ol"></div><div class="mtn m2 ol"></div><div class="snowman ol"><div class="sb bot"></div><div class="sb top"></div><div class="eye l"></div><div class="eye r"></div><div class="nose"></div><div class="hat"></div></div><div class="snowbox" id="snowbox"></div></div>
+  <div class="world w5"><div class="vmtn vl"></div><div class="vmtn vr"></div><div class="tower tl ol"></div><div class="tower tr ol"></div><div class="torch torchL"></div><div class="torch torchR"></div><div class="fall fl"></div><div class="fall fr"></div><div class="lava"></div><div class="emberbox" id="emberbox"></div></div>
   <div class="rose" id="rosePlay" style="position:absolute; left:1vh; bottom:27vh; --s:15vh; z-index:2;"></div>
 
   <div class="counter">いま <b id="cur">1</b> かいめ / 5かい</div>
@@ -1611,21 +1649,82 @@ function hideBubble(){
 /* =========================================================================
    敵マスコット ＆ 視界じゃま攻撃
    ========================================================================= */
-const EYES = '<div class="e-eye l"></div><div class="e-eye r"></div>';
-function enemyHTML(boss){
-  const head='<div class="m-head"></div>';
-  const mouth='<div class="m-mouth"></div>';
-  const mouthFang='<div class="m-mouth"><div class="m-fang l"></div><div class="m-fang r"></div></div>';
-  const horns='<div class="m-horn l"></div><div class="m-horn r"></div>';
-  const brows='<div class="m-brow l"></div><div class="m-brow r"></div>';
-  switch(boss){
-    case 'b1': return '<div class="m-body">'+head+EYES+mouth+'</div>';
-    case 'b2': return '<div class="m-body">'+horns+head+EYES+mouthFang+'</div>';
-    case 'b3': return '<div class="m-body"><div class="m-spike s1"></div><div class="m-spike s2"></div>'+horns+head+brows+EYES+mouthFang+'</div>';
-    case 'b4': return '<div class="m-body"><div class="m-spike s1"></div><div class="m-spike s2"></div><div class="m-spike s3"></div>'+horns+head+brows+EYES+mouthFang+'</div>';
-    case 'b5': return '<div class="m-body"><div class="m-flame"></div><div class="m-spike s1"></div><div class="m-spike s2"></div><div class="m-spike s3"></div>'+horns+'<div class="m-crown"></div>'+head+brows+EYES+mouthFang+'</div>';
+/* ===== 敵キャラ：SVGで描画（なめらか・陰影・ふちどり・まばたき）===== */
+const ENEMY_SPEC = {
+  b1:{ c1:'#f6e2b4', c2:'#cda05e', eye:'dark', horn:'none', brow:false, spike:'none', crown:false, flame:false, mouth:'smile',   cheek:true  },
+  b2:{ c1:'#c8ef86', c2:'#5fa233', eye:'dark', horn:'small',brow:false, spike:'none', crown:false, flame:false, mouth:'fang',    cheek:true  },
+  b3:{ c1:'#ffb066', c2:'#df7a14', eye:'dark', horn:'med',  brow:true,  spike:'two',  crown:false, flame:false, mouth:'fang',    cheek:false },
+  b4:{ c1:'#ef6e58', c2:'#9e2014', eye:'dark', horn:'big',  brow:true,  spike:'three',crown:false, flame:false, mouth:'bigfang', cheek:false },
+  b5:{ c1:'#6a5a78', c2:'#251830', eye:'red',  horn:'huge', brow:true,  spike:'three',crown:true,  flame:true,  mouth:'bigfang', cheek:false }
+};
+function svgHorns(t){
+  if(t==='none') return '';
+  const ty={small:24,med:15,big:7,huge:-1}[t];
+  return `<path d="M26 35 L41 30 L31 ${ty} Z" fill="url(#ehorn)" stroke="#241a2e" stroke-width="2.4" stroke-linejoin="round"/>`
+       + `<path d="M74 35 L59 30 L69 ${ty} Z" fill="url(#ehorn)" stroke="#241a2e" stroke-width="2.4" stroke-linejoin="round"/>`;
+}
+function svgSpikes(t){
+  if(t==='none') return '';
+  const sp=(x)=>`<path d="M${x-6} 31 L${x+6} 31 L${x} 13 Z" fill="#e6e6e6" stroke="#241a2e" stroke-width="2" stroke-linejoin="round"/>`;
+  return t==='two' ? sp(30)+sp(70) : sp(27)+sp(50)+sp(73);
+}
+function svgBrows(b){
+  if(!b) return '';
+  return `<path d="M27 41 L45 47" stroke="#241a2e" stroke-width="4.6" stroke-linecap="round"/>`
+       + `<path d="M73 41 L55 47" stroke="#241a2e" stroke-width="4.6" stroke-linecap="round"/>`;
+}
+function svgEyes(eye){
+  if(eye==='red'){
+    return `<g class="esvg-eyes">
+      <circle cx="37" cy="55" r="11" fill="#ff2a2a" opacity="0.3"/><circle cx="63" cy="55" r="11" fill="#ff2a2a" opacity="0.3"/>
+      <circle cx="37" cy="55" r="7" fill="#ff2a2a" stroke="#5a0000" stroke-width="1.5"/><circle cx="63" cy="55" r="7" fill="#ff2a2a" stroke="#5a0000" stroke-width="1.5"/>
+      <circle cx="34.6" cy="52.6" r="2.2" fill="#ffdede"/><circle cx="60.6" cy="52.6" r="2.2" fill="#ffdede"/></g>`;
   }
-  return '';
+  return `<g class="esvg-eyes">
+    <ellipse cx="37" cy="54" rx="8.5" ry="10.5" fill="#fff" stroke="#241a2e" stroke-width="2"/>
+    <ellipse cx="63" cy="54" rx="8.5" ry="10.5" fill="#fff" stroke="#241a2e" stroke-width="2"/>
+    <circle cx="38" cy="56" r="5" fill="#2a1830"/><circle cx="62" cy="56" r="5" fill="#2a1830"/>
+    <circle cx="40" cy="54" r="1.8" fill="#fff"/><circle cx="64" cy="54" r="1.8" fill="#fff"/></g>`;
+}
+function svgMouth(m){
+  if(m==='smile') return `<path d="M41 70 Q50 77 59 70" fill="none" stroke="#6a3a18" stroke-width="3.4" stroke-linecap="round"/>`;
+  const big = m==='bigfang';
+  const w = big?16:12, top=70, bot=big?86:82;
+  const mouth=`<path d="M${50-w} ${top} Q50 ${top-5} ${50+w} ${top} Q${50+w-2} ${bot} 50 ${bot} Q${50-w+2} ${bot} ${50-w} ${top} Z" fill="#5a1020" stroke="#241a2e" stroke-width="2.4"/>`;
+  const fangs=`<path d="M${50-w+3} ${top+1} l4 0 l-2 7 z" fill="#fff"/><path d="M${50+w-7} ${top+1} l4 0 l-2 7 z" fill="#fff"/>`;
+  return mouth+fangs;
+}
+function svgCheeks(c){
+  if(!c) return '';
+  return `<ellipse cx="27" cy="64" rx="6" ry="4" fill="rgba(255,120,150,.55)"/><ellipse cx="73" cy="64" rx="6" ry="4" fill="rgba(255,120,150,.55)"/>`;
+}
+function svgCrown(c){
+  if(!c) return '';
+  return `<path d="M33 18 L40 28 L50 12 L60 28 L67 18 L65 33 L35 33 Z" fill="url(#ecrown)" stroke="#241a2e" stroke-width="2.2" stroke-linejoin="round"/>`
+       + `<circle cx="50" cy="13" r="2.4" fill="#ff5a5a" stroke="#241a2e" stroke-width="1.4"/>`;
+}
+function svgFlame(f){
+  if(!f) return '';
+  return `<ellipse class="esvg-flame" cx="50" cy="42" rx="52" ry="42" fill="url(#eflame)"/>`;
+}
+function enemyHTML(boss){
+  const S = ENEMY_SPEC[boss]; if(!S) return '';
+  const defs = `<defs>
+    <radialGradient id="ebody" cx="38%" cy="30%" r="78%">
+      <stop offset="0%" stop-color="${S.c1}"/><stop offset="100%" stop-color="${S.c2}"/></radialGradient>
+    <linearGradient id="ehorn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#cfc6ad"/></linearGradient>
+    <linearGradient id="ecrown" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe874"/><stop offset="100%" stop-color="#ffab12"/></linearGradient>
+    <radialGradient id="eflame" cx="50%" cy="64%" r="55%">
+      <stop offset="0%" stop-color="rgba(255,185,45,.92)"/><stop offset="55%" stop-color="rgba(255,70,0,.4)"/><stop offset="76%" stop-color="rgba(255,70,0,0)"/></radialGradient></defs>`;
+  const body = `<ellipse cx="50" cy="55" rx="40" ry="41" fill="url(#ebody)" stroke="#241a2e" stroke-width="3"/>`
+             + `<ellipse cx="38" cy="33" rx="16" ry="11" fill="#fff" opacity="0.45"/>`;
+  return `<div class="m-body"><svg class="esvg" viewBox="-6 -14 112 112" xmlns="http://www.w3.org/2000/svg">`
+       + defs + svgFlame(S.flame) + svgSpikes(S.spike) + svgHorns(S.horn)
+       + body + svgCrown(S.crown) + svgCheeks(S.cheek) + svgBrows(S.brow)
+       + svgEyes(S.eye) + svgMouth(S.mouth)
+       + `</svg></div>`;
 }
 /* 難易度ごとの 敵（見た目＝boss / 攻撃＝atk / 大きさ＝size）。攻撃は今までどおり。 */
 const ENEMY = {
