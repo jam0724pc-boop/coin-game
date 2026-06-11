@@ -84,7 +84,7 @@ body{
 .game-title{
   font-size:9.2vh; line-height:1; font-weight:900; letter-spacing:.02em;
   transform:rotate(-2deg);
-  animation:titlePop .6s cubic-bezier(.2,1.8,.4,1) both;
+  animation:titlePop .6s cubic-bezier(.2,1.8,.4,1) both, logoGlow 2.6s .7s ease-in-out infinite alternate;
 }
 .game-title span{
   display:inline-block;
@@ -636,7 +636,46 @@ body{
    バラのキャラクター「バラリン」🌹（すべてCSS）
    ========================================================= */
 .rose{ position:relative; width:var(--s,12vh); height:var(--s,12vh);
-  filter: drop-shadow(.32vh 0 0 #6a2330) drop-shadow(-.32vh 0 0 #6a2330) drop-shadow(0 .32vh 0 #6a2330) drop-shadow(0 -.32vh 0 #6a2330); }
+  filter: drop-shadow(0 .6vh .5vh rgba(0,0,0,.3)); }
+/* SVGバラリン：表示・表情きりかえ・おしゃべり */
+.rose .esvg{ width:100%; height:100%; display:block; overflow:visible; }
+.rose .rs-m{ display:none; }
+.rose .rs-m-smile{ display:block; }
+.rose .rs-eyearc{ display:none; }
+.rose .sweat{ opacity:0; }
+.rose.worry .rs-m-smile{ display:none; } .rose.worry .rs-m-small{ display:block; }
+.rose.worry .sweat{ opacity:1; animation:sweat .7s ease-in infinite; }
+.rose.cheer .rs-m-smile{ display:none; } .rose.cheer .rs-m-open{ display:block; }
+.rose.cheer .rs-eyes{ display:none; } .rose.cheer .rs-eyearc{ display:block; }
+.rose.sad .rs-m-smile{ display:none; } .rose.sad .rs-m-frown{ display:block; }
+.rose.talking .rs-m{ transform-box:fill-box; transform-origin:50% 55%; animation:rtalkS .16s ease-in-out infinite alternate; }
+@keyframes rtalkS{ from{ transform:scaleY(.55);} to{ transform:scaleY(1.12);} }
+
+/* ===== 演出強化（A:タイトル / B:結果 / C:コイン / D:敵） ===== */
+@keyframes letterFloat{ 0%,100%{ transform:rotate(var(--rt,0deg)) translateY(0);} 50%{ transform:rotate(var(--rt,0deg)) translateY(-1vh);} }
+@keyframes logoGlow{ from{ filter:drop-shadow(0 0 .5vh rgba(255,215,70,.2));} to{ filter:drop-shadow(0 0 2.2vh rgba(255,215,70,.7));} }
+.enemy-parade{ position:absolute; right:1.6vh; top:7%; z-index:6; text-align:center; }
+.ep-lbl{ display:inline-block; font-size:2.1vh; font-weight:900; color:#fff; background:rgba(40,20,60,.35); padding:.5vh 1.4vh; border-radius:2vh; margin-bottom:.8vh; text-shadow:0 .25vh .4vh rgba(0,0,0,.4); }
+.ep-row{ display:flex; align-items:flex-end; gap:1vh; justify-content:center; }
+.rr-msg.stamp{ animation:stampIn .55s cubic-bezier(.2,1.5,.4,1) both; }
+@keyframes stampIn{ 0%{ transform:scale(2.4) rotate(-14deg); opacity:0;} 55%{ transform:scale(.9) rotate(3deg); opacity:1;} 100%{ transform:scale(1) rotate(-2deg); opacity:1;} }
+.bstar{ position:absolute; left:50%; top:44%; font-size:3vh; pointer-events:none; z-index:60; animation:burstFly .9s ease-out forwards; text-shadow:0 0 1.2vh rgba(255,210,60,.9); }
+@keyframes burstFly{ from{ transform:translate(-50%,-50%) scale(.3) rotate(0deg); opacity:1;} to{ transform:translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.1) rotate(240deg); opacity:0;} }
+.coin{ overflow:hidden; }
+.coin::before{ content:""; position:absolute; inset:-12%; border-radius:50%; pointer-events:none;
+  background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.85) 50%, transparent 60%);
+  transform:translateX(-140%); animation:coinSweep 2.8s ease-in-out infinite; z-index:2; }
+@keyframes coinSweep{ 0%{ transform:translateX(-140%);} 55%{ transform:translateX(140%);} 100%{ transform:translateX(140%);} }
+.tray::before{ content:""; position:absolute; inset:2.2vh; border-radius:9vh; pointer-events:none;
+  background:repeating-radial-gradient(circle at 50% 50%, rgba(170,110,15,.08) 0 2.4vh, transparent 2.4vh 4.8vh); }
+.traildot{ position:absolute; left:50%; top:50%; width:2.4vh; height:2.4vh; margin:-1.2vh 0 0 -1.2vh; border-radius:50%; pointer-events:none; z-index:10;
+  background:radial-gradient(circle, rgba(255,235,130,.85), rgba(255,200,40,0) 72%); animation:trailFade .55s ease-out forwards; }
+@keyframes trailFade{ to{ opacity:0; } }
+@keyframes enemyIn{ 0%{ opacity:0; transform:translateY(-26vh) scale(.7);} 60%{ opacity:1; transform:translateY(1.6vh) scale(1.06);} 80%{ transform:translateY(-1vh) scale(.98);} 100%{ opacity:1; transform:none;} }
+.enemy-char.windup{ animation:eWindup .5s ease-in both; }
+@keyframes eWindup{ 0%{ transform:none;} 45%{ transform:scaleY(.8) scaleX(1.14) translateY(2.2vh);} 75%{ transform:scaleY(.8) scaleX(1.14) translateY(2.2vh) rotate(2deg);} 100%{ transform:none;} }
+#game.shakeS{ animation:gshake .3s linear; }
+@keyframes gshake{ 0%,100%{ transform:none;} 25%{ transform:translate(.45vh,-.3vh);} 50%{ transform:translate(-.45vh,.3vh);} 75%{ transform:translate(.3vh,.18vh);} }
 .rose .bloom{ position:absolute; inset:0; animation:roseBob 2.6s ease-in-out infinite; }
 @keyframes roseBob{ 0%,100%{ transform:translateY(0) rotate(-1.5deg);} 50%{ transform:translateY(-7%) rotate(1.5deg);} }
 .rose .petal{
@@ -709,7 +748,7 @@ body{
   filter: drop-shadow(0 .7vh .6vh rgba(0,0,0,.32)); }
 .enemy .m-body{ position:absolute; inset:0; animation:roseBob 2.2s ease-in-out infinite; }
 .enemy .esvg{ width:100%; height:100%; display:block; overflow:visible; }
-.enemy .esvg-eyes{ transform-box:fill-box; transform-origin:center; animation:eblink 4.2s infinite; }
+.enemy .esvg-eyes, .rose .esvg-eyes{ transform-box:fill-box; transform-origin:center; animation:eblink 4.2s infinite; }
 @keyframes eblink{ 0%,93%,100%{ transform:scaleY(1);} 96%{ transform:scaleY(.12);} }
 .enemy .esvg-flame{ transform-box:fill-box; transform-origin:50% 72%; animation:eflameP .4s ease-in-out infinite alternate; }
 @keyframes eflameP{ from{ transform:scaleY(1) scaleX(1);} to{ transform:scaleY(1.16) scaleX(1.05);} }
@@ -776,7 +815,7 @@ body{
 
 /* 敵キャラ（プレイ中ずっと 右の土管の上に いる） */
 .enemy-char{ position:absolute; z-index:13; pointer-events:none; opacity:0; transition:opacity .3s ease; }
-.enemy-char.in{ opacity:1; }
+.enemy-char.in{ opacity:1; animation:enemyIn .75s cubic-bezier(.3,1.4,.4,1) both; }
 .enemy-char.attacking{ animation:enemyLunge .55s ease; }
 @keyframes enemyLunge{ 0%,100%{ transform:translateX(0) scale(1) rotate(0);} 35%{ transform:translateX(-4vh) scale(1.15) rotate(-5deg);} }
 
@@ -841,7 +880,7 @@ body{
   <div class="pipe left"></div>
   <div class="pipe right"></div>
 
-  <div class="rose wave" id="roseTitle" style="position:absolute; left:3%; top:11%; --s:17vh; z-index:6;"></div>
+  <div class="rose wave" id="roseTitle" style="position:absolute; left:3%; top:9%; --s:21vh; z-index:6;"></div>
 
   <div class="title-wrap">
     <div class="game-title" id="gameTitle">コインはこびゲーム</div>
@@ -872,6 +911,8 @@ body{
     <button class="mode-btn on" id="modeNormal">🛡️ つうじょう</button>
     <button class="mode-btn" id="modeEnemy">👾 てきあり</button>
   </div>
+
+  <div class="enemy-parade"><div class="ep-lbl">👾 レベルが あがると てきも つよくなる！</div><div class="ep-row" id="epRow"></div></div>
 
   <button class="test-enter-btn" id="testEnterBtn">🧭 かたむきテスト（むきを あわせる）</button>
 </section>
@@ -950,7 +991,7 @@ body{
   <!-- ラウンドけっか -->
   <div class="round-result hidden" id="roundResult">
     <div class="rr-card">
-      <div class="rose" id="roseRound" style="--s:16vh; margin:0 auto .6vh;"></div>
+      <div class="rose" id="roseRound" style="--s:20vh; margin:0 auto .6vh;"></div>
       <div class="rr-msg" id="rrMsg">せいこう！</div>
       <div class="rr-sub" id="rrSub"></div>
     </div>
@@ -964,7 +1005,7 @@ body{
   <div class="confetti" id="confetti"></div>
   <div class="final-card">
     <div class="final-star hidden" id="finalStar">⭐</div>
-    <div class="rose" id="roseFinal" style="--s:15vh; margin:0 auto 1vh;"></div>
+    <div class="rose" id="roseFinal" style="--s:19vh; margin:0 auto 1vh;"></div>
     <div class="final-headline" id="finalHeadline">5かいちゅう 0かい くりあ！</div>
     <div class="final-rate" id="finalRate">0<span class="pct">％</span></div>
     <div class="final-praise" id="finalPraise"></div>
@@ -1361,6 +1402,14 @@ function loop(now){
 
     const dist=Math.hypot(State.x,State.y);
     coinEl.style.transform='translate('+State.x+'px,'+State.y+'px)';
+    // うごいた あとに 光のあとが のこる
+    if(State.active && now-(State._lt||0)>80 && (Math.abs(State.vx)+Math.abs(State.vy))>0.15){
+      State._lt=now;
+      const td=document.createElement('div'); td.className='traildot';
+      td.style.transform='translate('+State.x+'px,'+State.y+'px)';
+      coinEl.parentElement.appendChild(td);
+      setTimeout(()=>td.remove(), 620);
+    }
 
     // ふちが近づくと赤く光る
     const ratio=clamp(dist/State.maxR,0,1);
@@ -1437,6 +1486,8 @@ function showRoundResult(ok){
   const msg=byId('rrMsg'), sub=byId('rrSub');
   if(ok){ msg.textContent='せいこう！'; msg.className='rr-msg ok'; sub.textContent='コインを おとさず あるけたね！'; }
   else  { msg.textContent='おっとっと！'; msg.className='rr-msg ng'; sub.textContent='だいじょうぶ、つぎ がんばろう！'; }
+  msg.classList.remove('stamp'); void msg.offsetWidth; msg.classList.add('stamp');   // スタンプ風に ドン！
+  if(ok){ makeStarBurst(byId('roundResult'), 14); }                                   // 星が はじける
 
   const nb=byId('nextBtn');
   if(State.play < TOTAL_PLAYS){ nb.textContent='つぎへ（'+(State.play+1)+'かいめ）'; }
@@ -1460,7 +1511,7 @@ function showFinal(){
   const rate=Math.round(clears/TOTAL_PLAYS*100);
 
   byId('finalHeadline').textContent = TOTAL_PLAYS+'かいちゅう '+clears+'かい くりあ！';
-  const rateEl=byId('finalRate'); rateEl.innerHTML = rate+'<span class="pct">％</span>';
+  const rateEl=byId('finalRate'); countUpRate(rateEl, rate);   // 0→成功率まで カウントアップ
 
   const star=byId('finalStar'), praise=byId('finalPraise'), nudge=byId('finalNudge');
   const rf=byId('roseFinal');
@@ -1475,6 +1526,7 @@ function showFinal(){
     makeConfetti();
     show('final');
     sfxStar();
+    makeStarBurst(byId('final'), 18);   // 星が はじける！
     speak(rf, 'すごい！ やったね！🌟', 3000);
   } else {
     star.classList.add('hidden');
@@ -1557,16 +1609,53 @@ setupPointerFallback();
    バラのキャラクター「バラリン」🌹
    ========================================================================= */
 function roseHTML(){
+  const ST='stroke="#8a1640" stroke-linejoin="round"';
+  const LF='stroke="#1e5a14" stroke-linejoin="round"';
   let petals='';
-  for(let i=0;i<8;i++){ petals += '<div class="petal" style="transform:rotate('+(i*45)+'deg) translateY(-32%)"></div>'; }
-  return '<div class="rose-arm l"></div><div class="rose-arm r"></div>'
-    + '<div class="bloom">'+petals+'<div class="core"></div>'
-    + '<div class="face">'
-    +   '<div class="eye l"></div><div class="eye r"></div>'
-    +   '<div class="cheek l"></div><div class="cheek r"></div>'
-    +   '<div class="mouth"></div><div class="sweat"></div><div class="tear" style="display:none"></div>'
-    + '</div></div>'
-    + '<div class="leaf l"></div><div class="leaf r"></div>';
+  for(let a=0;a<360;a+=45){
+    petals += '<ellipse cx="50" cy="34" rx="13.5" ry="19" fill="url(#rpp)" '+ST+' stroke-width="2.4" transform="rotate('+a+' 50 57)"/>';
+  }
+  let mids='';
+  for(let a=22;a<360;a+=72){
+    mids += '<ellipse cx="50" cy="42" rx="9.5" ry="13" fill="url(#rpm)" '+ST+' stroke-width="2" transform="rotate('+a+' 50 57)"/>';
+  }
+  return '<div class="bloom"><svg class="esvg" viewBox="0 0 100 124" xmlns="http://www.w3.org/2000/svg">'
+   +'<defs>'
+   +'<radialGradient id="rpp" cx="40%" cy="28%" r="85%"><stop offset="0%" stop-color="#ff9ec0"/><stop offset="100%" stop-color="#dc2e68"/></radialGradient>'
+   +'<radialGradient id="rpm" cx="40%" cy="28%" r="85%"><stop offset="0%" stop-color="#ffc2d6"/><stop offset="100%" stop-color="#ee5e90"/></radialGradient>'
+   +'<radialGradient id="rpc" cx="40%" cy="30%" r="85%"><stop offset="0%" stop-color="#ffe2ec"/><stop offset="100%" stop-color="#ff8cb0"/></radialGradient>'
+   +'<linearGradient id="rpl" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8ce85e"/><stop offset="100%" stop-color="#2e8a1e"/></linearGradient>'
+   +'</defs>'
+   +'<ellipse cx="50" cy="118" rx="26" ry="5.5" fill="rgba(20,20,40,.16)"/>'
+   /* はっぱの手 */
+   +'<path d="M14 66 C3 60 0 49 7 43 C12 52 19 58 28 60 Z" fill="url(#rpl)" '+LF+' stroke-width="2.4"/>'
+   +'<path d="M86 66 C97 60 100 49 93 43 C88 52 81 58 72 60 Z" fill="url(#rpl)" '+LF+' stroke-width="2.4"/>'
+   /* はっぱの足 */
+   +'<path d="M40 116 C26 119 14 113 12 102 C25 102 35 107 44 113 Z" fill="url(#rpl)" '+LF+' stroke-width="2.4"/>'
+   +'<path d="M60 116 C74 119 86 113 88 102 C75 102 65 107 56 113 Z" fill="url(#rpl)" '+LF+' stroke-width="2.4"/>'
+   /* 花びら（外側8枚 → 内側5枚 → 花芯） */
+   + petals + mids
+   +'<circle cx="50" cy="57" r="20.5" fill="url(#rpc)" '+ST+' stroke-width="2.6"/>'
+   +'<path d="M50 44 C59 45 63 52 61 58 C59 64 52 66 48 62 C45 59 46 53 51 52" fill="none" stroke="#e0608c" stroke-width="2" stroke-linecap="round"/>'
+   +'<ellipse cx="42" cy="47" rx="7.5" ry="4" fill="rgba(255,255,255,.55)"/>'
+   /* 顔 */
+   +'<g class="esvg-eyes rs-eyes">'
+   +'<ellipse cx="42" cy="56" rx="5.4" ry="6.6" fill="#fff" stroke="#3a1020" stroke-width="1.8"/>'
+   +'<ellipse cx="58" cy="56" rx="5.4" ry="6.6" fill="#fff" stroke="#3a1020" stroke-width="1.8"/>'
+   +'<circle cx="43" cy="57.5" r="3.1" fill="#3a1020"/><circle cx="57" cy="57.5" r="3.1" fill="#3a1020"/>'
+   +'<circle cx="44.4" cy="56" r="1.2" fill="#fff"/><circle cx="58.4" cy="56" r="1.2" fill="#fff"/></g>'
+   +'<g class="rs-eyearc"><path d="M37 56 Q42 51 47 56" fill="none" stroke="#3a1020" stroke-width="2.6" stroke-linecap="round"/><path d="M53 56 Q58 51 63 56" fill="none" stroke="#3a1020" stroke-width="2.6" stroke-linecap="round"/></g>'
+   +'<ellipse cx="36" cy="64" rx="4.4" ry="3" fill="rgba(255,90,120,.5)"/>'
+   +'<ellipse cx="64" cy="64" rx="4.4" ry="3" fill="rgba(255,90,120,.5)"/>'
+   /* 口（表情で切り替え） */
+   +'<path class="rs-m rs-m-smile" d="M44 67 Q50 72 56 67" fill="none" stroke="#5a1030" stroke-width="2.8" stroke-linecap="round"/>'
+   +'<g class="rs-m rs-m-open"><path d="M42.5 66 Q50 63 57.5 66 Q56.5 75 50 75 Q43.5 75 42.5 66 Z" fill="#5a1030" stroke="#3a1020" stroke-width="1.8"/><ellipse cx="50" cy="72.4" rx="3.8" ry="2.2" fill="#ff8aa6"/></g>'
+   +'<circle class="rs-m rs-m-small" cx="50" cy="68.5" r="3" fill="none" stroke="#5a1030" stroke-width="2.4"/>'
+   +'<path class="rs-m rs-m-frown" d="M44 71 Q50 65.5 56 71" fill="none" stroke="#5a1030" stroke-width="2.8" stroke-linecap="round"/>'
+   /* あせ・なみだ */
+   +'<path class="sweat" d="M73 38 C77 44 77 48 73 50 C69 48 69 44 73 38 Z" fill="#7fd0f4"/>'
+   +'<path class="tear" style="display:none" d="M38 64 C41 69 41 73 38 75 C35 73 35 69 38 64 Z" fill="#7fd0f4"/>'
+   +'</svg></div>';
 }
 document.querySelectorAll('.rose').forEach(r=>{ r.innerHTML = roseHTML(); });
 function setFace(el, expr){
@@ -1585,7 +1674,7 @@ setFace(byId('roseTitle'),'happy');
   let html='';
   for(let i=0;i<txt.length;i++){
     const r=((i%2)?1:-1)*(2+(i%3));
-    html+='<span style="color:'+cols[i%cols.length]+'; transform:rotate('+r+'deg)">'+txt[i]+'</span>';
+    html+='<span style="color:'+cols[i%cols.length]+'; --rt:'+r+'deg; animation:letterFloat 2.4s ease-in-out '+(i*0.09)+'s infinite">'+txt[i]+'</span>';
   }
   el.innerHTML=html;
 })();
@@ -1673,8 +1762,8 @@ function eEyes(y,dx){ dx=dx||13;
 }
 function eEyesRed(y,dx){ dx=dx||13;
   return '<g class="esvg-eyes">'
-   +'<circle cx="'+(50-dx)+'" cy="'+y+'" r="10" fill="#ff2a2a" opacity="0.28"/>'
-   +'<circle cx="'+(50+dx)+'" cy="'+y+'" r="10" fill="#ff2a2a" opacity="0.28"/>'
+   +'<circle cx="'+(50-dx)+'" cy="'+y+'" r="12.5" fill="#ff2a2a" opacity="0.4"/>'
+   +'<circle cx="'+(50+dx)+'" cy="'+y+'" r="12.5" fill="#ff2a2a" opacity="0.4"/>'
    +'<circle cx="'+(50-dx)+'" cy="'+y+'" r="6.4" fill="#ff2a2a" stroke="#5a0000" stroke-width="1.6"/>'
    +'<circle cx="'+(50+dx)+'" cy="'+y+'" r="6.4" fill="#ff2a2a" stroke="#5a0000" stroke-width="1.6"/>'
    +'<circle cx="'+(50-dx-2)+'" cy="'+(y-2)+'" r="2" fill="#ffdede"/>'
@@ -1708,6 +1797,9 @@ function enemyHTML(boss){
       +'<path d="M50 16 C70 16 82 32 85 49 Q50 37 15 49 C18 32 30 16 50 16 Z" fill="url(#b1c)" '+EOL+' stroke-width="2.6"/>'
       +'<ellipse cx="38" cy="30" rx="12" ry="6" fill="rgba(255,255,255,.35)"/>'
       +'<ellipse cx="38" cy="62" rx="13" ry="8" fill="rgba(255,255,255,.4)"/>'
+      +'<path d="M50 16 C50 8 56 3 63 3 C59 9 56 13 52 17 Z" fill="#4f9e2a" stroke="#241a2e" stroke-width="2"/>'
+      +'<ellipse cx="50" cy="103" rx="24" ry="8" fill="rgba(70,35,10,.14)"/>'
+      +'<circle cx="28" cy="82" r="1.6" fill="#a8783e"/><circle cx="72" cy="82" r="1.6" fill="#a8783e"/><circle cx="24" cy="76" r="1.4" fill="#a8783e"/><circle cx="76" cy="76" r="1.4" fill="#a8783e"/>'
       + eEyes(72,12) + eCheeks(84,21) + eSmile(88)
     );
   }
@@ -1720,6 +1812,7 @@ function enemyHTML(boss){
       + eShadow()
       +'<ellipse cx="36" cy="111" rx="10" ry="6.4" fill="url(#b2b)" '+EOL+' stroke-width="2.4"/>'
       +'<ellipse cx="64" cy="111" rx="10" ry="6.4" fill="url(#b2b)" '+EOL+' stroke-width="2.4"/>'
+      +'<path d="M67 96 C82 94 88 85 85 75 C91 88 84 99 69 101 Z" fill="url(#b2b)" '+EOL+' stroke-width="2.2"/>'
       +'<rect x="31" y="70" width="38" height="38" rx="15" fill="url(#b2b)" '+EOL+' stroke-width="2.8"/>'
       +'<ellipse cx="50" cy="91" rx="12" ry="13" fill="rgba(255,255,255,.32)"/>'
       +'<path d="M33 24 L43 28 L37 12 Z" fill="url(#b2h)" '+EOL+' stroke-width="2.2"/>'
@@ -1741,6 +1834,7 @@ function enemyHTML(boss){
       +'<path d="M24 50 L36 44 L30 28 Z" fill="url(#b3h)" '+EOL+' stroke-width="2.2"/>'
       +'<path d="M76 50 L64 44 L70 28 Z" fill="url(#b3h)" '+EOL+' stroke-width="2.2"/>'
       +'<circle cx="50" cy="74" r="34" fill="url(#b3s)" '+EOL+' stroke-width="3"/>'
+      +'<path d="M26 62 C38 54 62 54 74 62 M21 75 C37 66 63 66 79 75" fill="none" stroke="#5e2c08" stroke-width="2" opacity=".75"/>'
       +'<path d="M20 86 C30 100 70 100 80 86 C72 106 28 106 20 86 Z" fill="#f3d9a4" '+EOL+' stroke-width="2.4"/>'
       +'<ellipse cx="13" cy="80" rx="8" ry="12" fill="url(#b3g)" '+EOL+' stroke-width="2.6"/>'
       +'<ellipse cx="87" cy="80" rx="8" ry="12" fill="url(#b3g)" '+EOL+' stroke-width="2.6"/>'
@@ -1764,6 +1858,8 @@ function enemyHTML(boss){
       +'<path d="M40 14 L50 18 L44 2 Z" fill="url(#b4h)" '+EOL+' stroke-width="2.2"/>'
       +'<path d="M60 14 L50 18 L56 2 Z" fill="url(#b4h)" '+EOL+' stroke-width="2.2"/>'
       +'<ellipse cx="50" cy="72" rx="32" ry="38" fill="url(#b4g)" '+EOL+' stroke-width="3.2"/>'
+      +'<path d="M22 50 L33 45 L26 34 Z" fill="url(#b4h)" '+EOL+' stroke-width="2"/>'
+      +'<path d="M78 50 L67 45 L74 34 Z" fill="url(#b4h)" '+EOL+' stroke-width="2"/>'
       +'<ellipse cx="40" cy="46" rx="12" ry="7" fill="rgba(255,255,255,.34)"/>'
       +'<ellipse cx="50" cy="92" rx="16" ry="13" fill="#f6cfa6" stroke="#241a2e" stroke-width="2.2"/>'
       +'<path d="M42 88 L58 88 M42 96 L58 96" stroke="#caa172" stroke-width="1.8"/>'
@@ -1783,6 +1879,7 @@ function enemyHTML(boss){
       +'<path d="M91 66 L97 56 L86 60 Z" fill="url(#b5h)" '+EOL+' stroke-width="2"/>'
       +'<ellipse cx="36" cy="112" rx="12" ry="8" fill="url(#b5g)" '+EOL+' stroke-width="2.8"/>'
       +'<ellipse cx="64" cy="112" rx="12" ry="8" fill="url(#b5g)" '+EOL+' stroke-width="2.8"/>'
+      +'<path d="M28 115 L33 109 L37 115 Z" fill="#e8f4f8"/><path d="M57 115 L62 109 L66 115 Z" fill="#e8f4f8"/>'
       +'<ellipse cx="12" cy="74" rx="9" ry="14" fill="url(#b5g)" '+EOL+' stroke-width="2.8"/>'
       +'<ellipse cx="88" cy="74" rx="9" ry="14" fill="url(#b5g)" '+EOL+' stroke-width="2.8"/>'
       +'<path d="M8 64 L2 56 L12 60 Z" fill="#fff"/>'
@@ -1791,6 +1888,8 @@ function enemyHTML(boss){
       +'<path d="M72 34 C84 24 86 8 74 2 C76 14 70 24 58 30 Z" fill="url(#b5h)" '+EOL+' stroke-width="2.4"/>'
       +'<path d="M36 24 L46 28 L41 12 Z" fill="#cfe7ee" '+EOL+' stroke-width="2"/>'
       +'<path d="M64 24 L54 28 L59 12 Z" fill="#cfe7ee" '+EOL+' stroke-width="2"/>'
+      +'<path d="M17 50 C8 46 4 37 9 29 C13 38 19 43 26 45 Z" fill="url(#b5g)" '+EOL+' stroke-width="2.2"/>'
+      +'<path d="M83 50 C92 46 96 37 91 29 C87 38 81 43 74 45 Z" fill="url(#b5g)" '+EOL+' stroke-width="2.2"/>'
       +'<ellipse cx="50" cy="70" rx="34" ry="40" fill="url(#b5g)" '+EOL+' stroke-width="3.4"/>'
       +'<ellipse cx="38" cy="42" rx="13" ry="7" fill="rgba(255,255,255,.26)"/>'
       +'<ellipse cx="50" cy="90" rx="17" ry="17" fill="#8d7da0" stroke="#241a2e" stroke-width="2.2"/>'
@@ -1804,11 +1903,11 @@ function enemyHTML(boss){
 }
 /* 難易度ごとの 敵（見た目＝boss / 攻撃＝atk / 大きさ＝size）。攻撃は今までどおり。 */
 const ENEMY = {
-  1:{ boss:'b1', atk:'cloud', size:11,   interval:5200, dur:2600, name:'コロぽん',   line:'むにゃ…' },
-  2:{ boss:'b2', atk:'fly',   size:13.5, interval:4600, dur:2200, name:'ツノこぞう', line:'ちょろちょろ〜' },
-  3:{ boss:'b3', atk:'ink',   size:16,   interval:4200, dur:2200, name:'キバモン',   line:'スミ ぴゅっ！' },
-  4:{ boss:'b4', atk:'smoke', size:19,   interval:3700, dur:2400, name:'オニドロ',   line:'もくもく〜！' },
-  5:{ boss:'b5', atk:'dark',  size:23,   interval:3200, dur:2800, name:'ラスボス',   line:'くらやみだ！' }
+  1:{ boss:'b1', atk:'cloud', size:15,   interval:5200, dur:2600, name:'コロぽん',   line:'むにゃ…' },
+  2:{ boss:'b2', atk:'fly',   size:18,   interval:4600, dur:2200, name:'ツノこぞう', line:'ちょろちょろ〜' },
+  3:{ boss:'b3', atk:'ink',   size:21,   interval:4200, dur:2200, name:'キバモン',   line:'スミ ぴゅっ！' },
+  4:{ boss:'b4', atk:'smoke', size:24.5, interval:3700, dur:2400, name:'オニドロ',   line:'もくもく〜！' },
+  5:{ boss:'b5', atk:'dark',  size:28,   interval:3200, dur:2800, name:'ラスボス',   line:'くらやみだ！' }
 };
 
 /* 敵キャラを 右の土管の上に 出す（プレイ中ずっと） */
@@ -1820,7 +1919,7 @@ function mountEnemy(level){
   ec.style.right='1.5vh'; ec.style.left='auto'; ec.style.bottom='30vh'; ec.style.top='auto';
   void ec.offsetWidth; ec.classList.add('in');     // ふわっと表示（ずっと いる）
 }
-function hideEnemyChar(){ const ec=byId('enemyChar'); if(ec){ ec.classList.remove('in','attacking'); } }
+function hideEnemyChar(){ const ec=byId('enemyChar'); if(ec){ ec.classList.remove('in','attacking','windup'); } }
 function lungeEnemy(){ const ec=byId('enemyChar'); if(!ec) return; ec.classList.remove('attacking'); void ec.offsetWidth; ec.classList.add('attacking'); setTimeout(()=>ec.classList.remove('attacking'),600); }
 
 /* 攻撃エフェクトを 出す */
@@ -1854,7 +1953,13 @@ function scheduleEnemy(){
   if(!State.enemyMode || !State.active || State.ended) return;
   const cfg=ENEMY[State.level];
   State.enemyTimer=setTimeout(()=>{
-    if(State.enemyMode && State.active && !State.ended){ doAttack(cfg); scheduleEnemy(); }
+    if(!(State.enemyMode && State.active && !State.ended)) return;
+    // ためポーズ（ぷるぷる しゃがむ）→ 0.5秒後に 攻撃！
+    const ec=byId('enemyChar');
+    if(ec){ ec.classList.remove('windup'); void ec.offsetWidth; ec.classList.add('windup'); }
+    State.enemyTimer=setTimeout(()=>{
+      if(State.enemyMode && State.active && !State.ended){ doAttack(cfg); shakeGame(); scheduleEnemy(); }
+    }, 520);
   }, cfg.interval);
 }
 function stopEnemy(){
@@ -1872,6 +1977,51 @@ function refreshMode(){
 refreshMode();
 byId('modeNormal').addEventListener('click', ()=>{ State.enemyMode=false; refreshMode(); try{localStorage.setItem('enemyMode','0');}catch(e){} });
 byId('modeEnemy').addEventListener('click', ()=>{ State.enemyMode=true; refreshMode(); try{localStorage.setItem('enemyMode','1');}catch(e){} });
+
+/* タイトルの敵パレード（5体ならべて強さの階段を見せる） */
+(function(){
+  const row=byId('epRow'); if(!row) return;
+  const sizes={b1:6.5,b2:7.5,b3:8.5,b4:9.5,b5:11};
+  ['b1','b2','b3','b4','b5'].forEach((b,i)=>{
+    const d=document.createElement('div');
+    d.className='enemy '+b;
+    d.style.setProperty('--s', sizes[b]+'vh');
+    d.innerHTML=enemyHTML(b);
+    const mb=d.querySelector('.m-body'); if(mb) mb.style.animationDelay=(i*0.25)+'s';
+    row.appendChild(d);
+  });
+})();
+/* 星がはじけるバースト */
+function makeStarBurst(container,n){
+  if(!container) return;
+  const cols=['#ffd21a','#ff8ad0','#7fd0f4','#ffe874'];
+  for(let i=0;i<n;i++){
+    const s=document.createElement('span');
+    s.className='bstar'; s.textContent='★';
+    const ang=Math.random()*Math.PI*2, dist=14+Math.random()*18;
+    s.style.setProperty('--tx', (Math.cos(ang)*dist)+'vh');
+    s.style.setProperty('--ty', (Math.sin(ang)*dist*0.7)+'vh');
+    s.style.color=cols[i%cols.length];
+    s.style.fontSize=(2.2+Math.random()*1.8)+'vh';
+    s.style.animationDelay=(Math.random()*0.15)+'s';
+    container.appendChild(s);
+    setTimeout(()=>s.remove(), 1200);
+  }
+}
+/* 成功率のカウントアップ */
+function countUpRate(el, target){
+  let v=0; const step=Math.max(1, Math.round(target/26));
+  const iv=setInterval(()=>{
+    v+=step; if(v>=target){ v=target; clearInterval(iv); }
+    el.innerHTML=v+'<span class="pct">％</span>';
+  }, 30);
+}
+/* 攻撃時に画面を小さくゆらす */
+function shakeGame(){
+  const g=byId('game'); if(!g) return;
+  g.classList.remove('shakeS'); void g.offsetWidth; g.classList.add('shakeS');
+  setTimeout(()=>g.classList.remove('shakeS'), 350);
+}
 
 /* ===== 向き調整ボタン（押すと左右/前後の向きを反転、設定は記憶） ===== */
 try{
